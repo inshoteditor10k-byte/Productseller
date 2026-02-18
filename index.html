@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product by Shailesh – Futuristic Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--primary-glow:#00f5ff;--secondary-glow:#9b5cff;--card-bg:rgba(255,255,255,0.08);--text-light:rgba(255,255,255,0.8);}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);color:#fff;min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
+h1,h2,h3{text-shadow:0 0 15px var(--primary-glow);}
+h1{text-align:center;font-size:28px;margin-top:25px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.controls-container{padding:0 20px;max-width:800px;margin:20px auto;display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
+.search-container{flex-grow:1;min-width:250px;display:flex;gap:10px;position:relative;}
+.search-container input{flex-grow:1;}
+#searchBtn{padding:14px 25px;border-radius:30px;border:none;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s;}
+#searchBtn:hover{transform:scale(1.05);}
+.search-container input, .sort-container select{width:100%;padding:14px 20px;border-radius:30px;border:none;outline:none;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);color:#fff;font-size:15px;box-shadow:0 0 10px rgba(0,0,0,0.5);transition: box-shadow 0.3s;}
+.search-container input:focus, .sort-container select:focus{box-shadow:0 0 20px var(--primary-glow);}
+.sort-container select{cursor:pointer;}
+#suggestions{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(25,25,46,0.95);backdrop-filter:blur(10px);border-radius:15px;max-height:250px;overflow-y:auto;z-index:1000;border:1px solid rgba(0,245,255,0.2);}
+.suggestion-item{padding:12px 20px;color:var(--text-light);cursor:pointer;transition:background-color 0.2s;border-bottom:1px solid rgba(255,255,255,0.1);}
+.suggestion-item:last-child{border-bottom:none;}
+.suggestion-item:hover{background-color:rgba(0,245,255,0.15);}
+.banner{width:100%;position:relative;margin-top:10px;border-radius:15px;overflow:hidden;height:180px;background-color:var(--card-bg);}
+.banner img{width:100%;height:100%;display:block;position:absolute;top:0;left:0;opacity:0;transition:opacity 1s ease-in-out;cursor:pointer;object-fit:cover;object-position:center;}
+.banner img.active{opacity:1;position:relative;}
+.categories-panel{display:none;padding:15px;flex-wrap:wrap;gap:10px;justify-content:center;}
+.category-chip{padding:8px 15px;border-radius:20px;background:rgba(255,255,255,0.1);cursor:pointer;font-size:13px;transition: all 0.3s;}
+.category-chip.active{background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;font-weight:600;transform:scale(1.05);}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px;padding:20px;}
+.card{background:var(--card-bg);backdrop-filter:blur(15px);border-radius:15px;box-shadow:0 0 15px rgba(0,0,0,0.5);transition:0.3s;overflow:hidden;display:flex;flex-direction:column;}
+.card:hover{transform:translateY(-5px);box-shadow:0 0 20px var(--secondary-glow);}
+.card .image-container{width:100%;height:150px;position:relative;overflow:hidden;}
+.card .image-container img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+.card:hover .image-container img{transform:scale(1.05);}
+.badge{position:absolute;top:10px;padding:4px 8px;font-size:10px;font-weight:bold;border-radius:5px;text-transform:uppercase;color:#000;}
+.discount-badge{left:10px;background:var(--primary-glow);}
+.sales-badge{right:10px;background:linear-gradient(90deg,#ffc107,#ff9800);}
+.card .card-content{padding:15px;flex-grow:1;display:flex;flex-direction:column;}
+.card h3{font-size:15px;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card .category-text{font-size:11px;opacity:0.7;margin-bottom:10px;}
+.card .price-container{margin-top:auto;padding-top:10px;}
+.card .original-price{font-size:13px;text-decoration:line-through;opacity:0.6;}
+.card .final-price{font-size:16px;font-weight:bold;color:var(--primary-glow);}
+.card .view-button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s;}
+.card .view-button:hover{transform:scale(1.03);}
+.bottom-nav{position:fixed;bottom:0;left:0;width:100%;display:flex;justify-content:space-around;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);padding:12px 0;z-index:999;}
+.bottom-nav button{background:none;border:none;color:#fff;font-size:14px;cursor:pointer;transition:color 0.3s;}
+.bottom-nav button.active{color:var(--primary-glow);font-weight:bold;}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;padding:20px;z-index:1000;opacity:0;transition:opacity 0.3s;}
+.modal.show{display:flex;opacity:1;}
+.modal-content{background:#111;width:100%;max-width:500px;padding:20px;border-radius:15px;overflow-y:auto;max-height:90vh;position:relative;transform:scale(0.9);transition:transform 0.3s;}
+.modal.show .modal-content{transform:scale(1);}
+.modal .close-btn{position:absolute;top:10px;right:15px;font-size:24px;color:#fff;background:none;border:none;cursor:pointer;}
+.modal .slider-container{position:relative;width:100%;height:250px;overflow:hidden;border-radius:10px;margin-bottom:15px;}
+.modal .slider-image{width:100%;height:100%;object-fit:cover;position:absolute;opacity:0;transition:opacity 0.5s;}
+.modal .slider-image.active{opacity:1;}
+.modal .slider-nav{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;}
+.modal .slider-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;}
+.modal .slider-dot.active{background:#fff;}
+.modal h3{margin-bottom:10px;}
+.modal .price-container{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.modal .original-price{font-size:16px;text-decoration:line-through;opacity:0.6;}
+.modal .final-price{font-size:22px;font-weight:bold;color:var(--primary-glow);}
+.modal .discount-badge{position:relative;top:0;left:0;}
+.modal p{margin-bottom:15px;font-size:14px;opacity:0.9;}
+.modal button{width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s;}
+.modal button:hover{transform:scale(1.02);}
+.modal-image-gallery { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+.modal-gallery-image { width: 100%; height: auto; border-radius: 10px; object-fit: cover; }
+.admin-btn{position:fixed;bottom:70px;right:10px;font-size:11px;opacity:0.6;cursor:pointer;z-index:1001;}
+.admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:none;overflow-y:auto;z-index:2000;padding:20px;}
+.admin-panel h2, .admin-panel h3{text-align:center;margin-bottom:15px;color:var(--primary-glow);}
+.admin-panel input,.admin-panel textarea,.admin-panel select{width:100%;margin-bottom:10px;padding:10px;border-radius:8px;border:none;background:#1a1a2e;color:#fff;}
+.admin-panel .price-inputs{display:flex;gap:10px;}
+#finalPricePreview{font-weight:bold;color:var(--primary-glow);padding:5px 0;}
+.admin-panel button{padding:10px 15px;margin:5px 0;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;cursor:pointer;font-weight:bold;}
+.admin-panel .btn-secondary{background:rgba(255,255,255,0.1);color:#fff;}
+.dynamic-input{display:flex;gap:5px;margin-bottom:5px;}
+.dynamic-input input{flex-grow:1;}
+.dynamic-input button{padding:0 10px;background:#c82333;color:#fff;}
+hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
+.loading-indicator, .no-products{text-align:center;margin-top:50px;font-size:18px;opacity:0.8;}
+.admin-product-list{margin-top:20px;}
+.admin-product-item{background:#1a1a2e;padding:10px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.admin-product-item img{width:50px;height:50px;object-fit:cover;border-radius:5px;}
+.admin-product-item .info{flex-grow:1;}
+.admin-product-item .info h4{font-size:14px;}
+.admin-product-item .info p{font-size:12px;opacity:0.7;}
+.admin-product-item .actions button{padding:5px 8px;font-size:12px;}
+#category-manager .category-item{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;padding:8px;border-radius:5px;margin-bottom:5px;}
+</style>
+</head>
+<body>
+
+<h1>Product by Shailesh – Futuristic Store</h1>
+<div class="controls-container">
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search products..." autocomplete="off">
+        <button id="searchBtn">Search</button>
+        <div id="suggestions"></div>
+    </div>
+    <div class="sort-container">
+        <select id="sortProducts">
+            <option value="latest">Sort by: Latest</option>
+            <option value="popular">Most Popular</option>
+            <option value="discount">Most Discount</option>
+            <option value="price-low-high">Price Low to High</option>
+            <option value="price-high-low">Price High to Low</option>
+        </select>
+    </div>
+</div>
+<div class="banner" id="banner"></div>
+<div class="categories-panel" id="categoriesPanel"></div>
+<div class="products" id="products">
+    <div class="loading-indicator">Loading products...</div>
+</div>
+
+<div class="bottom-nav" id="bottomNav">
+    <button onclick="showHome()" class="active">Home</button>
+    <button onclick="toggleCategories()">Categories</button>
+    <button onclick="showTrending()">Trending</button>
+</div>
+
+<div class="admin-btn" onclick="adminLogin()">Admin Panel</div>
+
+<div class="modal" id="productModal">
+    <div class="modal-content" id="modalContent"></div>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+    <h2>Admin Panel</h2>
+    <hr>
+    <h3>Product Management</h3>
+    <input type="hidden" id="pId">
+    <input type="text" id="pTitle" placeholder="Title">
+    <textarea id="pDesc" placeholder="Full Description"></textarea>
+    <div class="price-inputs">
+        <input type="number" id="pOriginalPrice" placeholder="Original Price (₹)">
+        <input type="number" id="pDiscount" placeholder="Discount (%)">
+    </div>
+    <p>Final Price: <span id="finalPricePreview">₹ 0.00</span></p>
+    <select id="pCategory"></select>
+    <input type="url" id="pAffiliateLink" placeholder="Affiliate Link">
+    <div id="imageFields"></div>
+    <button onclick="addImageField()" class="btn-secondary">+ Add Image URL</button>
+    <br>
+    <button onclick="saveProduct()">Save Product</button>
+    <button onclick="clearProductForm()" class="btn-secondary">Clear Form</button>
+    <div id="adminProductList" class="admin-product-list"></div>
+    <hr>
+    <h3>Category Management</h3>
+    <div id="category-manager">
+        <input type="text" id="newCategoryName" placeholder="New Category Name">
+        <button onclick="addCategory()">Add Category</button>
+        <div id="categoryList"></div>
+    </div>
+    <hr>
+    <h3>Banner Management</h3>
+    <div id="bannerFields"></div>
+    <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
+    <br>
+    <button onclick="saveBanners()">Save All Banners</button>
+    <div id="adminBannerList" class="admin-product-list"></div>
+    <hr>
+    <button onclick="closeAdmin()" class="btn-secondary">Close Panel</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, remove, update, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDpF0VyF-4MeniRCO1L1oMhYtR5uBZkklU",
+        authDomain: "apps-and-games-store-8c442.firebaseapp.com",
+        databaseURL: "https://apps-and-games-store-8c442-default-rtdb.firebaseio.com",
+        projectId: "apps-and-games-store-8c442",
+        storageBucket: "apps-and-games-store-8c442.firebasestorage.app",
+        messagingSenderId: "320735195272",
+        appId: "1:320735195272:web:f6d8693160baf6eaf8af3d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const productsRef = ref(db, 'products/');
+    const bannersRef = ref(db, 'banners/');
+    const categoriesRef = ref(db, 'categories/');
+
+    let productsData = {}, bannersData = {}, categoriesData = {};
+    let currentCategory = "ALL";
+    let currentView = "home";
+    let bannerInterval = null;
+
+    const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
+
+    // Data Listeners
+    onValue(categoriesRef, (snapshot) => {
+        categoriesData = snapshot.val() || {};
+        renderCategories();
+        renderAdminCategories();
+    });
+
+    onValue(productsRef, snapshot => {
+        productsData = snapshot.val() || {};
+        renderProducts();
+        renderAdminProducts();
+    });
+
+    onValue(bannersRef, snapshot => {
+        bannersData = snapshot.val() || {};
+        renderBanners();
+        renderAdminBanners();
+    });
+
+    // Image Handling
+    function safeImage(url) {
+        if (!url || typeof url !== 'string') return fallbackImage;
+        return url.startsWith("http://") ? url.replace("http://", "https://") : url;
+    }
+    window.handleImageError = (img) => { img.onerror = null; img.src = fallbackImage; };
+
+    // Search & Sort
+    function matchScore(title, search) {
+        if (!search) return 1; // Not in search mode
+        title = title.toLowerCase();
+        search = search.toLowerCase();
+        if (title === search) return 100; // Exact match
+        if (title.startsWith(search)) return 80; // Starts with
+        if (title.includes(search)) return 50; // Partial match
+        return 0; // No match
+    }
+
+    // USER PANEL RENDERING
+    function renderProducts() {
+        const container = document.getElementById("products");
+        const banner = document.getElementById("banner");
+        container.innerHTML = "";
+        const search = document.getElementById("search").value.trim();
+        const sortBy = document.getElementById("sortProducts").value;
+        const searchLower = search.toLowerCase();
+
+        // Manage UI based on search state
+        if (search) {
+            banner.style.display = 'none';
+            document.getElementById('categoriesPanel').style.display = 'none';
+        } else {
+            banner.style.display = ''; // Revert to default display
+        }
+
+        let list = Object.entries(productsData).map(([id, p]) => ({ 
+            ...p, 
+            id, 
+            score: matchScore(p.title || "", search),
+            isExactMatch: (p.title || "").toLowerCase() === searchLower
+        }));
+        
+        if (search) {
+            // In search mode, filter by score
+            list = list.filter(p => p.score > 0);
+            
+            // Sort by score first, then by the selected option
+            list.sort((a, b) => {
+                if (a.isExactMatch && !b.isExactMatch) return -1;
+                if (!a.isExactMatch && b.isExactMatch) return 1;
+                if (a.score !== b.score) return b.score - a.score;
+                switch (sortBy) {
+                    case 'popular': return (b.sales || 0) - (a.sales || 0);
+                    case 'discount': return (b.discount || 0) - (a.discount || 0);
+                    case 'price-low-high': return (a.finalPrice || 0) - (b.finalPrice || 0);
+                    case 'price-high-low': return (b.finalPrice || 0) - (a.finalPrice || 0);
+                    case 'latest': return (b.createdAt || 0) - (a.createdAt || 0);
+                    default: return (b.sales || 0) - (a.sales || 0); // Default to popular for similar matches
+                }
+            });
+        } else {
+            // Not in search mode, apply regular filters and sorting
+            if (currentView === "trending") {
+                list.sort((a, b) => (b.sales || 0) - (a.sales || 0));
+            } else {
+                if (currentCategory !== "ALL") {
+                    list = list.filter(p => p.category === currentCategory);
+                }
+                switch (sortBy) {
+                    case 'popular': list.sort((a, b) => (b.sales || 0) - (a.sales || 0)); break;
+                    case 'discount': list.sort((a, b) => (b.discount || 0) - (a.discount || 0)); break;
+                    case 'price-low-high': list.sort((a, b) => (a.finalPrice || 0) - (b.finalPrice || 0)); break;
+                    case 'price-high-low': list.sort((a, b) => (b.finalPrice || 0) - (a.finalPrice || 0)); break;
+                    case 'latest':
+                    default:
+                        list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); break;
+                }
+            }
+        }
+
+        if (list.length === 0) {
+            container.innerHTML = `<div class="no-products">No products found.</div>`;
+            return;
+        }
+
+        list.forEach(product => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            let priceHTML = `<div class="final-price">₹ ${product.finalPrice?.toFixed(2) || product.price?.toFixed(2) || '0.00'}</div>`;
+            if (product.discount > 0) {
+                priceHTML = `<div class="original-price">₹ ${product.price?.toFixed(2)}</div>` + priceHTML;
+            }
+
+            let discountBadge = product.discount > 0 ? `<div class="badge discount-badge">${product.discount}% OFF</div>` : '';
+            let salesBadge = '';
+            if (product.sales > 50) salesBadge = `<div class="badge sales-badge">Best Seller</div>`;
+            else if (product.sales > 25) salesBadge = `<div class="badge sales-badge">Hot Selling</div>`;
+            else if (product.sales > 10) salesBadge = `<div class="badge sales-badge">Popular</div>`;
+
+            card.innerHTML = `
+                <div class="image-container">
+                    <img src="${safeImage(product.images?.[0])}" onerror="handleImageError(this)">
+                    ${discountBadge}
+                    ${salesBadge}
+                </div>
+                <div class="card-content">
+                    <h3>${product.title || 'No Title'}</h3>
+                    <p class="category-text">${product.category}</p>
+                    <div class="price-container">${priceHTML}</div>
+                    <button class="view-button" onclick="openProduct('${product.id}')">View Details</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function renderCategories() {
+        const panel = document.getElementById("categoriesPanel");
+        panel.innerHTML = "";
+        const createChip = (name, isActive) => {
+            const chip = document.createElement("div");
+            chip.className = `category-chip ${isActive ? 'active' : ''}`; chip.textContent = name;
+            chip.onclick = () => {
+                currentCategory = name; currentView = 'home';
+                updateNavHighlight(); updateCategoryHighlight(); renderProducts();
+            };
+            return chip;
+        };
+        panel.appendChild(createChip("ALL", currentCategory === "ALL"));
+        Object.values(categoriesData).sort().forEach(cat => {
+            panel.appendChild(createChip(cat, currentCategory === cat));
+        });
+    }
+
+    function updateCategoryHighlight() {
+        document.querySelectorAll('.category-chip').forEach(c => c.classList.toggle('active', c.textContent === currentCategory));
+    }
+
+    function renderBanners() {
+        const banner = document.getElementById("banner");
+        banner.innerHTML = "";
+        clearInterval(bannerInterval);
+        const bannerEntries = Object.values(bannersData);
+
+        if (bannerEntries.length === 0) {
+            banner.style.display = 'none';
+            return;
+        }
+        banner.style.display = 'block';
+
+        bannerEntries.forEach((b, i) => {
+            const img = document.createElement("img");
+            img.src = safeImage(b.image);
+            img.onclick = () => window.open(b.link, '_blank');
+            img.onerror = () => handleImageError(img);
+            if (i === 0) {
+                img.classList.add("active");
+            }
+            banner.appendChild(img);
+        });
+
+        const slides = banner.querySelectorAll("img");
+        if (slides.length > 1) {
+            let index = 0;
+            bannerInterval = setInterval(() => {
+                slides.forEach(s => s.classList.remove("active"));
+                index = (index + 1) % slides.length;
+                const activeSlide = slides[index];
+                activeSlide.classList.add("active");
+            }, 3000);
+        }
+    }
+
+
+    // NAVIGATION & EVENTS
+    const searchInput = document.getElementById("search");
+    const searchBtn = document.getElementById("searchBtn");
+    const suggestionsContainer = document.getElementById("suggestions");
+    
+    const triggerSearch = () => {
+        if(searchInput.value.trim()){
+            currentView = 'home'; // Exit trending view when a search is active
+            updateNavHighlight();
+        }
+        renderProducts();
+    };
+    
+    window.selectSuggestion = (title) => {
+        searchInput.value = title;
+        suggestionsContainer.style.display = 'none';
+        triggerSearch();
+    };
+
+    const handleSearchInput = () => {
+        const query = searchInput.value.trim().toLowerCase();
+        
+        if (query.length > 0) {
+            const matches = Object.values(productsData).filter(p => p.title && p.title.toLowerCase().includes(query)).slice(0, 10);
+            if (matches.length > 0) {
+                suggestionsContainer.innerHTML = matches.map(p => {
+                    const cleanTitle = p.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    return `<div class="suggestion-item" onclick="selectSuggestion('${cleanTitle}')">${p.title}</div>`
+                }).join('');
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        } else {
+            suggestionsContainer.style.display = 'none';
+        }
+
+        // Keep live filtering feature
+        triggerSearch();
+    };
+    
+    searchBtn.addEventListener("click", () => {
+        suggestionsContainer.style.display = 'none';
+        triggerSearch();
+    });
+    searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            suggestionsContainer.style.display = 'none';
+            triggerSearch();
+        }
+    });
+    searchInput.addEventListener("input", handleSearchInput);
+
+    document.getElementById("sortProducts").addEventListener("change", renderProducts);
+    window.showTrending = () => { currentView = "trending"; currentCategory = "ALL"; document.getElementById('categoriesPanel').style.display = 'none'; updateNavHighlight(); updateCategoryHighlight(); renderProducts(); };
+    window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; updateNavHighlight('Categories'); };
+    window.showHome = () => {
+        searchInput.value = '';
+        suggestionsContainer.style.display = 'none';
+        currentView = "home";
+        currentCategory = "ALL";
+        document.getElementById('categoriesPanel').style.display = 'none';
+        updateNavHighlight();
+        updateCategoryHighlight();
+        renderProducts();
+    };
+    
+    function updateNavHighlight(buttonText = null) {
+        const buttons = document.querySelectorAll('#bottomNav button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        if (buttonText) { buttons.forEach(btn => { if (btn.textContent === buttonText) btn.classList.add('active'); }); } 
+        else if (currentView === 'home') { buttons[0].classList.add('active'); } 
+        else if (currentView === 'trending') { buttons[2].classList.add('active'); }
+    }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (event) => {
+        const searchContainer = document.querySelector('.search-container');
+        if (!searchContainer.contains(event.target)) {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+
+    // PRODUCT MODAL
+    window.openProduct = (productId) => {
+        const product = productsData[productId]; if (!product) return;
+        document.body.style.overflow = 'hidden';
+
+        const modal = document.getElementById("productModal");
+        const content = document.getElementById("modalContent");
+        
+        let imagesHTML = '<div class="modal-image-gallery">';
+        if (product.images && product.images.length > 0) {
+            product.images.forEach(imgUrl => {
+                imagesHTML += `<img src="${safeImage(imgUrl)}" class="modal-gallery-image" onerror="handleImageError(this)">`;
+            });
+        } else {
+            imagesHTML += `<img src="${fallbackImage}" class="modal-gallery-image" onerror="handleImageError(this)">`;
+        }
+        imagesHTML += '</div>';
+
+        let priceHTML = `<div class="final-price">₹ ${product.finalPrice?.toFixed(2)}</div>`;
+        let discountBadge = '';
+        if (product.discount > 0) {
+            priceHTML = `<div class="original-price">₹ ${product.price?.toFixed(2)}</div>` + priceHTML;
+            discountBadge = `<div class="badge discount-badge">${product.discount}% OFF</div>`;
+        }
+        
+        content.innerHTML = `
+            <button class="close-btn" onclick="closeModal()">×</button>
+            ${imagesHTML}
+            <h3>${product.title}</h3> <p><strong>Category:</strong> ${product.category}</p>
+            <div class="price-container">${priceHTML} ${discountBadge}</div>
+            <p>${product.description}</p>
+            <button onclick="buyProduct('${productId}', '${product.affiliateLink}')">Buy / Visit</button>`;
+        modal.classList.add('show');
+    }
+
+    window.closeModal = () => {
+        document.body.style.overflow = 'auto';
+        document.getElementById("productModal").classList.remove('show');
+    };
+    
+    window.buyProduct = (id, link) => {
+        if(id && productsData[id]){ update(ref(db, 'products/' + id), { sales: increment(1) }); }
+        if(link) window.open(link, '_blank');
+    };
+    
+    // ADMIN PANEL
+    window.adminLogin = () => {
+        const pass = prompt("Enter Admin Password");
+        if (pass === "ss620631") { document.getElementById("adminPanel").style.display = "block"; addImageField(); addBannerField(); } 
+        else if (pass) { alert("Incorrect Password"); }
+    };
+    window.closeAdmin = () => document.getElementById("adminPanel").style.display = "none";
+
+    // Admin: Products
+    window.saveProduct = () => {
+        const id = document.getElementById("pId").value;
+        const title = document.getElementById("pTitle").value.trim();
+        const description = document.getElementById("pDesc").value.trim();
+        const price = parseFloat(document.getElementById("pOriginalPrice").value) || 0;
+        const discount = parseFloat(document.getElementById("pDiscount").value) || 0;
+        const category = document.getElementById("pCategory").value;
+        const affiliateLink = document.getElementById("pAffiliateLink").value.trim();
+        const images = [...document.querySelectorAll("#imageFields .pImage")].map(i => i.value.trim()).filter(Boolean);
+        if (!title || !description || !category || !affiliateLink || images.length === 0) { return alert("Please fill Title, Description, Category, Affiliate Link, and add at least one Image URL."); }
+        
+        const finalPrice = price - (price * discount / 100);
+        const productData = { title, description, price, discount, finalPrice, category, affiliateLink, images, sales: productsData[id]?.sales || 0, createdAt: productsData[id]?.createdAt || Date.now() };
+
+        const promise = id ? update(ref(db, 'products/' + id), productData) : set(push(productsRef), productData);
+        promise.then(() => alert(`Product ${id ? 'updated' : 'saved'}!`)).catch(e => alert("Error: " + e.message));
+        clearProductForm();
+    };
+
+    window.addImageField = (url = '') => {
+        const container = document.getElementById("imageFields");
+        const div = document.createElement('div');
+        div.className = 'dynamic-input';
+        div.innerHTML = `<input type="text" class="pImage" placeholder="Image URL" value="${url}"><button onclick="this.parentElement.remove()">-</button>`;
+        container.appendChild(div);
+    };
+    
+    document.getElementById("pOriginalPrice").addEventListener('input', calculateFinalPrice);
+    document.getElementById("pDiscount").addEventListener('input', calculateFinalPrice);
+    function calculateFinalPrice() {
+        const price = parseFloat(document.getElementById("pOriginalPrice").value) || 0;
+        const discount = parseFloat(document.getElementById("pDiscount").value) || 0;
+        const final = price - (price * discount / 100);
+        document.getElementById("finalPricePreview").textContent = `₹ ${final.toFixed(2)}`;
+    }
+
+    window.clearProductForm = () => {
+        document.getElementById("pId").value = ''; document.getElementById("pTitle").value = '';
+        document.getElementById("pDesc").value = ''; document.getElementById("pOriginalPrice").value = '';
+        document.getElementById("pDiscount").value = ''; document.getElementById("pCategory").selectedIndex = 0;
+        document.getElementById("pAffiliateLink").value = '';
+        document.getElementById("imageFields").innerHTML = ''; addImageField(); calculateFinalPrice();
+    }
+
+    window.editProduct = (productId) => {
+        const product = productsData[productId]; if (!product) return;
+        document.getElementById("pId").value = productId; document.getElementById("pTitle").value = product.title;
+        document.getElementById("pDesc").value = product.description; document.getElementById("pOriginalPrice").value = product.price || '';
+        document.getElementById("pDiscount").value = product.discount || ''; document.getElementById("pCategory").value = product.category;
+        document.getElementById("pAffiliateLink").value = product.affiliateLink || '';
+        const imageContainer = document.getElementById("imageFields"); imageContainer.innerHTML = '';
+        (product.images || []).forEach(url => addImageField(url));
+        if(!product.images || product.images.length === 0) addImageField();
+        calculateFinalPrice(); window.scrollTo(0, 0);
+    };
+
+    window.deleteProduct = (productId) => { if (confirm("Delete product?")) { remove(ref(db, 'products/' + productId)); } };
+    
+    function renderAdminProducts() {
+        const container = document.getElementById("adminProductList");
+        container.innerHTML = "<h4>All Products</h4>";
+        const entries = Object.entries(productsData).sort((a,b)=>b[1].createdAt - a[1].createdAt);
+        if(entries.length === 0) { container.innerHTML += "<p>No products added.</p>"; return; }
+        entries.forEach(([id, p]) => {
+            const item = document.createElement("div"); item.className = "admin-product-item";
+            item.innerHTML = `<img src="${safeImage(p.images?.[0])}" onerror="handleImageError(this)">
+                <div class="info"><h4>${p.title}</h4><p>${p.category}</p></div>
+                <div class="actions"><button onclick="editProduct('${id}')">Edit</button><button onclick="deleteProduct('${id}')" class="btn-secondary">Del</button></div>`;
+            container.appendChild(item);
+        });
+    }
+
+    // Admin: Categories
+    window.addCategory = () => { const name = document.getElementById("newCategoryName").value.trim(); if (name) { push(categoriesRef, name); document.getElementById("newCategoryName").value = ''; } };
+    window.deleteCategory = (id) => { if (confirm("Delete category?")) { remove(ref(db, 'categories/' + id)); } };
+    function renderAdminCategories() {
+        const select = document.getElementById("pCategory"); const listContainer = document.getElementById("categoryList");
+        select.innerHTML = '<option value="">Select Category</option>'; listContainer.innerHTML = "";
+        Object.entries(categoriesData).forEach(([id, cat]) => {
+            const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat; select.appendChild(opt);
+            const item = document.createElement("div"); item.className = 'category-item';
+            item.innerHTML = `<span>${cat}</span><button onclick="deleteCategory('${id}')" class="btn-secondary">Del</button>`;
+            listContainer.appendChild(item);
+        });
+    }
+    
+    // Admin: Banners
+    window.addBannerField = (id = '', imgUrl = '', linkUrl = '') => {
+        const container = document.getElementById("bannerFields");
+        const div = document.createElement('div');
+        div.className = 'dynamic-input';
+        div.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="text" class="bImage" placeholder="Image URL" value="${imgUrl}"><input type="text" class="bLink" placeholder="Link" value="${linkUrl}"><button onclick="this.parentElement.remove()">-</button>`;
+        container.appendChild(div);
+    };
+
+    window.saveBanners = () => {
+        const bannerNodes = [...document.querySelectorAll("#bannerFields .dynamic-input")];
+        const promises = [];
+        bannerNodes.forEach(node => {
+            const id = node.querySelector('.bId').value;
+            const image = node.querySelector('.bImage').value.trim();
+            const link = node.querySelector('.bLink').value.trim();
+
+            if (image && link) {
+                const bannerData = { image, link };
+                if (id) {
+                    promises.push(update(ref(db, `banners/${id}`), bannerData));
+                } else {
+                    bannerData.createdAt = Date.now();
+                    promises.push(set(push(bannersRef), bannerData));
+                }
+            }
+        });
+
+        Promise.all(promises)
+            .then(() => {
+                alert("Banners Saved!");
+            })
+            .catch(e => {
+                alert("Error saving banners: " + e.message);
+            });
+    };
+
+    window.deleteBanner = (id) => { if (confirm("Delete banner?")) { remove(ref(db, 'banners/' + id)); } }
+
+    function renderAdminBanners() {
+        const container = document.getElementById("adminBannerList");
+        const fields = document.getElementById("bannerFields");
+        container.innerHTML = "<h4>Current Banners</h4>"; fields.innerHTML = "";
+        const entries = Object.entries(bannersData);
+        if(entries.length === 0){ container.innerHTML += "<p>No banners added.</p>"; addBannerField('', '', ''); return; }
+        entries.forEach(([id, b]) => {
+            addBannerField(id, b.image, b.link);
+            const item = document.createElement("div"); item.className = "admin-product-item";
+            item.innerHTML = `<img src="${safeImage(b.image)}" onerror="handleImageError(this)">
+                <div class="info"><h4>Banner Image</h4><p>${b.link}</p></div>
+                <div class="actions"><button onclick="deleteBanner('${id}')" class="btn-secondary">Del</button></div>`;
+            container.appendChild(item);
+        });
+    }
+    // Initial load
+    updateNavHighlight();
+</script>
+</body>
+</html>
