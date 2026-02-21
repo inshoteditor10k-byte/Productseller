@@ -73,11 +73,11 @@ h1{text-align:center;font-size:28px;margin-top:25px;background:linear-gradient(9
 .admin-btn{position:fixed;bottom:70px;right:10px;font-size:11px;opacity:0.6;cursor:pointer;z-index:1001;}
 .admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:none;overflow-y:auto;z-index:2000;padding:20px;}
 .admin-panel h2, .admin-panel h3{text-align:center;margin-bottom:15px;color:var(--primary-glow);}
-.admin-panel input,.admin-panel textarea,.admin-panel select{width:100%;margin-bottom:10px;padding:10px;border-radius:8px;border:none;background:#1a1a2e;color:#fff;}
+.admin-panel input,.admin-panel textarea,.admin-panel select, #adminLoginModal input[type="password"] {width:100%;margin-bottom:10px;padding:10px;border-radius:8px;border:none;background:#1a1a2e;color:#fff;}
 .admin-panel .price-inputs{display:flex;gap:10px;}
 #finalPricePreview{font-weight:bold;color:var(--primary-glow);padding:5px 0;}
-.admin-panel button{padding:10px 15px;margin:5px 0;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;cursor:pointer;font-weight:bold;}
-.admin-panel .btn-secondary{background:rgba(255,255,255,0.1);color:#fff;}
+.admin-panel button, #adminLoginModal button {padding:10px 15px;margin:5px 0;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;cursor:pointer;font-weight:bold;}
+.admin-panel .btn-secondary, #adminLoginModal .btn-secondary {background:rgba(255,255,255,0.1);color:#fff;}
 .dynamic-input{display:flex;gap:5px;margin-bottom:5px;}
 .dynamic-input input{flex-grow:1;}
 .dynamic-input button{padding:0 10px;background:#c82333;color:#fff;}
@@ -91,20 +91,23 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
 .admin-product-item .info p{font-size:12px;opacity:0.7;}
 .admin-product-item .actions button{padding:5px 8px;font-size:12px;}
 #category-manager .category-item{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;padding:8px;border-radius:5px;margin-bottom:5px;}
+/* Styles for new Admin Login Modal */
+#adminLoginModal .modal-content { max-width: 350px; }
+#adminLoginModal button { width: 100%; }
 </style>
 </head>
-    <script src="https://pl28750759.effectivegatecpm.com/28/b7/77/28b7770062cf1401c510514ab77dccf2.js"></script>
 <body>
+    <script src="https://pl28750759.effectivegatecpm.com/28/b7/77/28b7770062cf1401c510514ab77dccf2.js"></script>
     <script>
-  atOptions = {
-    'key' : '71f469a0676044942280f6e5f52c9392',
-    'format' : 'iframe',
-    'height' : 50,
-    'width' : 320,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
+        atOptions = {
+            'key' : '71f469a0676044942280f6e5f52c9392',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+        };
+    </script>
+    <script src="https://www.highperformanceformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
 
 <h1>Product by Shailesh – Futuristic Store</h1>
 <div class="controls-container">
@@ -139,6 +142,18 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
 
 <div class="modal" id="productModal">
     <div class="modal-content" id="modalContent"></div>
+</div>
+
+<!-- NEW: Admin Login Modal -->
+<div class="modal" id="adminLoginModal">
+    <div class="modal-content">
+        <h3>Admin Login</h3>
+        <p style="opacity:0.8; font-size: 14px; margin-bottom: 15px;">Enter password to access the panel.</p>
+        <input type="password" id="adminPasswordInput" placeholder="Password">
+        <div id="adminLoginError" style="color: #ff4757; margin-top: 10px; display: none; text-align:center;">Incorrect Password</div>
+        <button onclick="checkAdminPassword()">Login</button>
+        <button onclick="closeAdminLoginModal()" class="btn-secondary">Cancel</button>
+    </div>
 </div>
 
 <div class="admin-panel" id="adminPanel">
@@ -380,7 +395,7 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         bannerEntries.forEach((b, i) => {
             const img = document.createElement("img");
             img.src = safeImage(b.image);
-            img.onclick = () => window.open(b.link, '_blank');
+            img.onclick = () => window.location.href = b.link; // Changed for APK compatibility
             img.onerror = () => handleImageError(img);
             if (i === 0) {
                 img.classList.add("active");
@@ -437,8 +452,6 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         } else {
             suggestionsContainer.style.display = 'none';
         }
-
-        // Keep live filtering feature
         triggerSearch();
     };
     
@@ -476,7 +489,6 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         else if (currentView === 'trending') { buttons[2].classList.add('active'); }
     }
 
-    // Hide suggestions when clicking outside
     document.addEventListener('click', (event) => {
         const searchContainer = document.querySelector('.search-container');
         if (!searchContainer.contains(event.target)) {
@@ -524,17 +536,41 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         document.getElementById("productModal").classList.remove('show');
     };
     
+    // UPDATED for APK compatibility
     window.buyProduct = (id, link) => {
         if(id && productsData[id]){ update(ref(db, 'products/' + id), { sales: increment(1) }); }
-        if(link) window.open(link, '_blank');
+        if(link) {
+            // This method is more compatible with WebViews (for APKs) than window.open
+            window.location.href = link;
+        }
     };
     
-    // ADMIN PANEL
+    // ADMIN PANEL (UPDATED LOGIN LOGIC)
     window.adminLogin = () => {
-        const pass = prompt("Enter Admin Password");
-        if (pass === "ss620631") { document.getElementById("adminPanel").style.display = "block"; addImageField(); addBannerField(); } 
-        else if (pass) { alert("Incorrect Password"); }
+        // Instead of prompt, we show our custom modal
+        document.getElementById('adminPasswordInput').value = ''; // Clear old password
+        document.getElementById('adminLoginError').style.display = 'none'; // Hide any previous error
+        document.getElementById('adminLoginModal').classList.add('show');
     };
+
+    window.checkAdminPassword = () => {
+        const pass = document.getElementById("adminPasswordInput").value;
+        const errorMsg = document.getElementById('adminLoginError');
+        if (pass === "ss620631") {
+            closeAdminLoginModal();
+            document.getElementById("adminPanel").style.display = "block";
+            // Ensure fields are ready if it's the first time opening
+            if (!document.getElementById("imageFields").hasChildNodes()) addImageField();
+            if (!document.getElementById("bannerFields").hasChildNodes()) addBannerField();
+        } else {
+            errorMsg.style.display = 'block';
+        }
+    };
+
+    window.closeAdminLoginModal = () => {
+        document.getElementById('adminLoginModal').classList.remove('show');
+    };
+
     window.closeAdmin = () => document.getElementById("adminPanel").style.display = "none";
 
     // Admin: Products
