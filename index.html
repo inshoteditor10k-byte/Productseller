@@ -8,7 +8,7 @@
 <style>
 :root{--primary-glow:#00f5ff;--secondary-glow:#9b5cff;--card-bg:rgba(255,255,255,0.08);--text-light:rgba(255,255,255,0.8);}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);color:#fff;min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
+body{background:linear-gradient(135deg,#0f0c29,#1a1a2e,#16213e);color:#fff;min-height:100vh;overflow-x:hidden;padding-bottom:120px;}
 h1,h2,h3{text-shadow:0 0 15px var(--primary-glow);}
 h1{text-align:center;font-size:28px;margin-top:25px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .controls-container{padding:0 20px;max-width:800px;margin:20px auto;display:flex;flex-wrap:wrap;gap:15px;justify-content:center;}
@@ -94,6 +94,23 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
 /* Styles for new Admin Login Modal */
 #adminLoginModal .modal-content { max-width: 350px; }
 #adminLoginModal button { width: 100%; }
+
+/* Adsterra Bottom Banner Styles */
+#adsterra-bottom-banner {
+    position: fixed;
+    bottom: 60px; /* Positioned above the bottom-nav */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 50px;
+    z-index: 998; /* Below modals and nav bar */
+}
+/* Hide banner on larger screens */
+@media (min-width: 769px) {
+    #adsterra-bottom-banner {
+        display: none;
+    }
+}
 </style>
 </head>
 <body>
@@ -118,12 +135,6 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
 <div class="categories-panel" id="categoriesPanel"></div>
 <div class="products" id="products">
     <div class="loading-indicator">Loading products...</div>
-</div>
-
-<div class="bottom-nav" id="bottomNav">
-    <button onclick="showHome()" class="active">Home</button>
-    <button onclick="toggleCategories()">Categories</button>
-    <button onclick="showTrending()">Trending</button>
 </div>
 
 <div class="admin-btn" onclick="adminLogin()">Admin Panel</div>
@@ -180,6 +191,26 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     <div id="adminBannerList" class="admin-product-list"></div>
     <hr>
     <button onclick="closeAdmin()" class="btn-secondary">Close Panel</button>
+</div>
+
+<!-- Adsterra Bottom Banner -->
+<div id="adsterra-bottom-banner">
+    <script type="text/javascript">
+        atOptions = {
+            'key' : '71f469a0676044942280f6e5f52c9392',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+        };
+    </script>
+    <script type="text/javascript" src="//www.topcreativeformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
+</div>
+
+<div class="bottom-nav" id="bottomNav">
+    <button onclick="showHome()" class="active">Home</button>
+    <button onclick="toggleCategories()">Categories</button>
+    <button onclick="showTrending()">Trending</button>
 </div>
 
 <script type="module">
