@@ -105,22 +105,25 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     height: 50px;
     z-index: 998; /* Below modals and nav bar */
 }
-/* Hide banner on larger screens */
+/* Hide bottom banner on larger screens where it's not needed */
 @media (min-width: 769px) {
     #adsterra-bottom-banner {
         display: none;
     }
 }
 
-/* NEW: Adsterra Top Banner Styles */
-#adsterra-top-banner {
-    display: flex;
-    justify-content: center;
-    margin: 15px 0;
+/* Adsterra Top Banner Styles */
+#adsterra-top-banner{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:20px auto;
+    width:100%;
+    min-height:60px;
 }
-@media (max-width: 768px) {
-    #adsterra-top-banner {
-        display: none;
+@media(max-width:768px){
+    #adsterra-top-banner{
+        display:none;
     }
 }
 </style>
@@ -145,18 +148,17 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     </div>
 </div> <!-- controls-container -->
 
-<!-- NEW: Adsterra Top Banner -->
 <div id="adsterra-top-banner">
-    <script>
-      atOptions = {
-        'key' : '8dd0b4eb3b8a5835eeea9dae52d5c9ab',
-        'format' : 'iframe',
-        'height' : 60,
-        'width' : 468,
-        'params' : {}
-      };
-    </script>
-    <script src="https://www.highperformanceformat.com/8dd0b4eb3b8a5835eeea9dae52d5c9ab/invoke.js"></script>
+  <script>
+    atOptions = {
+      'key' : '8dd0b4eb3b8a5835eeea9dae52d5c9ab',
+      'format' : 'iframe',
+      'height' : 60,
+      'width' : 468,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/8dd0b4eb3b8a5835eeea9dae52d5c9ab/invoke.js"></script>
 </div>
 
 <div class="banner" id="banner"></div>
@@ -171,7 +173,7 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     <div class="modal-content" id="modalContent"></div>
 </div>
 
-<!-- NEW: Admin Login Modal -->
+<!-- Admin Login Modal -->
 <div class="modal" id="adminLoginModal">
     <div class="modal-content">
         <h3>Admin Login</h3>
