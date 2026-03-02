@@ -374,8 +374,6 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
             container.innerHTML = `<div class="no-products">No products found.</div>`;
             return;
         }
-        
-        let index = 0; // Counter for native ad injection
 
         list.forEach(product => {
             const card = document.createElement("div");
@@ -406,20 +404,6 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
                 </div>
             `;
             container.appendChild(card);
-            index++;
-
-            // NEW: Adsterra Native Banner Injection
-            if(index % 6 === 0){
-               const adDiv = document.createElement("div");
-               adDiv.className = "card"; // Use 'card' class to blend with the grid
-               adDiv.innerHTML = `
-                   <div style="display: flex; justify-content: center; align-items: center; min-height: 100%; padding: 10px;">
-                       <script async="async" data-cfasync="false" src="https://pl28827401.effectivegatecpm.com/aebc6a48a55d9e375e388d9626818725/invoke.js"></script>
-                       <div id="container-aebc6a48a55d9e375e388d9626818725"></div>
-                   </div>
-               `;
-               container.appendChild(adDiv);
-            }
         });
     }
 
@@ -783,4 +767,4 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     updateNavHighlight();
 </script>
 </body>
-    </html>
+</html>
