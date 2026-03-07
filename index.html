@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "5b9188a3-bfda-4708-91af-02e183289cc8",
-    });
-  });
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product by Shailesh – Futuristic Store</title>
@@ -136,6 +127,15 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     }
 }
 </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "5b9188a3-bfda-4708-91af-02e183289cc8",
+    });
+  });
+</script>
 </head>
     <script src="https://pl28750759.effectivegatecpm.com/28/b7/77/28b7770062cf1401c510514ab77dccf2.js"></script>
 <body>
@@ -774,6 +774,91 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     }
     // Initial load
     updateNavHighlight();
+</script>
+
+<script>
+// New script for update detection and notification triggering system
+document.addEventListener('DOMContentLoaded', () => {
+    /**
+     * This function simulates triggering a push notification.
+     * IMPORTANT: For security reasons, sending push notifications to all users (broadcasting)
+     * must be done from a server using the OneSignal REST API. Your REST API Key must be kept
+     * secret and should never be exposed in client-side code.
+     * 
+     * The process would be:
+     * 1. This client-side code detects a change.
+     * 2. It sends a request to your own secure server endpoint (e.g., `https://your-server.com/send-update`).
+     * 3. Your server receives the request and then makes a secure API call to OneSignal to send the push notification.
+     */
+    const sendUpdateNotification = () => {
+        console.log("-----------------------------------------");
+        console.log("WEBSITE UPDATE DETECTED");
+        console.log("Triggering push notification with the following content:");
+        console.log({
+            title: "Website Updated",
+            message: "New update or product added. Check the website now!"
+        });
+        console.log("In a live environment, this would trigger a call to a secure server endpoint.");
+        console.log("-----------------------------------------");
+    };
+
+    // Use a debounce mechanism to prevent the notification from firing multiple times
+    // during a single batch of DOM updates (e.g., when multiple products are loaded).
+    let debounceTimeout;
+    const debouncedSendNotification = () => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            // Check if the content is actual products, not a "loading" or "no products" message.
+            const loadingIndicator = document.querySelector('.products .loading-indicator');
+            const noProductsMessage = document.querySelector('.products .no-products');
+            if (!loadingIndicator && !noProductsMessage) {
+                 sendUpdateNotification();
+            }
+        }, 1000); // Wait 1 second after the last change before triggering.
+    };
+
+    // Select the node that will be observed for mutations.
+    // The #products div is the best target as it's where dynamic content is loaded.
+    const targetNode = document.getElementById('products');
+
+    if (targetNode) {
+        // Observer configuration: we want to watch for nodes being added or removed.
+        const config = { childList: true };
+
+        // A flag to prevent the observer from firing on the initial page load.
+        let isInitialLoad = true;
+
+        // The callback function to execute when mutations are observed.
+        const callback = function(mutationsList, observer) {
+            // Ignore the very first set of mutations which is just the initial product loading.
+            if (isInitialLoad) {
+                // Set the flag to false after the initial content has likely rendered.
+                isInitialLoad = false;
+                return;
+            }
+
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    // Check if actual product cards were added, not just the text of the loading indicator being removed.
+                    if (mutation.addedNodes.length > 0 && mutation.addedNodes[0].nodeType === Node.ELEMENT_NODE) {
+                         debouncedSendNotification();
+                         break; // No need to check other mutations in this batch.
+                    }
+                }
+            }
+        };
+
+        // Create an observer instance with the callback.
+        const observer = new MutationObserver(callback);
+
+        // Start observing the target node with the specified configuration.
+        observer.observe(targetNode, config);
+
+        console.log('Website update detection system is now active.');
+    } else {
+        console.error('Could not find the #products container to initialize the update detection system.');
+    }
+});
 </script>
 </body>
 </html>
