@@ -941,5 +941,30 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     // Initial load
     updateNavHighlight();
 </script>
+  <script>
+// Automatically generate meta keywords from products and website info
+(function() {
+    const websiteName = "Vah"; // Tumhara website ka naam
+    const developerName = "Shailesh"; // Tumhara naam ya brand
+    const keywordsSet = new Set([websiteName, `Website by ${developerName}`]);
+
+    // Add product titles and categories as keywords
+    if (window.productsData) {
+        Object.values(window.productsData).forEach(p => {
+            if (p.title) keywordsSet.add(p.title);
+            if (p.category) keywordsSet.add(p.category);
+        });
+    }
+
+    // Create or update meta keywords tag
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+        metaKeywords = document.createElement('meta');
+        metaKeywords.name = "keywords";
+        document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.content = Array.from(keywordsSet).join(", ");
+})();
+  </script>
 </body>
 </html>
