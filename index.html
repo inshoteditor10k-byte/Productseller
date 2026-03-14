@@ -61,6 +61,8 @@ h1{text-align:center;font-size:28px;margin-top:25px;background:linear-gradient(9
 .card .final-price{font-size:16px;font-weight:bold;color:var(--primary-glow);}
 .card .view-button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;font-weight:bold;cursor:pointer;transition:transform 0.2s;}
 .card .view-button:hover{transform:scale(1.03);}
+.card .expiry-info { font-size: 10px; color: var(--text-light); opacity: 0.9; margin-top: 8px; }
+.card .countdown-timer { font-size: 11px; color: var(--primary-glow); font-weight: 600; margin-top: 4px; }
 .bottom-nav{position:fixed;bottom:0;left:0;width:100%;display:flex;justify-content:space-around;background:rgba(0,0,0,0.8);backdrop-filter:blur(15px);padding:12px 0;z-index:999;}
 .bottom-nav button{background:none;border:none;color:#fff;font-size:14px;cursor:pointer;transition:color 0.3s;}
 .bottom-nav button.active{color:var(--primary-glow);font-weight:bold;}
@@ -85,16 +87,20 @@ h1{text-align:center;font-size:28px;margin-top:25px;background:linear-gradient(9
 .modal button:hover{transform:scale(1.02);}
 .modal-image-gallery { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .modal-gallery-image { width: 100%; height: auto; border-radius: 10px; object-fit: cover; }
+.modal .expiry-info { font-size: 13px; color: var(--text-light); opacity: 0.9; margin-top: 15px; }
+.modal .countdown-timer { font-size: 14px; color: var(--primary-glow); font-weight: 600; margin-top: 5px; margin-bottom: 15px; }
 .admin-btn{position:fixed;bottom:70px;right:10px;font-size:11px;opacity:0.6;cursor:pointer;z-index:1001;}
 .admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:none;overflow-y:auto;z-index:2000;padding:20px;}
 .admin-panel h2, .admin-panel h3{text-align:center;margin-bottom:15px;color:var(--primary-glow);}
 .admin-panel input,.admin-panel textarea,.admin-panel select, #adminLoginModal input[type="password"] {width:100%;margin-bottom:10px;padding:10px;border-radius:8px;border:none;background:#1a1a2e;color:#fff;}
 .admin-panel .price-inputs{display:flex;gap:10px;}
+.admin-panel label { font-size: 12px; opacity: 0.7; margin-bottom: 2px; display: block; }
+.admin-panel .expiry-inputs { display: flex; gap: 10px; }
 #finalPricePreview{font-weight:bold;color:var(--primary-glow);padding:5px 0;}
 .admin-panel button, #adminLoginModal button {padding:10px 15px;margin:5px 0;border:none;border-radius:8px;background:linear-gradient(90deg,var(--primary-glow),var(--secondary-glow));color:#000;cursor:pointer;font-weight:bold;}
 .admin-panel .btn-secondary, #adminLoginModal .btn-secondary {background:rgba(255,255,255,0.1);color:#fff;}
-.dynamic-input{display:flex;gap:5px;margin-bottom:5px;}
-.dynamic-input input{flex-grow:1;}
+.dynamic-input{display:flex;flex-wrap: wrap; gap:5px;margin-bottom:10px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px;}
+.dynamic-input input{flex-grow:1; min-width: 150px;}
 .dynamic-input button{padding:0 10px;background:#c82333;color:#fff;}
 hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
 .loading-indicator, .no-products{text-align:center;margin-top:50px;font-size:18px;opacity:0.8;}
@@ -212,6 +218,16 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         <input type="number" id="pDiscount" placeholder="Discount (%)">
     </div>
     <p>Final Price: <span id="finalPricePreview">₹ 0.00</span></p>
+    <div class="expiry-inputs">
+        <div>
+            <label for="pExpiryDate">Offer Expiry Date</label>
+            <input type="date" id="pExpiryDate">
+        </div>
+        <div>
+            <label for="pExpiryTime">Offer Expiry Time</label>
+            <input type="time" id="pExpiryTime">
+        </div>
+    </div>
     <select id="pCategory"></select>
     <input type="url" id="pAffiliateLink" placeholder="Affiliate Link">
     <div id="imageFields"></div>
@@ -291,8 +307,81 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     let currentCategory = "ALL";
     let currentView = "home";
     let bannerInterval = null;
+    let countdownInterval = null;
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
+
+    // --- EXPIRY & COUNTDOWN HELPER FUNCTIONS ---
+    function getTimestampFromInputs(dateInput, timeInput) {
+        if (dateInput.value) {
+            const dateTimeString = `${dateInput.value}T${timeInput.value || '00:00:00'}`;
+            const date = new Date(dateTimeString);
+            if (!isNaN(date.getTime())) {
+                return date.getTime();
+            }
+        }
+        return null;
+    }
+
+    function setInputsFromTimestamp(timestamp, dateInput, timeInput) {
+        if (timestamp) {
+            const date = new Date(timestamp);
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            dateInput.value = `${year}-${month}-${day}`;
+            timeInput.value = `${hours}:${minutes}`;
+        } else {
+            dateInput.value = '';
+            timeInput.value = '';
+        }
+    }
+
+    function formatExpiryDate(timestamp) {
+        if (!timestamp) return '';
+        return new Date(timestamp).toLocaleString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: 'numeric', minute: '2-digit', hour12: true
+        });
+    }
+
+    function formatCountdown(ms) {
+        if (ms <= 0) return 'Offer Expired';
+        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+        
+        let result = "Ends in: ";
+        if (days > 0) result += `${days}d `;
+        if (hours > 0 || days > 0) result += `${hours}h `;
+        result += `${minutes}m ${seconds}s`;
+        return result;
+    }
+
+    function updateAllCountdowns() {
+        const now = Date.now();
+        document.querySelectorAll('[data-expiry]').forEach(el => {
+            const expiryTime = parseInt(el.dataset.expiry, 10);
+            const remaining = expiryTime - now;
+            if(remaining > 0) {
+                el.textContent = formatCountdown(remaining);
+            } else {
+                el.textContent = 'Offer Expired';
+                el.style.color = '#ff4757';
+            }
+        });
+    }
+    
+    function startCountdownTimer() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        countdownInterval = setInterval(updateAllCountdowns, 1000);
+    }
+    // ---------------------------------------------
+
 
     // Data Listeners
     onValue(categoriesRef, (snapshot) => {
@@ -355,6 +444,10 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
             isExactMatch: (p.title || "").toLowerCase() === searchLower
         }));
         
+        // Filter out expired products
+        const now = Date.now();
+        list = list.filter(p => !p.expiryDateTime || p.expiryDateTime > now);
+
         if (search) {
             // In search mode, filter by score
             list = list.filter(p => p.score > 0);
@@ -412,6 +505,14 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
             if (product.sales > 50) salesBadge = `<div class="badge sales-badge">Best Seller</div>`;
             else if (product.sales > 25) salesBadge = `<div class="badge sales-badge">Hot Selling</div>`;
             else if (product.sales > 10) salesBadge = `<div class="badge sales-badge">Popular</div>`;
+            
+            let expiryHTML = '';
+            if (product.expiryDateTime) {
+                expiryHTML = `
+                    <p class="expiry-info">Offer valid till: ${formatExpiryDate(product.expiryDateTime)}</p>
+                    <div class="countdown-timer" data-expiry="${product.expiryDateTime}"></div>
+                `;
+            }
 
             card.innerHTML = `
                 <div class="image-container">
@@ -423,11 +524,13 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
                     <h3>${product.title || 'No Title'}</h3>
                     <p class="category-text">${product.category}</p>
                     <div class="price-container">${priceHTML}</div>
+                    ${expiryHTML}
                     <button class="view-button" onclick="openProduct('${product.id}')">View Details</button>
                 </div>
             `;
             container.appendChild(card);
         });
+        updateAllCountdowns(); // Initial call after render
     }
 
     function renderCategories() {
@@ -456,7 +559,9 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         const banner = document.getElementById("banner");
         banner.innerHTML = "";
         clearInterval(bannerInterval);
-        const bannerEntries = Object.values(bannersData);
+
+        const now = Date.now();
+        const bannerEntries = Object.values(bannersData).filter(b => !b.expiryDateTime || b.expiryDateTime > now);
 
         if (bannerEntries.length === 0) {
             banner.style.display = 'none';
@@ -593,14 +698,24 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
             discountBadge = `<div class="badge discount-badge">${product.discount}% OFF</div>`;
         }
         
+        let expiryHTML = '';
+        if (product.expiryDateTime) {
+            expiryHTML = `
+                <p class="expiry-info">Offer valid till: ${formatExpiryDate(product.expiryDateTime)}</p>
+                <div class="countdown-timer" data-expiry="${product.expiryDateTime}"></div>
+            `;
+        }
+        
         content.innerHTML = `
             <button class="close-btn" onclick="closeModal()">×</button>
             ${imagesHTML}
             <h3>${product.title}</h3> <p><strong>Category:</strong> ${product.category}</p>
             <div class="price-container">${priceHTML} ${discountBadge}</div>
+            ${expiryHTML}
             <p>${product.description}</p>
             <button onclick="buyProduct('${productId}', '${product.affiliateLink}')">Buy / Visit</button>`;
         modal.classList.add('show');
+        updateAllCountdowns();
     }
 
     window.closeModal = () => {
@@ -740,10 +855,16 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         const category = document.getElementById("pCategory").value;
         const affiliateLink = document.getElementById("pAffiliateLink").value.trim();
         const images = [...document.querySelectorAll("#imageFields .pImage")].map(i => i.value.trim()).filter(Boolean);
+        const expiryDateTime = getTimestampFromInputs(document.getElementById('pExpiryDate'), document.getElementById('pExpiryTime'));
+
         if (!title || !description || !category || !affiliateLink || images.length === 0) { return alert("Please fill Title, Description, Category, Affiliate Link, and add at least one Image URL."); }
         
         const finalPrice = price - (price * discount / 100);
         const productData = { title, description, price, discount, finalPrice, category, affiliateLink, images, sales: productsData[id]?.sales || 0, createdAt: productsData[id]?.createdAt || Date.now() };
+        
+        if (expiryDateTime) {
+            productData.expiryDateTime = expiryDateTime;
+        }
         
         const isNewProduct = !id;
         const promise = id ? update(ref(db, 'products/' + id), productData) : set(push(productsRef), productData);
@@ -785,6 +906,7 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         document.getElementById("pDesc").value = ''; document.getElementById("pOriginalPrice").value = '';
         document.getElementById("pDiscount").value = ''; document.getElementById("pCategory").selectedIndex = 0;
         document.getElementById("pAffiliateLink").value = '';
+        document.getElementById('pExpiryDate').value = ''; document.getElementById('pExpiryTime').value = '';
         document.getElementById("imageFields").innerHTML = ''; addImageField(); calculateFinalPrice();
     }
 
@@ -794,6 +916,7 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
         document.getElementById("pDesc").value = product.description; document.getElementById("pOriginalPrice").value = product.price || '';
         document.getElementById("pDiscount").value = product.discount || ''; document.getElementById("pCategory").value = product.category;
         document.getElementById("pAffiliateLink").value = product.affiliateLink || '';
+        setInputsFromTimestamp(product.expiryDateTime, document.getElementById('pExpiryDate'), document.getElementById('pExpiryTime'));
         const imageContainer = document.getElementById("imageFields"); imageContainer.innerHTML = '';
         (product.images || []).forEach(url => addImageField(url));
         if(!product.images || product.images.length === 0) addImageField();
@@ -872,12 +995,21 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     }
     
     // Admin: Banners
-    window.addBannerField = (id = '', imgUrl = '', linkUrl = '') => {
+    window.addBannerField = (id = '', imgUrl = '', linkUrl = '', expiryTimestamp = null) => {
         const container = document.getElementById("bannerFields");
+        const newId = id || `new_${Date.now()}`;
         const div = document.createElement('div');
         div.className = 'dynamic-input';
-        div.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="text" class="bImage" placeholder="Image URL" value="${imgUrl}"><input type="text" class="bLink" placeholder="Link" value="${linkUrl}"><button onclick="this.parentElement.remove()">-</button>`;
+        div.id = `banner-form-${newId}`;
+        div.innerHTML = `
+            <input type="hidden" class="bId" value="${id}">
+            <input type="text" class="bImage" placeholder="Image URL" value="${imgUrl}">
+            <input type="text" class="bLink" placeholder="Link" value="${linkUrl}">
+            <input type="date" class="bExpiryDate" title="Expiry Date">
+            <input type="time" class="bExpiryTime" title="Expiry Time">
+            <button onclick="this.parentElement.remove()">-</button>`;
         container.appendChild(div);
+        setInputsFromTimestamp(expiryTimestamp, div.querySelector('.bExpiryDate'), div.querySelector('.bExpiryTime'));
     };
 
     window.saveBanners = () => {
@@ -889,9 +1021,12 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
             const id = node.querySelector('.bId').value;
             const image = node.querySelector('.bImage').value.trim();
             const link = node.querySelector('.bLink').value.trim();
+            const expiryDateTime = getTimestampFromInputs(node.querySelector('.bExpiryDate'), node.querySelector('.bExpiryTime'));
 
             if (image && link) {
                 const bannerData = { image, link };
+                if (expiryDateTime) bannerData.expiryDateTime = expiryDateTime;
+
                 if (id) {
                     promises.push(update(ref(db, `banners/${id}`), bannerData));
                 } else {
@@ -922,24 +1057,37 @@ hr{border:1px solid rgba(255,255,255,0.1);margin:20px 0;}
     };
 
     window.deleteBanner = (id) => { if (confirm("Delete banner?")) { remove(ref(db, 'banners/' + id)); } }
+    
+    window.editBanner = (id) => {
+        const bannerForm = document.getElementById(`banner-form-${id}`);
+        if(bannerForm) {
+            bannerForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            bannerForm.style.boxShadow = '0 0 15px var(--primary-glow)';
+            setTimeout(() => { bannerForm.style.boxShadow = 'none'; }, 2000);
+        }
+    }
 
     function renderAdminBanners() {
         const container = document.getElementById("adminBannerList");
         const fields = document.getElementById("bannerFields");
         container.innerHTML = "<h4>Current Banners</h4>"; fields.innerHTML = "";
         const entries = Object.entries(bannersData);
-        if(entries.length === 0){ container.innerHTML += "<p>No banners added.</p>"; addBannerField('', '', ''); return; }
+        if(entries.length === 0){ container.innerHTML += "<p>No banners added.</p>"; addBannerField(); return; }
         entries.forEach(([id, b]) => {
-            addBannerField(id, b.image, b.link);
+            addBannerField(id, b.image, b.link, b.expiryDateTime);
             const item = document.createElement("div"); item.className = "admin-product-item";
             item.innerHTML = `<img src="${safeImage(b.image)}" onerror="handleImageError(this)">
                 <div class="info"><h4>Banner Image</h4><p>${b.link}</p></div>
-                <div class="actions"><button onclick="deleteBanner('${id}')" class="btn-secondary">Del</button></div>`;
+                <div class="actions">
+                    <button onclick="editBanner('${id}')">Edit</button>
+                    <button onclick="deleteBanner('${id}')" class="btn-secondary">Del</button>
+                </div>`;
             container.appendChild(item);
         });
     }
     // Initial load
     updateNavHighlight();
+    startCountdownTimer();
 </script>
 </body>
 </html>
