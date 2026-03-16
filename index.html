@@ -79,7 +79,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--primary-glow); }
 .card .image-container { width: 100%; height: 150px; position: relative; overflow: hidden; background: var(--input-bg); }
 .card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; opacity: 0; }
-.card .image-container img.loaded { opacity: 1; } /* Lazy load fade-in */
+.card .image-container img.loaded { opacity: 1; } 
 .card:hover .image-container img { transform: scale(1.05); }
 .badge { position: absolute; top: 10px; padding: 4px 8px; font-size: 10px; font-weight: bold; border-radius: 5px; color: #fff; text-transform: uppercase; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 .discount-badge { left: 10px; background: var(--primary-glow); color: #000; animation: pulse 2s infinite; }
@@ -127,7 +127,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes fadeOut { to { opacity: 0; } }
 
-/* ADMIN PANEL (Upgraded with Tabs) */
+/* ADMIN PANEL */
 .admin-btn { position: fixed; bottom: 80px; right: 15px; font-size: 12px; background: var(--card-bg); padding: 8px 12px; border-radius: 20px; cursor: pointer; z-index: 1001; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--panel-bg); display: none; overflow-y: auto; z-index: 3000; padding: 20px; }
 .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -394,32 +394,35 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div id="toast-container"></div>
 
 <script type="module">
-    // --- FIREBASE IMPORTS (Modular) ---
+    // --- EXACT FIREBASE CONFIG REQUIRED ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyDpF0VyF-4MeniRCO1L1oMhYtR5uBZkklU",
-        authDomain: "apps-and-games-store-8c442.firebaseapp.com",
-        databaseURL: "https://apps-and-games-store-8c442-default-rtdb.firebaseio.com",
-        projectId: "apps-and-games-store-8c442",
-        storageBucket: "apps-and-games-store-8c442.firebasestorage.app",
-        messagingSenderId: "320735195272",
-        appId: "1:320735195272:web:f6d8693160baf6eaf8af3d"
+        apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
+        authDomain: "product-seller-app.firebaseapp.com",
+        databaseURL: "https://product-seller-app-default-rtdb.firebaseio.com",
+        projectId: "product-seller-app",
+        storageBucket: "product-seller-app.firebasestorage.app",
+        messagingSenderId: "1046644480118",
+        appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
-    setPersistence(auth, browserLocalPersistence); // Security: Session persistence
+    
+    // Auth Initialization Safely
+    setPersistence(auth, browserLocalPersistence).catch(err => console.warn("Persistence error:", err));
 
     const refs = {
         products: ref(db, 'products/'),
         expired: ref(db, 'expiredProducts/'),
         banners: ref(db, 'banners/'),
         categories: ref(db, 'categories/'),
-        analytics: ref(db, 'analytics/totals')
+        analytics: ref(db, 'analytics/totals'),
+        connected: ref(db, '.info/connected')
     };
 
     // --- GLOBAL STATE ---
@@ -428,8 +431,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
-        isAdmin: false,
-        cacheTimestamp: 0 // Cache layer control
+        isAdmin: false
     };
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
@@ -471,8 +473,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(confirmCallback) confirmCallback();
     };
 
-    // --- TIME & TIMERS (Performance Optimized) ---
-    function getTimestamp(d, t) { return d ? new Date(`${d}T${t || '00:00:00'}`).getTime() : null; }
+    // --- TIME & TIMERS ---
+    function getTimestamp(d, t) { 
+        if (!d) return null;
+        const parsed = new Date(`${d}T${t || '00:00:00'}`).getTime();
+        return isNaN(parsed) ? null : parsed;
+    }
     function setInputsDate(ts, dInp, tInp) {
         if (!ts) { dInp.value = ''; tInp.value = ''; return; }
         const d = new Date(ts);
@@ -486,7 +492,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         return `Ends in: ${d}d ${h}h ${m}m ${s}s`;
     }
 
-    // Performance: requestAnimationFrame instead of setInterval for smooth counters
     function runTimers() {
         const now = Date.now();
         document.querySelectorAll('.countdown-timer').forEach(el => {
@@ -497,7 +502,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     }
     requestAnimationFrame(runTimers);
 
-    // Intersection Observer for Image Lazy Loading
+    // Lazy Loading
     const lazyObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if(entry.isIntersecting) {
@@ -509,77 +514,90 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         });
     });
 
-    // --- DATABASE LISTENERS ---
-    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
-    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
-    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
-    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
+    // --- DATABASE LISTENERS & SAFETY CHECKS ---
+    onValue(refs.connected, (snap) => {
+        if (snap.val() === true) console.log("Database connected successfully.");
+        else console.warn("Database connection lost or initializing.");
+    });
+
+    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); }, (error) => console.error(error));
+    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); }, (error) => console.error(error));
+    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); }, (error) => console.error(error));
+    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); }, (error) => console.error(error));
     
     onValue(refs.products, s => {
         state.products = s.val() || {};
-        document.getElementById("products").innerHTML = ""; // Remove skeletons
+        document.getElementById("products").innerHTML = ""; // Clear skeletons or old data safely
         renderAllViews(); renderAdminProducts(); updateAdminAnalytics();
-    }, (error) => { console.error("Firebase Error:", error); showToast("Database read error", "error"); });
+    }, (error) => { 
+        console.error("Firebase Read Error:", error); 
+        showToast("Error loading products", "error"); 
+        document.getElementById("products").innerHTML = `<div class="empty-state"><p>Database read error. Check console.</p></div>`;
+    });
 
-    // Performance: Memoize active list
+    // Performance: Filter active products
     function getActiveProducts() {
         const now = Date.now();
         return Object.entries(state.products)
-            .filter(([id, p]) => (!p.hidden || state.isAdmin) && (!p.expiryDateTime || p.expiryDateTime > now))
+            .filter(([id, p]) => p && (!p.hidden || state.isAdmin) && (!p.expiryDateTime || p.expiryDateTime > now))
             .map(([id, p]) => ({ id, ...p }));
     }
 
     // --- TRACKING & RECOVERY ENGINE ---
-    // Track stats multi-path atomic update
     function trackEvent(type, productId) {
-        const dateStr = new Date().toISOString().split('T')[0];
-        const updates = {};
-        updates[`analytics/totals/${type}`] = increment(1);
-        if(productId) {
-            updates[`products/${productId}/${type}`] = increment(1);
-            updates[`analytics/products/${productId}/${type}`] = increment(1);
-            if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
-        }
-        updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-        update(ref(db), updates).catch(e => console.error("Tracking Error:", e));
+        try {
+            const dateStr = new Date().toISOString().split('T')[0];
+            const updates = {};
+            updates[`analytics/totals/${type}`] = increment(1);
+            if(productId && state.products[productId]) {
+                updates[`products/${productId}/${type}`] = increment(1);
+                updates[`analytics/products/${productId}/${type}`] = increment(1);
+                if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
+            }
+            updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
+            update(ref(db), updates).catch(e => console.error("Tracking Update Error:", e));
+        } catch(e) { console.error("Tracking Error:", e); }
     }
 
-    // Auto Expiry Controller (Move, don't delete permanently)
+    // Auto Expiry Controller
     setInterval(() => {
-        const now = Date.now();
-        const updates = {};
-        let changed = false;
-        
-        Object.entries(state.products).forEach(([id, p]) => {
-            if(p.expiryDateTime && p.expiryDateTime < now) {
-                updates[`expiredProducts/${id}`] = p; // Move to expired
-                updates[`products/${id}`] = null;     // Remove from active
-                changed = true;
-            }
-        });
-        Object.entries(state.banners).forEach(([id, b]) => {
-            if(b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
-        });
-        
-        if(changed) update(ref(db), updates).then(()=>console.log("Auto-expiry cleanup complete."));
+        try {
+            const now = Date.now();
+            const updates = {};
+            let changed = false;
+            
+            Object.entries(state.products || {}).forEach(([id, p]) => {
+                if(p && p.expiryDateTime && p.expiryDateTime < now) {
+                    updates[`expiredProducts/${id}`] = p; 
+                    updates[`products/${id}`] = null;     
+                    changed = true;
+                }
+            });
+            Object.entries(state.banners || {}).forEach(([id, b]) => {
+                if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
+            });
+            
+            if(changed) update(ref(db), updates).catch(console.error);
+        } catch(e) { console.error("Auto Expiry Error:", e); }
     }, 60000);
 
     // --- MAIN RENDERERS ---
     function renderAllViews() {
-        const query = document.getElementById("search").value.trim().toLowerCase();
-        const activeList = getActiveProducts();
-        
-        document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-        document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+        try {
+            const query = document.getElementById("search").value.trim().toLowerCase();
+            const activeList = getActiveProducts();
+            
+            document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+            document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
 
-        if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
-            renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-            // Auto Trending: Top combined clicks + views
-            renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0))).slice(0, 10), "trendingWrapper");
-            document.getElementById("mainGridTitle").innerText = "Just Arrived";
-        }
+            if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
+                renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
+                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0))).slice(0, 10), "trendingWrapper");
+                document.getElementById("mainGridTitle").innerText = "Just Arrived";
+            }
 
-        renderMainGrid(activeList, query);
+            renderMainGrid(activeList, query);
+        } catch(e) { console.error("Render Error:", e); }
     }
 
     function renderMainGrid(list, query) {
@@ -608,7 +626,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             return;
         }
 
-        // Use DocumentFragment for performance virtual rendering
         const frag = document.createDocumentFragment();
         list.forEach(p => frag.appendChild(createProductCard(p)));
         container.appendChild(frag);
@@ -632,8 +649,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         let badges = [];
         if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
         if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
-        if (p.stock !== undefined && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
-        else if (p.stock > 0 && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`); // Low stock alert
+        if (p.stock != null && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
+        else if (p.stock != null && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`); 
 
         let stars = Array(5).fill('<i class="far fa-star"></i>');
         if (p.rating) {
@@ -667,14 +684,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 </div>
             </div>
         `;
-        // Attach lazy observer
-        lazyObserver.observe(card.querySelector('.lazy-img'));
+        const lazyImg = card.querySelector('.lazy-img');
+        if(lazyImg) lazyObserver.observe(lazyImg);
         return card;
     }
 
     // --- UX ACTIONS ---
     window.toggleWishlist = (id, event) => {
-        event.stopPropagation();
+        if(event) event.stopPropagation();
         const idx = state.wishlist.indexOf(id);
         if (idx > -1) { state.wishlist.splice(idx, 1); showToast("Removed from wishlist", "error"); } 
         else { state.wishlist.push(id); showToast("Added to wishlist", "success"); }
@@ -683,31 +700,36 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     function renderCategories() {
-        const panel = document.getElementById("categoriesPanel");
-        panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
-        Object.values(state.categories).sort().forEach(cat => {
-            panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
-        });
+        try {
+            const panel = document.getElementById("categoriesPanel");
+            panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
+            Object.values(state.categories || {}).sort().forEach(cat => {
+                if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
+            });
+        } catch(e) { console.error("Category Render Error:", e); }
     }
     window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
     window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
 
     const searchInp = document.getElementById("search");
     const suggBox = document.getElementById("suggestions");
-    searchInp.addEventListener("input", debounce(() => {
-        const q = searchInp.value.trim().toLowerCase();
-        if(q.length > 0) {
-            const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
-            if(matches.length > 0) {
-                suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
-                suggBox.style.display = 'block';
+    if(searchInp) {
+        searchInp.addEventListener("input", debounce(() => {
+            const q = searchInp.value.trim().toLowerCase();
+            if(q.length > 0) {
+                const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
+                if(matches.length > 0) {
+                    suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
+                    suggBox.style.display = 'block';
+                } else suggBox.style.display = 'none';
             } else suggBox.style.display = 'none';
-        } else suggBox.style.display = 'none';
-        renderAllViews();
-    }, 300));
+            renderAllViews();
+        }, 300));
+    }
+    
     window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
-    document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
-    document.getElementById("sortProducts").onchange = renderAllViews;
+    if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
+    if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
 
     window.switchTab = (tab) => {
         state.currentView = tab; state.currentCategory = 'ALL'; searchInp.value = '';
@@ -769,33 +791,35 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
     window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
     window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
-    window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link) window.open(link, '_blank'); };
+    window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
 
     // --- BANNERS ---
     let bannerInterval;
     function renderBanners() {
-        const b = document.getElementById("banner"); b.innerHTML = ""; clearInterval(bannerInterval);
-        const list = Object.values(state.banners).filter(x => !x.expiryDateTime || x.expiryDateTime > Date.now());
-        if(!list.length) return;
-        list.forEach((item, i) => {
-            const img = document.createElement("img");
-            img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
-            img.onclick = () => window.location.href = item.link;
-            if(i===0) img.classList.add('active');
-            b.appendChild(img);
-        });
-        const slides = b.querySelectorAll("img");
-        if(slides.length > 1) {
-            let idx = 0;
-            bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
-        }
+        try {
+            const b = document.getElementById("banner"); b.innerHTML = ""; clearInterval(bannerInterval);
+            const list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
+            if(!list.length) return;
+            list.forEach((item, i) => {
+                const img = document.createElement("img");
+                img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
+                img.onclick = () => window.location.href = item.link;
+                if(i===0) img.classList.add('active');
+                b.appendChild(img);
+            });
+            const slides = b.querySelectorAll("img");
+            if(slides.length > 1) {
+                let idx = 0;
+                bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
+            }
+        } catch(e) { console.error("Banner Error:", e); }
     }
 
     // --- SECURITY & ADMIN AUTHENTICATION ---
     onAuthStateChanged(auth, user => {
         state.isAdmin = !!user;
         if(state.isAdmin && document.getElementById('adminLoginModal').classList.contains('show')) {
-            closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin authenticated via Firebase");
+            closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin authenticated");
         }
     });
 
@@ -808,7 +832,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
         if(!e || !p) return showToast("Email and password required", "error");
         try { await signInWithEmailAndPassword(auth, e, p); } 
-        catch (err) { showToast("Authentication failed. Invalid credentials.", "error"); } // Strictly enforced Firebase Auth, no legacy fallback.
+        catch (err) { showToast("Authentication failed.", "error"); } 
     };
     
     window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", () => { signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); }); };
@@ -822,24 +846,27 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     function updateAdminAnalytics() {
-        document.getElementById('statTotalItems').innerText = Object.keys(state.products).length;
-        document.getElementById('statViews').innerText = state.analytics.views || 0;
-        document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
-        document.getElementById('statSales').innerText = state.analytics.sales || 0;
-        
-        const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
-        document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
-        
-        // Render Top Products Table in Analytics
-        const list = Object.entries(state.products).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
-        const c = document.getElementById("topProductsList"); c.innerHTML='';
-        list.forEach(([id, p], i) => {
-            c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`;
-        });
+        try {
+            document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).length;
+            document.getElementById('statViews').innerText = state.analytics.views || 0;
+            document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
+            document.getElementById('statSales').innerText = state.analytics.sales || 0;
+            
+            const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
+            document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
+            
+            const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
+            const c = document.getElementById("topProductsList"); c.innerHTML='';
+            list.forEach(([id, p], i) => {
+                c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`;
+            });
+        } catch(e) { console.error("Analytics Error:", e); }
     }
 
     // --- ADMIN PRODUCT MANAGEMENT ---
-    document.getElementById("pOriginalPrice").oninput = calcPrice; document.getElementById("pDiscount").oninput = calcPrice;
+    if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice; 
+    if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
+    
     function calcPrice() {
         const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
         document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
@@ -895,7 +922,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById("pDesc").value = p.description||'';
         document.getElementById("pOriginalPrice").value = p.price||'';
         document.getElementById("pDiscount").value = p.discount||'';
-        document.getElementById("pStock").value = p.stock||'';
+        document.getElementById("pStock").value = p.stock!=null?p.stock:'';
         document.getElementById("pRating").value = p.rating||'';
         document.getElementById("pCategory").value = p.category||'';
         document.getElementById("pTags").value = p.tags||'';
@@ -909,7 +936,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
         calcPrice(); 
         document.getElementById("adminPanel").scrollTo(0,0);
-        switchAdminTab('tab-manage');
+        window.switchAdminTab('tab-manage');
     };
 
     window.duplicateProduct = (id) => {
@@ -931,14 +958,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     function renderAdminProducts() {
         const c = document.getElementById("adminProductList"); c.innerHTML = "";
-        const list = Object.entries(state.products).sort((a,b)=>b[1].createdAt - a[1].createdAt); // Virtual render if heavy
+        const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
         
         const frag = document.createDocumentFragment();
-        list.slice(0, 100).forEach(([id, p]) => { // Max 100 displayed to save dom nodes in admin
+        list.slice(0, 100).forEach(([id, p]) => { 
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!==undefined?p.stock:'∞'} | ${p.hidden?'Hidden':'Visible'}</p></div>
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | ${p.hidden?'Hidden':'Visible'}</p></div>
                 <div class="admin-item-actions">
                     <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
                     <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
@@ -952,7 +979,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     // --- EXPIRED PANEL ENGINE ---
     function renderAdminExpired() {
         const c = document.getElementById("adminExpiredList"); c.innerHTML = "";
-        const list = Object.entries(state.expired);
+        const list = Object.entries(state.expired || {}).filter(x=>x[1]);
         if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired products.</p>'; return; }
         
         list.forEach(([id, p]) => {
@@ -970,7 +997,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.restoreProduct = (id) => {
         confirmAction("Restore this product to active?", () => {
-            const p = state.expired[id]; p.expiryDateTime = null; // Remove expiry block
+            const p = state.expired[id]; p.expiryDateTime = null; 
             const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null;
             update(ref(db), updates).then(()=>showToast("Restored successfully"));
         });
@@ -981,7 +1008,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.bulkRestore = () => {
         confirmAction("Restore ALL expired products?", () => {
             const updates = {};
-            Object.entries(state.expired).forEach(([id, p]) => { p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; });
+            Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }});
             if(Object.keys(updates).length) update(ref(db), updates).then(()=>showToast("Bulk restore complete"));
         });
     };
@@ -1021,9 +1048,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     function renderAdminCategories() {
         const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList");
         sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
-        Object.entries(state.categories).forEach(([id, c]) => {
-            sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`;
-            list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`;
+        Object.entries(state.categories || {}).forEach(([id, c]) => {
+            if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; }
         });
     }
 
@@ -1046,8 +1072,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
     function renderAdminBanners() {
         const c = document.getElementById("adminBannerList"); c.innerHTML='';
-        Object.entries(state.banners).forEach(([id, b]) => {
-            c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`;
+        Object.entries(state.banners || {}).forEach(([id, b]) => {
+            if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`;
         });
     }
 
@@ -1065,7 +1091,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         } catch(e) { showToast(e.message, "error"); }
     };
 
-    if(!document.getElementById("imageFields").children.length) addImageField();
+    if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 </script>
 </body>
 </html>
