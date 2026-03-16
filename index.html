@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
 <style>
-/* CORE STYLES (UNCHANGED AS REQUESTED) */
+/* CORE STYLES (UNCHANGED) */
 html { scroll-behavior: smooth; }
 :root {
     --primary-glow: #00f5ff; --secondary-glow: #9b5cff;
@@ -67,6 +67,24 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .carousel::-webkit-scrollbar { display: none; }
 .carousel .card { flex: 0 0 220px; scroll-snap-align: start; }
 .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px; }
+
+/* FEATURE 2: Horizontal Scrolling Cards Layout */
+.scroll-card { flex: 0 0 85%; max-width: 350px; scroll-snap-align: center; border-radius: 15px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5); overflow: hidden; cursor: pointer; }
+.scroll-card .image-container { height: auto; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+.scroll-card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; opacity: 0; }
+.scroll-card:hover .image-container img { transform: scale(1.05); }
+.scroll-card .image-container img.loaded { opacity: 1; }
+.scroll-card-title { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; font-weight: bold; font-size: 15px; }
+
+/* FEATURE 3: Strict Mobile 2-Column Rules */
+@media(max-width: 768px) { 
+    .products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
+    .card .image-container { height: 130px !important; }
+    .card h3 { font-size: 13px !important; }
+    .price-container { flex-direction: column; align-items: flex-start; gap: 2px !important; }
+    .final-price { font-size: 16px !important; }
+    .original-price { font-size: 11px !important; }
+}
 
 /* SKELETON & EMPTY STATES */
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
@@ -118,7 +136,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .coupon-box code { font-weight: bold; font-size: 16px; color: var(--primary-glow); }
 .share-links { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
 .share-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: #fff; cursor: pointer; font-size: 16px; transition: 0.3s; }
-.share-btn.wa { background: #25D366; } .share-btn.tg { background: #0088cc; } .share-btn.cp { background: #777; }
+.share-btn.wa { background: #25D366; } .share-btn.tg { background: #0088cc; } .share-btn.cp { background: #777; } .share-btn.ns { background: #ff4757; }
 
 /* TOASTS */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
@@ -209,21 +227,37 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div class="banner" id="banner"></div>
 <div class="categories-panel" id="categoriesPanel"></div>
 
-<!-- Dynamic Sections -->
+<!-- Dynamic Homepage Sections -->
 <div id="homeSections">
+    <div id="scrollingWrapper" style="display:none;">
+        <div class="section-title"><h3><i class="fas fa-fire-flame-curved" style="color: #ff4757;"></i> Hot Drops</h3></div>
+        <div class="carousel" id="scrollingCarousel"></div>
+    </div>
+    
     <div id="featuredWrapper" style="display:none;">
         <div class="section-title"><h3><i class="fas fa-star" style="color: #e91e63;"></i> Featured Products</h3></div>
         <div class="carousel" id="featuredProducts"></div>
     </div>
+    
     <div id="trendingWrapper" style="display:none;">
         <div class="section-title"><h3><i class="fas fa-fire" style="color: #ff9800;"></i> Trending Now</h3></div>
         <div class="carousel" id="trendingCarousel"></div>
     </div>
+    
     <div class="section-title"><h3 id="mainGridTitle">All Products</h3></div>
 </div>
 
 <div class="products" id="products">
     <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+</div>
+
+<!-- Category Generative Sections & Smart Recommendations -->
+<div id="homeBottomSections">
+    <div id="categoryWiseSections"></div>
+    <div id="recommendationWrapper" style="display:none;">
+        <div class="section-title"><h3><i class="fas fa-magic" style="color: var(--primary-glow);"></i> You May Also Like</h3></div>
+        <div class="products" id="recommendationGrid"></div>
+    </div>
 </div>
 
 <div class="admin-btn" onclick="openAdminAuth()"><i class="fas fa-user-shield"></i> Admin</div>
@@ -233,7 +267,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="modal-content" id="modalContent"></div>
 </div>
 
-<!-- Confirm Modal (UX Improvement) -->
+<!-- Confirm Modal -->
 <div class="modal" id="confirmModal" style="z-index: 4000;">
     <div class="modal-content" style="max-width: 300px; text-align: center;">
         <h3 id="confirmMsg" style="margin-bottom: 20px; font-size: 16px;">Are you sure?</h3>
@@ -255,7 +289,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     </div>
 </div>
 
-<!-- Complete Admin Panel (Tabbed UI) -->
+<!-- Complete Admin Panel -->
 <div class="admin-panel" id="adminPanel">
     <div class="admin-header">
         <h2>Admin Dashboard</h2>
@@ -283,7 +317,19 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             <input type="number" id="pOriginalPrice" placeholder="Price (₹)">
             <input type="number" id="pDiscount" placeholder="Discount (%)">
             <input type="number" id="pStock" placeholder="Stock Qty">
-            <input type="number" step="0.1" id="pRating" placeholder="Rating (1-5)">
+            
+            <select id="pRating">
+                <option value="">Rating (Select)</option>
+                <option value="5.0">5.0 ⭐⭐⭐⭐⭐</option>
+                <option value="4.5">4.5 ⭐⭐⭐⭐✨</option>
+                <option value="4.0">4.0 ⭐⭐⭐⭐</option>
+                <option value="3.5">3.5 ⭐⭐⭐✨</option>
+                <option value="3.0">3.0 ⭐⭐⭐</option>
+                <option value="2.5">2.5 ⭐⭐✨</option>
+                <option value="2.0">2.0 ⭐⭐</option>
+                <option value="1.5">1.5 ⭐✨</option>
+                <option value="1.0">1.0 ⭐</option>
+            </select>
         </div>
         <p style="margin-bottom:10px;">Final Price: <span id="finalPricePreview" style="color:var(--primary-glow); font-weight:bold;">₹ 0.00</span></p>
 
@@ -300,9 +346,20 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
         <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
 
-        <div class="admin-checkboxes">
+        <!-- Feature 2: Triple Visibility Mode & Banner Auto-Sync -->
+        <div style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
+            <label style="font-size:12px; font-weight:bold; margin-bottom:8px; display:block; color:var(--primary-glow);">Visibility Control (Public / Private / Scheduled)</label>
+            <div class="admin-checkboxes" style="margin-bottom:8px;">
+                <label><input type="radio" name="pVisibility" value="public" checked onchange="toggleSchedule()"> Public</label>
+                <label><input type="radio" name="pVisibility" value="private" onchange="toggleSchedule()"> Private Link Only</label>
+                <label><input type="radio" name="pVisibility" value="scheduled" onchange="toggleSchedule()"> Scheduled Time</label>
+            </div>
+            <input type="datetime-local" id="pScheduleTime" style="display:none; width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:var(--panel-bg); color:var(--text-color);">
+        </div>
+
+        <div class="admin-checkboxes" style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
             <label><input type="checkbox" id="pFeatured"> Featured Product</label>
-            <label><input type="checkbox" id="pHidden"> Hide from public</label>
+            <label><input type="checkbox" id="pAutoBanner"> Auto-Sync to Top Banner</label>
         </div>
 
         <div id="imageFields" style="margin-bottom: 10px;"></div>
@@ -314,7 +371,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         </div>
 
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Product List (Active)</h3>
+        <h3>All Products List (Active & Private)</h3>
         <div id="adminProductList"></div>
 
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
@@ -394,15 +451,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div id="toast-container"></div>
 
 <!-- ============================================== -->
-<!-- SCRIPT SECTION - ALL FIREBASE FIXES APPLIED    -->
+<!-- SCRIPT SECTION - FIREBASE & FULL LOGIC INTEGRATED -->
 <!-- ============================================== -->
 <script type="module">
-    // FIX 1 & 2: Explicit Firebase Imports and Initialization
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    // EXACT Config Provided by User (DO NOT MODIFY)
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
         authDomain: "product-seller-app.firebaseapp.com",
@@ -413,20 +468,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
     };
 
-    // Initialize Services Safely
     let app, db, auth;
     try {
         app = initializeApp(firebaseConfig);
         db = getDatabase(app);
         auth = getAuth(app);
-        
-        // Ensure persistence handles cleanly without crashing older browsers
-        setPersistence(auth, browserLocalPersistence).catch(err => console.warn("Persistence note:", err));
-    } catch (e) {
-        console.error("Firebase Initialization Error:", e);
-    }
+        setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
+    } catch (e) { console.error("Firebase Error:", e); }
 
-    // FIX 3: Safe References Declaration
     const refs = {
         products: ref(db, 'products/'),
         expired: ref(db, 'expiredProducts/'),
@@ -436,7 +485,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         connected: ref(db, '.info/connected')
     };
 
-    // FIX 8: Validate State Structure
     let state = {
         products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
         currentCategory: "ALL", currentView: "home",
@@ -446,8 +494,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
-
-    // Initialize Theme
     if (state.theme === 'light') document.body.classList.add('light-mode');
 
     // UTILITIES
@@ -523,70 +569,51 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         });
     });
 
-    // FIX 10: DATABASE LISTENERS & CONNECTION SAFETY CHECKS
-    onValue(refs.connected, (snap) => {
-        if (snap.val() === true) {
-            console.log("Firebase Database Connected.");
-        } else {
-            console.warn("Firebase Connection Not Established or Lost.");
-        }
-    });
-
-    // FIX 6 & 7: Null-Safety for Data Parsing and Strict UI Render Order
-    onValue(refs.categories, s => { 
-        state.categories = s.val() || {}; 
-        renderCategories(); 
-        renderAdminCategories(); 
-    }, (error) => console.error("Categories read error:", error));
-
-    onValue(refs.banners, s => { 
-        state.banners = s.val() || {}; 
-        renderBanners(); 
-        renderAdminBanners(); 
-    }, (error) => console.error("Banners read error:", error));
-
-    onValue(refs.expired, s => { 
-        state.expired = s.val() || {}; 
-        renderAdminExpired(); 
-    }, (error) => console.error("Expired data read error:", error));
-
-    onValue(refs.analytics, s => { 
-        state.analytics = s.val() || { views:0, clicks:0, sales:0 }; 
-        updateAdminAnalytics(); 
-    }, (error) => console.error("Analytics read error:", error));
+    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
+    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
+    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
+    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
     
-    // FIX 9 & 11: Products DB loading with freeze fallback and correct render order
+    let initialPidChecked = false;
     onValue(refs.products, (snapshot) => {
         try {
             state.products = snapshot.val() || {};
             
-            const container = document.getElementById("products");
-            if(container) container.innerHTML = ""; // Safely clear skeleton loaders
-            
-            // Render Order Execution
+            // Feature 1: Native Share Check PID
+            if (!initialPidChecked) {
+                initialPidChecked = true;
+                const params = new URLSearchParams(window.location.search);
+                const pid = params.get('pid');
+                if (pid && state.products[pid]) {
+                    setTimeout(() => openProduct(pid), 500);
+                }
+            }
+
             renderAllViews(); 
             renderAdminProducts(); 
             updateAdminAnalytics();
-        } catch(e) {
-            console.error("Critical Error Rendering Products:", e); // FIX 12
-            document.getElementById("products").innerHTML = `<div class="empty-state"><p>Error rendering data. Check console.</p></div>`;
-        }
-    }, (error) => { 
-        console.error("Firebase Read Error (Products):", error); 
-        showToast("Error loading products", "error"); 
-        document.getElementById("products").innerHTML = `<div class="empty-state"><p>Database read error. Check connection.</p></div>`;
+            renderBanners(); // Ensure auto-banners map latest product data
+        } catch(e) { console.error("Render Data Error:", e); }
     });
 
-    // Helper: Safely get active products using null routing (|| {})
+    // TRIPLE VISIBILITY LOGIC (Public/Private/Scheduled)
     function getActiveProducts() {
         const now = Date.now();
-        // FIX 7: Safely Object.entries(state.products || {})
         return Object.entries(state.products || {})
-            .filter(([id, p]) => p && (!p.hidden || state.isAdmin) && (!p.expiryDateTime || p.expiryDateTime > now))
+            .filter(([id, p]) => {
+                if(!p) return false;
+                if(p.expiryDateTime && p.expiryDateTime < now) return false;
+                
+                let isVisible = true;
+                if(p.visibility === 'private') isVisible = false;
+                if(p.visibility === 'scheduled' && p.scheduleTime && p.scheduleTime > now) isVisible = false;
+                if(!p.visibility && p.hidden) isVisible = false; // Fallback to old schema logic
+                
+                return isVisible || state.isAdmin; // Admin sees all
+            })
             .map(([id, p]) => ({ id, ...p }));
     }
 
-    // TRACKING & RECOVERY ENGINE
     function trackEvent(type, productId) {
         try {
             const dateStr = new Date().toISOString().split('T')[0];
@@ -598,46 +625,53 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
             }
             updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-            update(ref(db), updates).catch(e => console.error("Tracking Update Error:", e));
-        } catch(e) { console.error("Tracking Error:", e); }
+            update(ref(db), updates).catch(e => console.warn(e));
+        } catch(e) { console.error(e); }
     }
 
-    // Auto Expiry Controller
+    // Auto Expiry & Scheduled Publisher Background Controller
     setInterval(() => {
         try {
             const now = Date.now();
             const updates = {};
             let changed = false;
             
-            // FIX 7: Safe parsing
             Object.entries(state.products || {}).forEach(([id, p]) => {
                 if(p && p.expiryDateTime && p.expiryDateTime < now) {
-                    updates[`expiredProducts/${id}`] = p; 
-                    updates[`products/${id}`] = null;     
-                    changed = true;
+                    updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; changed = true;
+                }
+                if(p && p.visibility === 'scheduled' && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
+                    updates[`products/${id}/visibility`] = 'public'; updates[`products/${id}/hidden`] = false; changed = true;
                 }
             });
             Object.entries(state.banners || {}).forEach(([id, b]) => {
                 if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
             });
-            
-            if(changed) update(ref(db), updates).catch(console.error);
-        } catch(e) { console.error("Auto Expiry Error:", e); }
+            if(changed) update(ref(db), updates).catch(e => console.warn(e));
+        } catch(e) {}
     }, 60000);
 
     // --- MAIN UI RENDERERS ---
     function renderAllViews() {
         try {
-            const query = document.getElementById("search").value.trim().toLowerCase();
+            const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
             const activeList = getActiveProducts();
             
             document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+            document.getElementById("homeBottomSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
             document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
 
             if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
+                renderScrollingProducts(activeList);
                 renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
                 renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0))).slice(0, 10), "trendingWrapper");
                 document.getElementById("mainGridTitle").innerText = "Just Arrived";
+                renderCategorySections(activeList);
+                renderRecommendations(activeList);
+            } else {
+                if(document.getElementById("scrollingWrapper")) document.getElementById("scrollingWrapper").style.display = "none";
+                if(document.getElementById("categoryWiseSections")) document.getElementById("categoryWiseSections").innerHTML = "";
+                if(document.getElementById("recommendationWrapper")) document.getElementById("recommendationWrapper").style.display = "none";
             }
 
             renderMainGrid(activeList, query);
@@ -645,17 +679,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     }
 
     function renderMainGrid(list, query) {
-        const container = document.getElementById("products");
-        if(!container) return;
+        const container = document.getElementById("products"); if(!container) return;
         container.innerHTML = "";
 
-        if (query) {
-            list = list.filter(p => (p.title||'').toLowerCase().includes(query) || (p.tags||'').toLowerCase().includes(query));
-        } else if (state.currentView === 'wishlist') {
-            list = list.filter(p => state.wishlist.includes(p.id));
-        } else if (state.currentCategory !== "ALL") {
-            list = list.filter(p => p.category === state.currentCategory);
-        }
+        if (query) list = list.filter(p => (p.title||'').toLowerCase().includes(query) || (p.tags||'').toLowerCase().includes(query));
+        else if (state.currentView === 'wishlist') list = list.filter(p => state.wishlist.includes(p.id));
+        else if (state.currentCategory !== "ALL") list = list.filter(p => p.category === state.currentCategory);
 
         const sortBy = document.getElementById("sortProducts").value;
         list.sort((a, b) => {
@@ -666,10 +695,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             return (b.createdAt || 0) - (a.createdAt || 0);
         });
 
-        // FIX 9: Proper Empty States
         if (list.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`;
-            return;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return;
         }
 
         const frag = document.createDocumentFragment();
@@ -678,23 +705,86 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     }
 
     function renderCarousel(containerId, list, wrapperId) {
-        const wrapper = document.getElementById(wrapperId);
-        const container = document.getElementById(containerId);
+        const wrapper = document.getElementById(wrapperId), container = document.getElementById(containerId);
         if(!wrapper || !container) return;
-        
         if (list.length === 0) { wrapper.style.display = 'none'; return; }
-        wrapper.style.display = 'block';
-        container.innerHTML = "";
-        
+        wrapper.style.display = 'block'; container.innerHTML = "";
         const frag = document.createDocumentFragment();
         list.forEach(p => frag.appendChild(createProductCard(p)));
         container.appendChild(frag);
     }
 
-    function createProductCard(p) {
-        const card = document.createElement("div");
-        card.className = "card";
+    // Feature 2: Scrolling Horizontal Full Image Products
+    function renderScrollingProducts(activeList) {
+        const wrapper = document.getElementById("scrollingWrapper"), container = document.getElementById("scrollingCarousel");
+        if (!wrapper || !container) return;
+        const list = [...activeList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 8);
+        if (list.length === 0) { wrapper.style.display = "none"; return; }
         
+        wrapper.style.display = "block"; container.innerHTML = "";
+        const frag = document.createDocumentFragment();
+        list.forEach(p => {
+            const card = document.createElement("div");
+            card.className = "scroll-card";
+            card.onclick = () => openProduct(p.id);
+            card.innerHTML = `
+                <div class="image-container">
+                    <img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
+                    ${p.discount > 0 ? `<div class="badge discount-badge">${p.discount}% OFF</div>` : ''}
+                </div>
+                <div class="scroll-card-title">${sanitize(p.title)}</div>
+            `;
+            const lazyImg = card.querySelector('.lazy-img');
+            if(lazyImg) lazyObserver.observe(lazyImg);
+            frag.appendChild(card);
+        });
+        container.appendChild(frag);
+    }
+
+    // Feature 4: Category-Wise Layouts
+    function renderCategorySections(activeList) {
+        const container = document.getElementById("categoryWiseSections"); if (!container) return;
+        container.innerHTML = "";
+        
+        const catMap = {};
+        activeList.forEach(p => { const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
+        const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
+
+        const frag = document.createDocumentFragment();
+        sortedCats.forEach(cat => {
+            const prods = catMap[cat]; if (prods.length === 0) return;
+            const wId = `catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`;
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = `<div class="section-title"><h3>${sanitize(cat)} Collection</h3></div><div class="carousel" id="${wId}"></div>`;
+            frag.appendChild(wrapper);
+        });
+        container.appendChild(frag);
+
+        sortedCats.forEach(cat => {
+            const prods = catMap[cat], cEl = document.getElementById(`catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`);
+            if (cEl) {
+                const cFrag = document.createDocumentFragment();
+                prods.forEach(p => cFrag.appendChild(createProductCard(p)));
+                cEl.appendChild(cFrag);
+            }
+        });
+    }
+
+    // Feature 5: Smart Recommendation Randomizer
+    function renderRecommendations(activeList) {
+        const wrapper = document.getElementById("recommendationWrapper"), container = document.getElementById("recommendationGrid");
+        if (!wrapper || !container) return;
+        if (activeList.length < 2) { wrapper.style.display = "none"; return; }
+        
+        const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
+        wrapper.style.display = "block"; container.innerHTML = "";
+        const frag = document.createDocumentFragment();
+        shuffled.forEach(p => frag.appendChild(createProductCard(p)));
+        container.appendChild(frag);
+    }
+
+    function createProductCard(p) {
+        const card = document.createElement("div"); card.className = "card";
         let badges = [];
         if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
         if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
@@ -703,8 +793,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         let stars = Array(5).fill('<i class="far fa-star"></i>');
         if (p.rating) {
-            const r = Math.round(p.rating);
-            for(let i=0; i<r; i++) stars[i] = '<i class="fas fa-star"></i>';
+            let r = Math.round(p.rating * 2) / 2;
+            for(let i=0; i<Math.floor(r); i++) stars[i] = '<i class="fas fa-star"></i>';
+            if(r % 1 !== 0) stars[Math.floor(r)] = '<i class="fas fa-star-half-alt"></i>';
         }
 
         const isWished = state.wishlist.includes(p.id);
@@ -717,16 +808,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             <div class="card-content">
                 <h3>${sanitize(p.title || 'Untitled')}</h3>
                 <p class="category-text">${sanitize(p.category || 'General')}</p>
-                <div class="card-stats">
-                    <span class="stars">${stars.join('')}</span>
-                    <span><i class="fas fa-eye"></i> ${p.views || 0}</span>
-                </div>
+                <div class="card-stats"><span class="stars">${stars.join('')}</span> <span><i class="fas fa-eye"></i> ${p.views || 0}</span></div>
                 <div class="price-container">
                     <span class="final-price">₹ ${p.finalPrice?.toFixed(2)}</span>
                     ${p.discount > 0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span>` : ''}
                 </div>
                 ${p.expiryDateTime ? `<div class="countdown-timer" data-expiry="${p.expiryDateTime}"></div>` : ''}
-                
                 <div class="btn-group">
                     <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="fas fa-heart"></i></button>
                     <button class="view-button" onclick="openProduct('${p.id}')">Details</button>
@@ -749,23 +836,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     function renderCategories() {
-        try {
-            const panel = document.getElementById("categoriesPanel");
-            if(!panel) return;
-            panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
-            
-            // FIX 7: Safely parsing categories
-            Object.values(state.categories || {}).sort().forEach(cat => {
-                if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
-            });
-        } catch(e) { console.error("Category Render Error:", e); }
+        const panel = document.getElementById("categoriesPanel"); if(!panel) return;
+        panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
+        Object.values(state.categories || {}).sort().forEach(cat => {
+            if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
+        });
     }
     
     window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
     window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
 
-    const searchInp = document.getElementById("search");
-    const suggBox = document.getElementById("suggestions");
+    const searchInp = document.getElementById("search"), suggBox = document.getElementById("suggestions");
     if(searchInp) {
         searchInp.addEventListener("input", debounce(() => {
             const q = searchInp.value.trim().toLowerCase();
@@ -779,7 +860,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             renderAllViews();
         }, 300));
     }
-    
     window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
     if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
     if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
@@ -790,16 +870,24 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById('categoriesPanel').style.display = 'none';
         updateNavHighlight(tab); renderAllViews(); renderCategories(); window.scrollTo(0,0);
     };
-    function updateNavHighlight(tab = state.currentView) {
-        document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    }
+    function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
 
-    // Modal Details & Sharing Tracking
+    // Native Sharing System (Feature 1) integrated
+    window.nativeShare = (id, title) => {
+        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
+        if (navigator.share) {
+            navigator.share({ title: title, text: 'Check out this awesome product!', url: prodUrl })
+            .then(() => trackEvent('shares', id)).catch(e => console.warn('Share rejected', e));
+        } else {
+            copyShare(id, prodUrl);
+        }
+    };
+
     window.openProduct = (id) => {
         const p = state.products[id]; if(!p) return;
         trackEvent('views', id);
-
         document.body.style.overflow = 'hidden';
+        
         const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
         const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
         
@@ -809,8 +897,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 <code id="cpnText">${sanitize(p.coupon)}</code><button class="icon-btn" onclick="copyCoupon('${sanitize(p.coupon)}')"><i class="fas fa-copy"></i></button></div>`;
         }
 
-        const shareUrl = encodeURIComponent(window.location.href);
+        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
+        const shareUrl = encodeURIComponent(prodUrl);
         const shareText = encodeURIComponent(`Check out ${p.title} on Futuristic Store!`);
+        const safeTitle = sanitize(p.title).replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
         document.getElementById("modalContent").innerHTML = `
             <button class="close-btn" onclick="closeModals()">×</button>
@@ -830,132 +920,95 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             <div class="share-links">
                 <button class="share-btn wa" onclick="shareProduct('${id}', 'https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
                 <button class="share-btn tg" onclick="shareProduct('${id}', 'https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
-                <button class="share-btn cp" onclick="copyShare('${id}', '${window.location.href}')"><i class="fas fa-link"></i></button>
+                <button class="share-btn cp" onclick="copyShare('${id}', '${prodUrl}')" title="Copy Link"><i class="fas fa-link"></i></button>
+                <button class="share-btn ns" onclick="nativeShare('${id}', '${safeTitle}')" title="More Sharing Options"><i class="fas fa-share-nodes"></i></button>
             </div>
         `;
         document.getElementById("productModal").classList.add('show');
     };
 
-    window.closeModals = () => {
-        document.body.style.overflow = 'auto';
-        document.getElementById("productModal").classList.remove('show');
-        document.getElementById("adminLoginModal").classList.remove('show');
-    };
-
+    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); };
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
     window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
     window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
     window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
 
-    // BANNERS
+    // BANNERS (With Auto-Sync System)
     let bannerInterval;
     function renderBanners() {
-        try {
-            const b = document.getElementById("banner"); 
-            if(!b) return;
-            b.innerHTML = ""; clearInterval(bannerInterval);
-            
-            // FIX 7: Safe Banners mapping
-            const list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
-            if(!list.length) return;
-            
-            list.forEach((item, i) => {
-                const img = document.createElement("img");
-                img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
-                img.onclick = () => window.location.href = item.link;
-                if(i===0) img.classList.add('active');
-                b.appendChild(img);
-            });
-            const slides = b.querySelectorAll("img");
-            if(slides.length > 1) {
-                let idx = 0;
-                bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
+        const b = document.getElementById("banner"); if(!b) return;
+        b.innerHTML = ""; clearInterval(bannerInterval);
+        
+        let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
+        
+        // Dynamic Inject Auto-Banners
+        const now = Date.now();
+        Object.entries(state.products || {}).forEach(([id, p]) => {
+            if (p && p.autoBanner && p.images && p.images[0]) {
+                let isVisible = true;
+                if(p.visibility === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
+                if(p.expiryDateTime && p.expiryDateTime < now) isVisible = false;
+                if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
             }
-        } catch(e) { console.error("Banner Error:", e); }
+        });
+
+        if(!list.length) return;
+        
+        list.forEach((item, i) => {
+            const img = document.createElement("img");
+            img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
+            img.onclick = () => window.location.href = item.link;
+            if(i===0) img.classList.add('active');
+            b.appendChild(img);
+        });
+        const slides = b.querySelectorAll("img");
+        if(slides.length > 1) {
+            let idx = 0;
+            bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
+        }
     }
 
-    // FIX 5: AUTH STATE LISTENER
+    // AUTH ENGINE
     onAuthStateChanged(auth, user => {
         if (user) {
             state.isAdmin = true;
-            console.log("Admin Logged In successfully.");
-            // Open panel automatically if login modal was open
             if(document.getElementById('adminLoginModal').classList.contains('show')) {
-                closeModals(); 
-                document.getElementById('adminPanel').style.display = 'block'; 
-                showToast("Admin session active");
+                closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
             }
-        } else {
-            state.isAdmin = false;
-            console.log("Admin logged out or no session found.");
-        }
+        } else { state.isAdmin = false; }
     });
 
-    window.openAdminAuth = () => {
-        if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block';
-        else document.getElementById('adminLoginModal').classList.add('show');
-    };
-
-    // FIX 4: ADMIN LOGIN HANDLER WITH ASYNC/AWAIT & ERROR HANDLING
+    window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
     window.loginAdmin = async () => {
-        const e = document.getElementById('adminEmail').value;
-        const p = document.getElementById('adminPass').value;
+        const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
         if(!e || !p) return showToast("Email and password required", "error");
-        
-        try { 
-            await signInWithEmailAndPassword(auth, e, p); 
-            // the onAuthStateChanged listener will handle the UI transition safely
-            showToast("Login Request Sent", "success");
-        } catch (err) { 
-            console.error("Login Error:", err);
-            showToast("Authentication failed: " + err.message, "error"); 
-        } 
+        try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); } 
+        catch (err) { showToast("Authentication failed: " + err.message, "error"); } 
     };
-    
-    window.logoutAdmin = () => { 
-        confirmAction("Are you sure you want to logout?", async () => { 
-            try {
-                await signOut(auth); 
-                state.isAdmin = false; 
-                closeAdmin(); 
-                showToast("Logged out safely"); 
-            } catch(e) {
-                console.error("Logout error", e);
-            }
-        }); 
-    };
+    window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
     window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
-
     window.switchAdminTab = (tabId) => {
         document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
     };
 
     function updateAdminAnalytics() {
-        try {
-            document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).length;
-            document.getElementById('statViews').innerText = state.analytics.views || 0;
-            document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
-            document.getElementById('statSales').innerText = state.analytics.sales || 0;
-            
-            const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
-            document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
-            
-            // FIX 7: Safe Product Analysis
-            const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
-            const c = document.getElementById("topProductsList"); 
-            if(c) {
-                c.innerHTML='';
-                list.forEach(([id, p], i) => {
-                    c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`;
-                });
-            }
-        } catch(e) { console.error("Analytics Error:", e); }
+        document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).length;
+        document.getElementById('statViews').innerText = state.analytics.views || 0;
+        document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
+        document.getElementById('statSales').innerText = state.analytics.sales || 0;
+        const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
+        document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
+        
+        const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
+        const c = document.getElementById("topProductsList"); if(c) {
+            c.innerHTML='';
+            list.forEach(([id, p], i) => { c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`; });
+        }
     }
 
-    // --- ADMIN PRODUCT MANAGEMENT (ORIGINAL LOGIC KEPT INTACT) ---
+    // --- ADMIN PRODUCT MANAGEMENT ---
     if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice; 
     if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
     
@@ -971,14 +1024,23 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         c.appendChild(div);
     };
 
+    window.toggleSchedule = () => {
+        const val = document.querySelector('input[name="pVisibility"]:checked')?.value || 'public';
+        document.getElementById("pScheduleTime").style.display = val === 'scheduled' ? 'block' : 'none';
+    };
+
     window.saveProduct = async () => {
         try {
-            const id = document.getElementById("pId").value;
-            const title = document.getElementById("pTitle").value.trim();
-            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
-            const cat = document.getElementById("pCategory").value;
-            
+            const id = document.getElementById("pId").value, title = document.getElementById("pTitle").value.trim();
+            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0, cat = document.getElementById("pCategory").value;
             if(!title || !price || !cat) return showToast("Title, Price and Category are required!", "error");
+
+            const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
+            let scheduleTime = null;
+            if (visRadio === 'scheduled') {
+                const st = document.getElementById("pScheduleTime").value;
+                if (st) scheduleTime = new Date(st).getTime();
+            }
 
             const data = {
                 title, description: document.getElementById("pDesc").value.trim(),
@@ -988,37 +1050,30 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 affiliateLink: document.getElementById("pAffiliateLink").value.trim(),
                 coupon: document.getElementById("pCoupon").value.trim(),
                 featured: document.getElementById("pFeatured").checked,
-                hidden: document.getElementById("pHidden").checked,
+                visibility: visRadio,
+                scheduleTime: scheduleTime,
+                hidden: (visRadio === 'private' || visRadio === 'scheduled'), // Maintain DB schema fallback structure
+                autoBanner: document.getElementById("pAutoBanner").checked,
                 images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
                 expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
                 stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
-                rating: isNaN(parseFloat(document.getElementById("pRating").value)) ? null : parseFloat(document.getElementById("pRating").value),
+                rating: document.getElementById("pRating").value ? parseFloat(document.getElementById("pRating").value) : null,
                 updatedAt: Date.now()
             };
 
             if(!id) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; }
             
             const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
-            await req;
-            showToast("Product Saved!"); 
-            clearProductForm(); 
-        } catch (e) {
-            console.error("Save Product Error:", e);
-            showToast("Save failed: " + e.message, "error");
-        }
+            await req; showToast("Product Saved!"); clearProductForm(); 
+        } catch (e) { console.error(e); showToast("Save failed", "error"); }
     };
 
     window.clearProductForm = () => {
-        ['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime'].forEach(i=> {
-            if(document.getElementById(i)) document.getElementById(i).value='';
-        });
-        ['pFeatured','pHidden'].forEach(i=>{
-            if(document.getElementById(i)) document.getElementById(i).checked=false;
-        });
-        if(document.getElementById('imageFields')){
-            document.getElementById('imageFields').innerHTML=''; addImageField(); 
-        }
-        calcPrice();
+        ['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime','pScheduleTime'].forEach(i=> { if(document.getElementById(i)) document.getElementById(i).value=''; });
+        ['pFeatured','pAutoBanner'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
+        if(document.getElementById('imageFields')){ document.getElementById('imageFields').innerHTML=''; addImageField(); }
+        const r = document.querySelector('input[name="pVisibility"][value="public"]'); if(r) r.checked = true;
+        toggleSchedule(); calcPrice();
     };
 
     window.quickEdit = (id) => {
@@ -1029,62 +1084,54 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById("pOriginalPrice").value = p.price||'';
         document.getElementById("pDiscount").value = p.discount||'';
         document.getElementById("pStock").value = p.stock!=null?p.stock:'';
-        document.getElementById("pRating").value = p.rating||'';
+        document.getElementById("pRating").value = p.rating ? p.rating.toFixed(1) : '';
         document.getElementById("pCategory").value = p.category||'';
         document.getElementById("pTags").value = p.tags||'';
         document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
         document.getElementById("pCoupon").value = p.coupon||'';
         document.getElementById("pFeatured").checked = p.featured||false;
-        document.getElementById("pHidden").checked = p.hidden||false;
+        document.getElementById("pAutoBanner").checked = p.autoBanner||false;
         setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
         
+        const vis = p.visibility || (p.hidden ? 'private' : 'public');
+        const rdo = document.querySelector(`input[name="pVisibility"][value="${vis}"]`); if(rdo) rdo.checked = true;
+        if (p.scheduleTime) document.getElementById("pScheduleTime").value = new Date(p.scheduleTime).toISOString().slice(0,16);
+        else document.getElementById("pScheduleTime").value = '';
+        toggleSchedule();
+
         document.getElementById("imageFields").innerHTML='';
         if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
-        calcPrice(); 
-        document.getElementById("adminPanel").scrollTo(0,0);
-        window.switchAdminTab('tab-manage');
+        calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
     };
 
     window.duplicateProduct = (id) => {
         confirmAction("Duplicate this product?", async () => {
-            try {
-                const p = {...state.products[id]}; delete p.id;
-                p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0;
-                await set(push(refs.products), p);
-                showToast("Duplicated successfully");
-            } catch(e) {
-                console.error("Duplicate error", e);
-            }
+            try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {}
         });
     };
 
     window.archiveProduct = (id) => {
         confirmAction("Archive product? (Moves to expired panel)", async () => {
-            try {
-                const updates = {};
-                updates[`expiredProducts/${id}`] = state.products[id];
-                updates[`products/${id}`] = null;
-                await update(ref(db), updates);
-                showToast("Archived successfully");
-            } catch(e) { console.error("Archive error", e); }
+            try { const updates = {}; updates[`expiredProducts/${id}`] = state.products[id]; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
         });
     };
 
     function renderAdminProducts() {
-        const c = document.getElementById("adminProductList"); 
-        if(!c) return;
-        c.innerHTML = "";
-        
-        // FIX 7: Safe parsing
+        const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
         const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
         
         const frag = document.createDocumentFragment();
         list.slice(0, 100).forEach(([id, p]) => { 
+            let visText = p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public');
+            if(!p.visibility) visText = p.hidden ? 'Hidden' : 'Public';
+            const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
+
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | ${p.hidden?'Hidden':'Visible'}</p></div>
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold;">${visText}</span></p></div>
                 <div class="admin-item-actions">
+                    <button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
                     <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
                     <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
                     <button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
@@ -1096,150 +1143,50 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     // --- EXPIRED PANEL ENGINE ---
     function renderAdminExpired() {
-        const c = document.getElementById("adminExpiredList"); 
-        if(!c) return;
-        c.innerHTML = "";
-        
-        // FIX 7: Safe Parsing
+        const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
         const list = Object.entries(state.expired || {}).filter(x=>x[1]);
         if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired products.</p>'; return; }
-        
         list.forEach(([id, p]) => {
-            c.innerHTML += `
-            <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
-                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Expired/Archived</p></div>
-                <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
-                    <button class="btn-danger btn-action" onclick="deletePermanent('${id}')"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>`;
+            c.innerHTML += `<div class="admin-list-item" style="border-left: 3px solid #ff4757;"><img src="${sanitize(p.images?.[0]||fallbackImage)}"><div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Expired/Archived</p></div><div class="admin-item-actions"><button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button><button class="btn-danger btn-action" onclick="deletePermanent('${id}')"><i class="fas fa-trash"></i></button></div></div>`;
         });
     }
 
-    window.restoreProduct = (id) => {
-        confirmAction("Restore this product to active?", async () => {
-            try {
-                const p = state.expired[id]; p.expiryDateTime = null; 
-                const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null;
-                await update(ref(db), updates);
-                showToast("Restored successfully");
-            } catch(e) { console.error("Restore error:", e); }
-        });
-    };
-    
-    window.deletePermanent = (id) => { 
-        confirmAction("Permanently delete? Cannot be undone.", async () => { 
-            try {
-                await remove(ref(db, `expiredProducts/${id}`)); 
-                showToast("Deleted permanently", "error"); 
-            } catch(e) { console.error("Delete Error", e); }
-        }); 
-    };
-    
-    window.bulkRestore = () => {
-        confirmAction("Restore ALL expired products?", async () => {
-            try {
-                const updates = {};
-                // FIX 7
-                Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }});
-                if(Object.keys(updates).length) {
-                    await update(ref(db), updates);
-                    showToast("Bulk restore complete");
-                }
-            } catch (e) { console.error("Bulk restore error", e); }
-        });
-    };
+    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
+    window.deletePermanent = (id) => { confirmAction("Permanently delete?", async () => { try { await remove(ref(db, `expiredProducts/${id}`)); showToast("Deleted", "error"); } catch(e) {} }); };
+    window.bulkRestore = () => { confirmAction("Restore ALL expired products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
 
     // --- BACKUP & RESTORE SYSTEM ---
     window.exportDatabaseJSON = async () => {
-        try {
-            const s = await get(ref(db));
-            const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `futuristic_store_backup_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-            showToast("Backup Downloaded");
-        } catch(e) { showToast("Backup Failed: " + e.message, "error"); }
+        try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); }
     };
-
     window.importDatabaseJSON = () => {
-        const file = document.getElementById('importFile').files[0];
-        if(!file) return showToast("Select a file first", "error");
-        confirmAction("DANGER: This will OVERWRITE the entire database with the selected file. Proceed?", () => {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    await set(ref(db), data);
-                    showToast("Database Restored Successfully!");
-                    document.getElementById('importFile').value = '';
-                } catch(err) { showToast("Invalid JSON File", "error"); console.error(err); }
-            };
-            reader.readAsText(file);
+        const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error");
+        confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => {
+            const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file);
         });
     };
 
-    // --- OTHER ADMIN MNGMT ---
-    window.addCategory = async () => { 
-        try {
-            const v = document.getElementById("newCategoryName").value.trim(); 
-            if(v) { 
-                await push(refs.categories, v); 
-                document.getElementById("newCategoryName").value=''; 
-            } 
-        } catch(e) { console.error("Add Category Error", e); }
-    };
-
+    // --- OTHER ADMIN MGMT ---
+    window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
     window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
-    
     function renderAdminCategories() {
-        const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList");
-        if(!sel || !list) return;
+        const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList"); if(!sel || !list) return;
         sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
-        
-        // FIX 7
-        Object.entries(state.categories || {}).forEach(([id, c]) => {
-            if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; }
-        });
+        Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
     }
 
     window.addBannerField = (id='', img='', link='', exp=null) => {
         const d = document.createElement('div'); d.className = 'admin-list-item'; d.style.flexDirection = 'column'; d.style.alignItems='stretch';
-        d.innerHTML = `
-            <input type="hidden" class="bId" value="${id}">
-            <input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;">
-            <input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;">
-            <div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
+        d.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;"><input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;"><div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
         setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
     };
-
     window.saveBanners = async () => {
-        try {
-            const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")];
-            for (const el of nodes) {
-                const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value);
-                if(img && link) { 
-                    const b = { image:img, link, expiryDateTime:exp }; 
-                    if (id) await update(ref(db, `banners/${id}`), b);
-                    else await set(push(refs.banners), b);
-                }
-            }
-            document.getElementById("bannerFields").innerHTML=''; 
-            showToast("Banners Saved!");
-        } catch(e) { console.error("Save Banners Error:", e); }
+        try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {}
     };
-
     window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
-    
     function renderAdminBanners() {
-        const c = document.getElementById("adminBannerList"); 
-        if(!c) return;
-        c.innerHTML='';
-        // FIX 7
-        Object.entries(state.banners || {}).forEach(([id, b]) => {
-            if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`;
-        });
+        const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML='';
+        Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; });
     }
 
     window.sendManualNotification = async () => {
@@ -1251,12 +1198,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url || undefined })
             });
             if(!res.ok) throw new Error("Failed to send");
-            showToast("Notification Sent Successfully!");
-            document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
+            showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
         } catch(e) { showToast(e.message, "error"); }
     };
 
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 </script>
 </body>
-  </html>
+</html>
