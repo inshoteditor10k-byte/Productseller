@@ -12,132 +12,105 @@
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignal = window.OneSignal || [];
-    OneSignal.push(function() {
-      OneSignal.init({
-        appId: "9406475a-99fb-4a88-a3d4-5e2a434d8c50",
-      });
-    });
+    OneSignal.push(function() { OneSignal.init({ appId: "9406475a-99fb-4a88-a3d4-5e2a434d8c50" }); });
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- FontAwesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
 <style>
+/* CORE STYLES */
+html { scroll-behavior: smooth; }
 :root {
-    --primary-glow: #00f5ff;
-    --secondary-glow: #9b5cff;
-    --card-bg: rgba(255, 255, 255, 0.08);
-    --text-light: rgba(255, 255, 255, 0.8);
-    --text-color: #fff;
-    --bg-gradient: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
-    --modal-bg: rgba(0, 0, 0, 0.9);
-    --modal-content-bg: #111;
-    --panel-bg: #0a0a0a;
-    --input-bg: rgba(255, 255, 255, 0.1);
+    --primary-glow: #00f5ff; --secondary-glow: #9b5cff;
+    --card-bg: rgba(255, 255, 255, 0.08); --text-light: rgba(255, 255, 255, 0.8);
+    --text-color: #fff; --bg-gradient: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+    --modal-bg: rgba(0, 0, 0, 0.9); --modal-content-bg: #111;
+    --panel-bg: #0a0a0a; --input-bg: rgba(255, 255, 255, 0.1);
 }
-
 body.light-mode {
-    --primary-glow: #0088cc;
-    --secondary-glow: #8e44ad;
-    --card-bg: rgba(0, 0, 0, 0.05);
-    --text-light: rgba(0, 0, 0, 0.6);
-    --text-color: #111;
-    --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    --modal-bg: rgba(255, 255, 255, 0.9);
-    --modal-content-bg: #fff;
-    --panel-bg: #f4f4f4;
-    --input-bg: rgba(0, 0, 0, 0.05);
+    --primary-glow: #0088cc; --secondary-glow: #8e44ad;
+    --card-bg: rgba(0, 0, 0, 0.05); --text-light: rgba(0, 0, 0, 0.6);
+    --text-color: #111; --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    --modal-bg: rgba(255, 255, 255, 0.9); --modal-content-bg: #fff;
+    --panel-bg: #f4f4f4; --input-bg: rgba(0, 0, 0, 0.05);
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; }
 body { background: var(--bg-gradient); color: var(--text-color); min-height: 100vh; overflow-x: hidden; padding-bottom: 120px; }
 h1, h2, h3 { text-shadow: 0 0 15px var(--primary-glow); }
 h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-/* Top actions */
+/* TOP ACTIONS & CONTROLS */
 .top-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 15px; z-index: 100; }
 .icon-btn { background: var(--card-bg); border: none; color: var(--text-color); font-size: 18px; padding: 10px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 .icon-btn:hover { color: var(--primary-glow); transform: scale(1.1); }
-
-/* Controls */
 .controls-container { padding: 0 20px; max-width: 800px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
 .search-container { flex-grow: 1; min-width: 250px; display: flex; gap: 10px; position: relative; }
 .search-container input, .sort-container select { width: 100%; padding: 14px 20px; border-radius: 30px; border: none; outline: none; background: var(--input-bg); backdrop-filter: blur(10px); color: var(--text-color); font-size: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
-.search-container input:focus, .sort-container select:focus { box-shadow: 0 0 20px var(--primary-glow); }
 #searchBtn { padding: 14px 25px; border-radius: 30px; border: none; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: #fff; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
 #searchBtn:hover { transform: scale(1.05); }
-
-/* Suggestions */
 #suggestions { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: var(--modal-content-bg); border-radius: 15px; max-height: 250px; overflow-y: auto; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
 .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid var(--input-bg); }
 .suggestion-item:hover { background: rgba(0,245,255,0.1); }
 
-/* Banners */
+/* BANNERS & CATEGORIES */
 .banner { width: 100%; position: relative; margin-top: 10px; border-radius: 15px; overflow: hidden; height: 180px; background-color: var(--card-bg); }
 .banner img { width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; cursor: pointer; object-fit: cover; }
 .banner img.active { opacity: 1; position: relative; }
-
-/* Categories */
 .categories-panel { display: none; padding: 15px; flex-wrap: wrap; gap: 10px; justify-content: center; }
 .category-chip { padding: 8px 15px; border-radius: 20px; background: var(--input-bg); cursor: pointer; font-size: 13px; transition: all 0.3s; border: 1px solid transparent; }
 .category-chip.active { background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: #fff; font-weight: 600; transform: scale(1.05); }
 
-/* Sections & Carousels */
+/* SECTIONS & GRID */
 .section-title { padding: 0 20px; margin-top: 20px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
-.carousel { display: flex; overflow-x: auto; gap: 15px; padding: 15px 20px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.carousel { display: flex; overflow-x: auto; gap: 15px; padding: 15px 20px; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel .card { flex: 0 0 220px; scroll-snap-align: start; }
-
-/* Product Grid */
 .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px; }
 
-/* Skeleton Loader */
+/* SKELETON & EMPTY STATES */
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-.skeleton { background: linear-gradient(90deg, var(--input-bg) 25%, rgba(255,255,255,0.2) 50%, var(--input-bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 15px; height: 250px; }
+.skeleton { background: linear-gradient(90deg, var(--input-bg) 25%, rgba(255,255,255,0.2) 50%, var(--input-bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 15px; height: 280px; }
+.empty-state { grid-column: 1/-1; text-align: center; padding: 50px 20px; opacity: 0.7; font-size: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.empty-state i { font-size: 40px; color: var(--primary-glow); }
 
-/* Product Cards */
-.card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.2); transition: 0.3s; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+/* CARDS & BADGES */
+.card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; overflow: hidden; display: flex; flex-direction: column; position: relative; }
 .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--primary-glow); }
-.card .image-container { width: 100%; height: 150px; position: relative; overflow: hidden; }
-.card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+.card .image-container { width: 100%; height: 150px; position: relative; overflow: hidden; background: var(--input-bg); }
+.card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; opacity: 0; }
+.card .image-container img.loaded { opacity: 1; } /* Lazy load fade-in */
 .card:hover .image-container img { transform: scale(1.05); }
-
-/* Badges with Animation */
-@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 .badge { position: absolute; top: 10px; padding: 4px 8px; font-size: 10px; font-weight: bold; border-radius: 5px; color: #fff; text-transform: uppercase; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 .discount-badge { left: 10px; background: var(--primary-glow); color: #000; animation: pulse 2s infinite; }
 .sales-badge { right: 10px; background: linear-gradient(90deg, #ffc107, #ff9800); }
 .featured-badge { top: auto; bottom: 10px; left: 10px; background: #e91e63; }
 .stock-badge { top: auto; bottom: 10px; right: 10px; background: #f44336; }
+.low-stock-badge { top: auto; bottom: 10px; right: 10px; background: #ff9800; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-/* Card Details */
+/* CARD DETAILS */
 .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
 .card h3 { font-size: 15px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .category-text { font-size: 11px; color: var(--text-light); margin-bottom: 5px; }
 .card-stats { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); margin-bottom: 5px; }
 .stars { color: #ffc107; font-size: 12px; }
-
 .price-container { margin-top: auto; padding-top: 10px; display: flex; align-items: baseline; gap: 8px; }
 .original-price { font-size: 13px; text-decoration: line-through; opacity: 0.6; }
 .final-price { font-size: 18px; font-weight: bold; color: var(--primary-glow); }
-
 .countdown-timer { font-size: 11px; color: #ff4757; font-weight: 600; margin-top: 5px; background: rgba(255,71,87,0.1); padding: 4px; border-radius: 4px; text-align: center; }
-
 .btn-group { display: flex; gap: 5px; margin-top: 10px; }
 .view-button { flex-grow: 1; padding: 10px; border: none; border-radius: 8px; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: #fff; font-weight: bold; cursor: pointer; }
 .wishlist-btn { width: 40px; border: none; border-radius: 8px; background: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 16px; transition: 0.3s; }
 .wishlist-btn.active { color: #e91e63; background: rgba(233, 30, 99, 0.2); }
 
-/* Modals */
+/* MODALS */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 2000; opacity: 0; transition: opacity 0.3s; }
 .modal.show { display: flex; opacity: 1; }
 .modal-content { background: var(--modal-content-bg); width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; overflow-y: auto; max-height: 90vh; position: relative; transform: scale(0.9); transition: transform 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .modal.show .modal-content { transform: scale(1); }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; background: none; border: none; color: var(--text-color); cursor: pointer; }
-
-/* Product Modal Extras */
-.modal-image-gallery { display: flex; overflow-x: auto; gap: 10px; scroll-snap-type: x mandatory; border-radius: 10px; margin-bottom: 15px; }
+.modal-image-gallery { display: flex; overflow-x: auto; gap: 10px; scroll-snap-type: x mandatory; border-radius: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
 .modal-gallery-image { width: 100%; height: 250px; scroll-snap-align: start; object-fit: cover; flex-shrink: 0; border-radius: 10px; }
 .tags-container { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
 .tag { font-size: 10px; background: var(--input-bg); padding: 3px 8px; border-radius: 12px; }
@@ -146,21 +119,23 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .share-links { display: flex; gap: 10px; margin-top: 15px; justify-content: center; }
 .share-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: #fff; cursor: pointer; font-size: 16px; transition: 0.3s; }
 .share-btn.wa { background: #25D366; } .share-btn.tg { background: #0088cc; } .share-btn.cp { background: #777; }
-.share-btn:hover { transform: translateY(-3px); }
-.modal-actions { margin-top: 20px; }
 
-/* Toast Notifications */
+/* TOASTS */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
 .toast { background: var(--modal-content-bg); color: var(--text-color); padding: 12px 20px; border-radius: 8px; border-left: 4px solid var(--primary-glow); box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards; font-size: 14px; display: flex; align-items: center; gap: 10px; pointer-events: auto; }
-.toast.error { border-left-color: #ff4757; }
-.toast.success { border-left-color: #2ed573; }
+.toast.error { border-left-color: #ff4757; } .toast.success { border-left-color: #2ed573; }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes fadeOut { to { opacity: 0; } }
 
-/* Admin Panel */
+/* ADMIN PANEL (Upgraded with Tabs) */
 .admin-btn { position: fixed; bottom: 80px; right: 15px; font-size: 12px; background: var(--card-bg); padding: 8px 12px; border-radius: 20px; cursor: pointer; z-index: 1001; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--panel-bg); display: none; overflow-y: auto; z-index: 3000; padding: 20px; }
 .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.admin-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.admin-tab { padding: 10px 15px; background: transparent; border: none; color: var(--text-light); cursor: pointer; font-weight: bold; white-space: nowrap; }
+.admin-tab.active { color: var(--primary-glow); border-bottom: 2px solid var(--primary-glow); }
+.admin-tab-content { display: none; } .admin-tab-content.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .admin-panel input, .admin-panel textarea, .admin-panel select { width: 100%; margin-bottom: 10px; padding: 12px; border-radius: 8px; border: 1px solid var(--input-bg); background: var(--input-bg); color: var(--text-color); }
 .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-checkboxes { display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -169,35 +144,33 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .admin-panel button { padding: 12px 15px; margin: 5px 0; border: none; border-radius: 8px; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: #fff; cursor: pointer; font-weight: bold; width: 100%; }
 .admin-panel .btn-secondary { background: var(--input-bg); color: var(--text-color); }
 .admin-panel .btn-danger { background: #ff4757; color: #fff; }
+.admin-panel .btn-action { width: auto; padding: 6px 10px; font-size: 12px; margin-left: 5px; }
 
-/* Dashboard Analytics */
+/* ANALYTICS DASHBOARD */
 .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 25px; }
 .stat-card { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .stat-card i { font-size: 24px; color: var(--primary-glow); margin-bottom: 10px; }
 .stat-card h4 { font-size: 20px; margin: 5px 0; }
 .stat-card p { font-size: 11px; opacity: 0.7; }
 
-/* Bottom Nav */
+/* ADMIN LIST ITEMS */
+.admin-list-item { background: var(--input-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-list-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
+.admin-item-info { flex-grow: 1; overflow: hidden; }
+.admin-item-info h4 { font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.admin-item-info p { font-size: 11px; opacity: 0.7; }
+.admin-item-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; }
+
+/* BOTTOM NAV & ADS */
 .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); padding: 12px 0; z-index: 999; border-top: 1px solid rgba(255,255,255,0.1); }
 .light-mode .bottom-nav { background: rgba(255,255,255,0.9); border-top: 1px solid rgba(0,0,0,0.1); }
 .bottom-nav button { background: none; border: none; color: var(--text-light); font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
 .bottom-nav button i { font-size: 18px; }
 .bottom-nav button.active { color: var(--primary-glow); font-weight: bold; }
-
-/* Ads */
 #adsterra-top-banner { display: flex; justify-content: center; margin: 20px auto; min-height: 60px; }
 #adsterra-bottom-banner { position: fixed; bottom: 65px; left: 50%; transform: translateX(-50%); z-index: 998; display: flex; justify-content: center; }
 @media(max-width: 768px) { #adsterra-top-banner { display: none; } }
 @media(min-width: 769px) { #adsterra-bottom-banner { display: none; } }
-
-/* Dynamic Admin Lists */
-.admin-list-item { background: var(--input-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-.admin-list-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px; }
-.admin-item-info { flex-grow: 1; overflow: hidden; }
-.admin-item-info h4 { font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-.admin-item-info p { font-size: 11px; opacity: 0.7; }
-.admin-item-actions button { padding: 5px 10px; font-size: 12px; width: auto; margin-left: 5px; }
-
 </style>
 </head>
 <body>
@@ -229,9 +202,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 </div>
 
 <div id="adsterra-top-banner">
-  <script>
-    atOptions = { 'key' : '8dd0b4eb3b8a5835eeea9dae52d5c9ab', 'format' : 'iframe', 'height' : 60, 'width' : 468, 'params' : {} };
-  </script>
+  <script>atOptions={'key':'8dd0b4eb3b8a5835eeea9dae52d5c9ab','format':'iframe','height':60,'width':468,'params':{}};</script>
   <script src="https://www.highperformanceformat.com/8dd0b4eb3b8a5835eeea9dae52d5c9ab/invoke.js"></script>
 </div>
 
@@ -252,7 +223,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 </div>
 
 <div class="products" id="products">
-    <!-- Skeleton Loaders -->
     <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
 </div>
 
@@ -263,109 +233,152 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="modal-content" id="modalContent"></div>
 </div>
 
+<!-- Confirm Modal (UX Improvement) -->
+<div class="modal" id="confirmModal" style="z-index: 4000;">
+    <div class="modal-content" style="max-width: 300px; text-align: center;">
+        <h3 id="confirmMsg" style="margin-bottom: 20px; font-size: 16px;">Are you sure?</h3>
+        <div style="display:flex; gap:10px;">
+            <button id="confirmYes" class="btn-danger" style="width: 100%; padding: 10px; border:none; border-radius:8px; color:#fff; cursor:pointer;">Yes</button>
+            <button onclick="document.getElementById('confirmModal').classList.remove('show')" style="width: 100%; padding: 10px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <!-- Admin Login Modal -->
 <div class="modal" id="adminLoginModal">
     <div class="modal-content" style="max-width: 350px;">
         <button class="close-btn" onclick="closeModals()">×</button>
         <h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
-        <input type="email" id="adminEmail" placeholder="Admin Email" class="admin-input" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="password" id="adminPass" placeholder="Password" class="admin-input" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Login Securely</button>
+        <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
     </div>
 </div>
 
-<!-- Complete Admin Panel -->
+<!-- Complete Admin Panel (Tabbed UI) -->
 <div class="admin-panel" id="adminPanel">
     <div class="admin-header">
         <h2>Admin Dashboard</h2>
-        <div>
-            <button onclick="logoutAdmin()" class="btn-secondary" style="width:auto;"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            <button onclick="closeAdmin()" class="btn-danger" style="width:auto;"><i class="fas fa-times"></i></button>
+        <div style="display:flex; gap:5px;">
+            <button onclick="logoutAdmin()" class="btn-secondary btn-action"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <button onclick="closeAdmin()" class="btn-danger btn-action"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
-    <!-- Analytics Dashboard -->
-    <div class="analytics-grid">
-        <div class="stat-card"><i class="fas fa-box"></i> <h4 id="statTotalItems">0</h4> <p>Active Products</p></div>
-        <div class="stat-card"><i class="fas fa-eye"></i> <h4 id="statViews">0</h4> <p>Total Views</p></div>
-        <div class="stat-card"><i class="fas fa-mouse-pointer"></i> <h4 id="statClicks">0</h4> <p>Total Clicks</p></div>
-        <div class="stat-card"><i class="fas fa-shopping-cart"></i> <h4 id="statSales">0</h4> <p>Total Sales</p></div>
+    <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired Data</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
     </div>
 
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+    <!-- TAB: Manage Products & Store -->
+    <div id="tab-manage" class="admin-tab-content active">
+        <h3>Product Form</h3>
+        <input type="hidden" id="pId">
+        <input type="text" id="pTitle" placeholder="Product Title">
+        <textarea id="pDesc" placeholder="Full Description" rows="3"></textarea>
+        
+        <div class="admin-grid">
+            <input type="number" id="pOriginalPrice" placeholder="Price (₹)">
+            <input type="number" id="pDiscount" placeholder="Discount (%)">
+            <input type="number" id="pStock" placeholder="Stock Qty">
+            <input type="number" step="0.1" id="pRating" placeholder="Rating (1-5)">
+        </div>
+        <p style="margin-bottom:10px;">Final Price: <span id="finalPricePreview" style="color:var(--primary-glow); font-weight:bold;">₹ 0.00</span></p>
 
-    <h3>Manage Product</h3>
-    <input type="hidden" id="pId">
-    <input type="text" id="pTitle" placeholder="Product Title">
-    <textarea id="pDesc" placeholder="Full Description" rows="3"></textarea>
-    
-    <div class="admin-grid">
-        <input type="number" id="pOriginalPrice" placeholder="Price (₹)">
-        <input type="number" id="pDiscount" placeholder="Discount (%)">
-        <input type="number" id="pStock" placeholder="Stock Qty">
-        <input type="number" step="0.1" id="pRating" placeholder="Rating (1-5)">
+        <div class="admin-grid">
+            <input type="date" id="pExpiryDate" title="Offer Expiry Date">
+            <input type="time" id="pExpiryTime" title="Offer Expiry Time">
+        </div>
+        
+        <div class="admin-grid">
+            <select id="pCategory"></select>
+            <input type="text" id="pTags" placeholder="Tags (comma separated)">
+        </div>
+
+        <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
+        <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
+
+        <div class="admin-checkboxes">
+            <label><input type="checkbox" id="pFeatured"> Featured Product</label>
+            <label><input type="checkbox" id="pHidden"> Hide from public</label>
+        </div>
+
+        <div id="imageFields" style="margin-bottom: 10px;"></div>
+        <button onclick="addImageField()" class="btn-secondary">+ Add Image URL</button>
+        
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <button onclick="saveProduct()">Save Product</button>
+            <button onclick="clearProductForm()" class="btn-secondary">Clear</button>
+        </div>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Product List (Active)</h3>
+        <div id="adminProductList"></div>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <div class="admin-grid">
+            <div>
+                <h3>Categories</h3>
+                <div style="display:flex; gap:5px;"><input type="text" id="newCategoryName" placeholder="New Category" style="margin:0;"><button onclick="addCategory()" style="margin:0; width:80px;">Add</button></div>
+                <div id="categoryList" style="margin-top:10px;"></div>
+            </div>
+            <div>
+                <h3>Push Notification</h3>
+                <input type="text" id="notificationTitle" placeholder="Title">
+                <textarea id="notificationMessage" placeholder="Message" rows="2"></textarea>
+                <input type="url" id="notificationUrl" placeholder="Redirect URL (Optional)">
+                <button onclick="sendManualNotification()"><i class="fas fa-paper-plane"></i> Broadcast</button>
+            </div>
+        </div>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Banners</h3>
+        <div id="bannerFields"></div>
+        <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
+        <button onclick="saveBanners()">Save Banners</button>
+        <div id="adminBannerList" style="margin-top:15px;"></div>
     </div>
-    <p style="margin-bottom:10px;">Final Price: <span id="finalPricePreview" style="color:var(--primary-glow); font-weight:bold;">₹ 0.00</span></p>
 
-    <div class="admin-grid">
-        <input type="date" id="pExpiryDate" title="Offer Expiry Date">
-        <input type="time" id="pExpiryTime" title="Offer Expiry Time">
-    </div>
-    
-    <div class="admin-grid">
-        <select id="pCategory"></select>
-        <input type="text" id="pTags" placeholder="Tags (comma separated)">
-    </div>
-
-    <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
-    <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
-
-    <div class="admin-checkboxes">
-        <label><input type="checkbox" id="pFeatured"> Featured Product</label>
-        <label><input type="checkbox" id="pHidden"> Hide from public</label>
+    <!-- TAB: Analytics -->
+    <div id="tab-analytics" class="admin-tab-content">
+        <div class="analytics-grid">
+            <div class="stat-card"><i class="fas fa-box"></i> <h4 id="statTotalItems">0</h4> <p>Active Products</p></div>
+            <div class="stat-card"><i class="fas fa-eye"></i> <h4 id="statViews">0</h4> <p>Total Store Views</p></div>
+            <div class="stat-card"><i class="fas fa-mouse-pointer"></i> <h4 id="statClicks">0</h4> <p>Total Link Clicks</p></div>
+            <div class="stat-card"><i class="fas fa-shopping-cart"></i> <h4 id="statSales">0</h4> <p>Total Sales (Proxy)</p></div>
+            <div class="stat-card"><i class="fas fa-chart-line"></i> <h4 id="statConvRate">0%</h4> <p>Conversion Rate</p></div>
+        </div>
+        <h3>Top Performing Products</h3>
+        <div id="topProductsList" style="margin-top:10px;"></div>
     </div>
 
-    <div id="imageFields" style="margin-bottom: 10px;"></div>
-    <button onclick="addImageField()" class="btn-secondary">+ Add Image URL</button>
-    
-    <div style="display:flex; gap:10px; margin-top:15px;">
-        <button onclick="saveProduct()">Save Product</button>
-        <button onclick="clearProductForm()" class="btn-secondary">Clear</button>
+    <!-- TAB: Expired Data -->
+    <div id="tab-expired" class="admin-tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3>Expired & Archived</h3>
+            <button onclick="bulkRestore()" class="btn-secondary" style="width:auto; padding:8px;"><i class="fas fa-undo"></i> Bulk Restore</button>
+        </div>
+        <div id="adminExpiredList"></div>
     </div>
 
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-    <h3>Product List (Top 50 Recent)</h3>
-    <div id="adminProductList"></div>
-
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-    <h3>Categories</h3>
-    <div style="display:flex; gap:10px;">
-        <input type="text" id="newCategoryName" placeholder="New Category" style="margin:0;">
-        <button onclick="addCategory()" style="margin:0; width:120px;">Add</button>
+    <!-- TAB: Backup & Restore -->
+    <div id="tab-backup" class="admin-tab-content">
+        <h3>System Backup</h3>
+        <p style="font-size:12px; opacity:0.8; margin-bottom:15px;">Export your complete database as a JSON file, or restore from a previous backup to prevent data loss.</p>
+        <button onclick="exportDatabaseJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Restore Database</h3>
+        <input type="file" id="importFile" accept="application/json" style="background:none; border:none; padding:0;">
+        <button onclick="importDatabaseJSON()" class="btn-danger"><i class="fas fa-upload"></i> Overwrite & Restore DB</button>
     </div>
-    <div id="categoryList" style="margin-top:10px;"></div>
-
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-    <h3>Banners</h3>
-    <div id="bannerFields"></div>
-    <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
-    <button onclick="saveBanners()">Save Banners</button>
-    <div id="adminBannerList" style="margin-top:15px;"></div>
-
-    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-    <h3>Push Notification</h3>
-    <input type="text" id="notificationTitle" placeholder="Title">
-    <textarea id="notificationMessage" placeholder="Message"></textarea>
-    <input type="url" id="notificationUrl" placeholder="Redirect URL (Optional)">
-    <button onclick="sendManualNotification()"><i class="fas fa-paper-plane"></i> Send Broadcast</button>
-
 </div>
 
 <!-- Adsterra Bottom Banner -->
 <div id="adsterra-bottom-banner">
-    <script>
-        atOptions = { 'key' : '71f469a0676044942280f6e5f52c9392', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-    </script>
+    <script>atOptions={'key':'71f469a0676044942280f6e5f52c9392','format':'iframe','height':50,'width':320,'params':{}};</script>
     <script src="//www.topcreativeformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
 </div>
 
@@ -381,10 +394,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div id="toast-container"></div>
 
 <script type="module">
-    // Firebase Setup (Modular)
+    // --- FIREBASE IMPORTS (Modular) ---
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, remove, update, increment } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDpF0VyF-4MeniRCO1L1oMhYtR5uBZkklU",
@@ -399,8 +412,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence); // Security: Session persistence
 
-    // DB References
     const refs = {
         products: ref(db, 'products/'),
         expired: ref(db, 'expiredProducts/'),
@@ -409,42 +422,56 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         analytics: ref(db, 'analytics/totals')
     };
 
-    // Global State
+    // --- GLOBAL STATE ---
     let state = {
-        products: {}, banners: {}, categories: {}, analytics: {},
+        products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
-        isAdmin: false
+        isAdmin: false,
+        cacheTimestamp: 0 // Cache layer control
     };
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
 
-    // Initialize Theme
+    // --- INIT ---
     if (state.theme === 'light') document.body.classList.add('light-mode');
 
-    // Utility: Toast
+    // --- UTILITIES ---
     window.showToast = (msg, type = 'success') => {
-        const t = document.createElement('div');
-        t.className = `toast ${type}`;
+        const t = document.createElement('div'); t.className = `toast ${type}`;
         t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
         document.getElementById('toast-container').appendChild(t);
         setTimeout(() => t.remove(), 3000);
     };
 
-    // Utility: Theme Toggle
     window.toggleTheme = () => {
         document.body.classList.toggle('light-mode');
         state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
         localStorage.setItem('theme', state.theme);
     };
 
-    // Utility: Debounce for Search
-    const debounce = (func, wait) => {
-        let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); };
+    const debounce = (func, wait) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); }; };
+    
+    // Security: Input Sanitization
+    function sanitize(str) {
+        if(typeof str !== 'string') return str;
+        const div = document.createElement('div'); div.innerText = str; return div.innerHTML;
+    }
+
+    // UX: Confirm Action Modal
+    let confirmCallback = null;
+    window.confirmAction = (msg, callback) => {
+        document.getElementById("confirmMsg").innerText = msg;
+        document.getElementById("confirmModal").classList.add("show");
+        confirmCallback = callback;
+    };
+    document.getElementById("confirmYes").onclick = () => {
+        document.getElementById("confirmModal").classList.remove("show");
+        if(confirmCallback) confirmCallback();
     };
 
-    // Expiry/Date Helpers
+    // --- TIME & TIMERS (Performance Optimized) ---
     function getTimestamp(d, t) { return d ? new Date(`${d}T${t || '00:00:00'}`).getTime() : null; }
     function setInputsDate(ts, dInp, tInp) {
         if (!ts) { dInp.value = ''; tInp.value = ''; return; }
@@ -455,22 +482,46 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     
     function formatCountdown(ms) {
         if (ms <= 0) return 'Expired';
-        const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000);
-        return `Ends in: ${d}d ${h}h ${m}m`;
+        const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
+        return `Ends in: ${d}d ${h}h ${m}m ${s}s`;
     }
 
-    // DB Listeners
-    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
-    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
-    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
-    onValue(refs.products, s => {
-        state.products = s.val() || {};
-        document.getElementById("products").innerHTML = ""; // Remove skeleton
-        renderAllViews();
-        renderAdminProducts();
-        updateAdminAnalytics();
+    // Performance: requestAnimationFrame instead of setInterval for smooth counters
+    function runTimers() {
+        const now = Date.now();
+        document.querySelectorAll('.countdown-timer').forEach(el => {
+            const exp = parseInt(el.dataset.expiry);
+            if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
+        });
+        requestAnimationFrame(runTimers);
+    }
+    requestAnimationFrame(runTimers);
+
+    // Intersection Observer for Image Lazy Loading
+    const lazyObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.onload = () => img.classList.add('loaded');
+                observer.unobserve(img);
+            }
+        });
     });
 
+    // --- DATABASE LISTENERS ---
+    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
+    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
+    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
+    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
+    
+    onValue(refs.products, s => {
+        state.products = s.val() || {};
+        document.getElementById("products").innerHTML = ""; // Remove skeletons
+        renderAllViews(); renderAdminProducts(); updateAdminAnalytics();
+    }, (error) => { console.error("Firebase Error:", error); showToast("Database read error", "error"); });
+
+    // Performance: Memoize active list
     function getActiveProducts() {
         const now = Date.now();
         return Object.entries(state.products)
@@ -478,7 +529,42 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             .map(([id, p]) => ({ id, ...p }));
     }
 
-    // Main Renderer
+    // --- TRACKING & RECOVERY ENGINE ---
+    // Track stats multi-path atomic update
+    function trackEvent(type, productId) {
+        const dateStr = new Date().toISOString().split('T')[0];
+        const updates = {};
+        updates[`analytics/totals/${type}`] = increment(1);
+        if(productId) {
+            updates[`products/${productId}/${type}`] = increment(1);
+            updates[`analytics/products/${productId}/${type}`] = increment(1);
+            if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
+        }
+        updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
+        update(ref(db), updates).catch(e => console.error("Tracking Error:", e));
+    }
+
+    // Auto Expiry Controller (Move, don't delete permanently)
+    setInterval(() => {
+        const now = Date.now();
+        const updates = {};
+        let changed = false;
+        
+        Object.entries(state.products).forEach(([id, p]) => {
+            if(p.expiryDateTime && p.expiryDateTime < now) {
+                updates[`expiredProducts/${id}`] = p; // Move to expired
+                updates[`products/${id}`] = null;     // Remove from active
+                changed = true;
+            }
+        });
+        Object.entries(state.banners).forEach(([id, b]) => {
+            if(b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
+        });
+        
+        if(changed) update(ref(db), updates).then(()=>console.log("Auto-expiry cleanup complete."));
+    }, 60000);
+
+    // --- MAIN RENDERERS ---
     function renderAllViews() {
         const query = document.getElementById("search").value.trim().toLowerCase();
         const activeList = getActiveProducts();
@@ -488,7 +574,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
             renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-            renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>(b.views || 0) - (a.views || 0)).slice(0, 10), "trendingWrapper");
+            // Auto Trending: Top combined clicks + views
+            renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0))).slice(0, 10), "trendingWrapper");
             document.getElementById("mainGridTitle").innerText = "Just Arrived";
         }
 
@@ -509,7 +596,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         const sortBy = document.getElementById("sortProducts").value;
         list.sort((a, b) => {
-            if (sortBy === 'popular') return (b.views || 0) - (a.views || 0);
+            if (sortBy === 'popular') return ((b.views||0)+(b.clicks||0)) - ((a.views||0)+(a.clicks||0));
             if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0);
             if (sortBy === 'price-low-high') return (a.finalPrice || 0) - (b.finalPrice || 0);
             if (sortBy === 'price-high-low') return (b.finalPrice || 0) - (a.finalPrice || 0);
@@ -517,12 +604,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         });
 
         if (list.length === 0) {
-            container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px 0; opacity:0.7;">No products found.</div>`;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`;
             return;
         }
 
-        list.forEach(p => container.appendChild(createProductCard(p)));
-        startTimers();
+        // Use DocumentFragment for performance virtual rendering
+        const frag = document.createDocumentFragment();
+        list.forEach(p => frag.appendChild(createProductCard(p)));
+        container.appendChild(frag);
     }
 
     function renderCarousel(containerId, list, wrapperId) {
@@ -531,54 +620,59 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if (list.length === 0) { wrapper.style.display = 'none'; return; }
         wrapper.style.display = 'block';
         container.innerHTML = "";
-        list.forEach(p => container.appendChild(createProductCard(p)));
+        const frag = document.createDocumentFragment();
+        list.forEach(p => frag.appendChild(createProductCard(p)));
+        container.appendChild(frag);
     }
 
-    function createProductCard(product) {
+    function createProductCard(p) {
         const card = document.createElement("div");
         card.className = "card";
         
         let badges = [];
-        if (product.discount > 0) badges.push(`<div class="badge discount-badge">${product.discount}% OFF</div>`);
-        if (product.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i> Featured</div>`);
-        if (product.stock !== undefined && product.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
-        else if (product.stock > 0 && product.stock < 5) badges.push(`<div class="badge stock-badge" style="background:#ff9800;">Only ${product.stock} left</div>`);
+        if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
+        if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
+        if (p.stock !== undefined && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
+        else if (p.stock > 0 && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`); // Low stock alert
 
         let stars = Array(5).fill('<i class="far fa-star"></i>');
-        if (product.rating) {
-            const r = Math.round(product.rating);
+        if (p.rating) {
+            const r = Math.round(p.rating);
             for(let i=0; i<r; i++) stars[i] = '<i class="fas fa-star"></i>';
         }
 
-        const isWished = state.wishlist.includes(product.id);
+        const isWished = state.wishlist.includes(p.id);
 
         card.innerHTML = `
             <div class="image-container">
-                <img src="${product.images?.[0] || fallbackImage}" loading="lazy" onerror="this.src='${fallbackImage}'">
+                <img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
                 ${badges.join('')}
             </div>
             <div class="card-content">
-                <h3>${product.title || 'Untitled'}</h3>
-                <p class="category-text">${product.category || 'General'}</p>
+                <h3>${sanitize(p.title || 'Untitled')}</h3>
+                <p class="category-text">${sanitize(p.category || 'General')}</p>
                 <div class="card-stats">
-                    <span class="stars">${stars.join('')} ${product.rating || ''}</span>
-                    <span><i class="fas fa-eye"></i> ${product.views || 0}</span>
+                    <span class="stars">${stars.join('')}</span>
+                    <span><i class="fas fa-eye"></i> ${p.views || 0}</span>
                 </div>
                 <div class="price-container">
-                    <span class="final-price">₹ ${product.finalPrice?.toFixed(2)}</span>
-                    ${product.discount > 0 ? `<span class="original-price">₹ ${product.price?.toFixed(2)}</span>` : ''}
+                    <span class="final-price">₹ ${p.finalPrice?.toFixed(2)}</span>
+                    ${p.discount > 0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span>` : ''}
                 </div>
-                ${product.expiryDateTime ? `<div class="countdown-timer" data-expiry="${product.expiryDateTime}"></div>` : ''}
+                ${p.expiryDateTime ? `<div class="countdown-timer" data-expiry="${p.expiryDateTime}"></div>` : ''}
                 
                 <div class="btn-group">
-                    <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${product.id}', event)"><i class="fas fa-heart"></i></button>
-                    <button class="view-button" onclick="openProduct('${product.id}')">Details</button>
+                    <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="fas fa-heart"></i></button>
+                    <button class="view-button" onclick="openProduct('${p.id}')">Details</button>
                 </div>
             </div>
         `;
+        // Attach lazy observer
+        lazyObserver.observe(card.querySelector('.lazy-img'));
         return card;
     }
 
+    // --- UX ACTIONS ---
     window.toggleWishlist = (id, event) => {
         event.stopPropagation();
         const idx = state.wishlist.indexOf(id);
@@ -588,21 +682,16 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         renderAllViews();
     };
 
-    // Categories UI
     function renderCategories() {
         const panel = document.getElementById("categoriesPanel");
         panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
         Object.values(state.categories).sort().forEach(cat => {
-            panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${cat}')">${cat}</div>`;
+            panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
         });
     }
     window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
-    window.toggleCategories = () => {
-        const p = document.getElementById("categoriesPanel");
-        p.style.display = p.style.display === "flex" ? "none" : "flex";
-    };
+    window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
 
-    // Search UI
     const searchInp = document.getElementById("search");
     const suggBox = document.getElementById("suggestions");
     searchInp.addEventListener("input", debounce(() => {
@@ -610,47 +699,38 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(q.length > 0) {
             const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
             if(matches.length > 0) {
-                suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${p.title.replace(/'/g,"\\'")}')"><i class="fas fa-search"></i> ${p.title}</div>`).join('');
+                suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
                 suggBox.style.display = 'block';
             } else suggBox.style.display = 'none';
         } else suggBox.style.display = 'none';
         renderAllViews();
     }, 300));
     window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
-    document.getElementById("searchBtn").onclick = renderAllViews;
+    document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
     document.getElementById("sortProducts").onchange = renderAllViews;
 
-    // Tabs
     window.switchTab = (tab) => {
         state.currentView = tab; state.currentCategory = 'ALL'; searchInp.value = '';
         document.getElementById('categoriesPanel').style.display = 'none';
-        updateNavHighlight(tab); renderAllViews(); renderCategories();
+        updateNavHighlight(tab); renderAllViews(); renderCategories(); window.scrollTo(0,0);
     };
     function updateNavHighlight(tab = state.currentView) {
-        document.querySelectorAll('.bottom-nav button').forEach(b => {
-            b.classList.toggle('active', b.dataset.tab === tab);
-        });
+        document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
     }
 
-    // Modal Details
+    // Modal Details & Sharing Tracking
     window.openProduct = (id) => {
         const p = state.products[id]; if(!p) return;
-        
-        // Track View
-        update(ref(db, `products/${id}`), { views: increment(1) });
-        update(ref(db, 'analytics/totals'), { views: increment(1) });
+        trackEvent('views', id);
 
         document.body.style.overflow = 'hidden';
-        const gallery = (p.images||[]).map(url => `<img src="${url}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
-        const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${t.trim()}</span>`).join('');
+        const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
+        const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
         
         let cpnHtml = '';
         if(p.coupon) {
-            cpnHtml = `<div class="coupon-box">
-                <span style="font-size:12px; opacity:0.8;">Use Code:</span>
-                <code id="cpnText">${p.coupon}</code>
-                <button class="icon-btn" onclick="copyCoupon('${p.coupon}')"><i class="fas fa-copy"></i></button>
-            </div>`;
+            cpnHtml = `<div class="coupon-box"><span style="font-size:12px; opacity:0.8;">Use Code:</span>
+                <code id="cpnText">${sanitize(p.coupon)}</code><button class="icon-btn" onclick="copyCoupon('${sanitize(p.coupon)}')"><i class="fas fa-copy"></i></button></div>`;
         }
 
         const shareUrl = encodeURIComponent(window.location.href);
@@ -659,23 +739,22 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById("modalContent").innerHTML = `
             <button class="close-btn" onclick="closeModals()">×</button>
             <div class="modal-image-gallery">${gallery||`<img src="${fallbackImage}" class="modal-gallery-image">`}</div>
-            <h2>${p.title}</h2>
+            <h2>${sanitize(p.title)}</h2>
             <div class="tags-container">${tags}</div>
+            <div style="font-size:11px; margin-top:5px; opacity:0.6;"><i class="fas fa-share-alt"></i> ${p.shares||0} shares</div>
             <div class="price-container" style="margin: 15px 0;">
                 <span class="final-price" style="font-size:24px;">₹ ${p.finalPrice?.toFixed(2)}</span>
                 ${p.discount>0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span> <span class="badge discount-badge" style="position:relative; top:0; left:0;">${p.discount}% OFF</span>` : ''}
             </div>
-            <p style="opacity:0.9; font-size:14px; line-height:1.6;">${p.description}</p>
+            <p style="opacity:0.9; font-size:14px; line-height:1.6;">${sanitize(p.description)}</p>
             ${cpnHtml}
-            
-            <div class="modal-actions">
+            <div style="margin-top: 20px;">
                 <button onclick="buyProduct('${id}', '${p.affiliateLink}')" style="width:100%; padding:15px; border-radius:10px; background:linear-gradient(90deg, #00f5ff, #9b5cff); border:none; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(0,245,255,0.4);"><i class="fas fa-shopping-cart"></i> Get Deal Now</button>
             </div>
-
             <div class="share-links">
-                <button class="share-btn wa" onclick="window.open('https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
-                <button class="share-btn tg" onclick="window.open('https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
-                <button class="share-btn cp" onclick="copyToClipboard('${window.location.href}')"><i class="fas fa-link"></i></button>
+                <button class="share-btn wa" onclick="shareProduct('${id}', 'https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
+                <button class="share-btn tg" onclick="shareProduct('${id}', 'https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
+                <button class="share-btn cp" onclick="copyShare('${id}', '${window.location.href}')"><i class="fas fa-link"></i></button>
             </div>
         `;
         document.getElementById("productModal").classList.add('show');
@@ -688,70 +767,35 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
-    window.copyToClipboard = (txt) => { navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
+    window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
+    window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
+    window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link) window.open(link, '_blank'); };
 
-    window.buyProduct = (id, link) => {
-        update(ref(db, `products/${id}`), { clicks: increment(1), sales: increment(1) });
-        update(ref(db, 'analytics/totals'), { clicks: increment(1), sales: increment(1) });
-        if(link) window.open(link, '_blank');
-    };
-
-    // Auto Expiry & Countdown Engine
-    setInterval(() => {
-        const now = Date.now();
-        document.querySelectorAll('[data-expiry]').forEach(el => {
-            const rem = parseInt(el.dataset.expiry) - now;
-            el.innerText = rem > 0 ? formatCountdown(rem) : 'Expired';
-        });
-    }, 60000);
-
-    setInterval(() => { // Check DB expiries
-        const now = Date.now();
-        Object.entries(state.products).forEach(([id, p]) => {
-            if(p.expiryDateTime && p.expiryDateTime < now) {
-                set(ref(db, `expiredProducts/${id}`), p);
-                remove(ref(db, `products/${id}`));
-            }
-        });
-        Object.entries(state.banners).forEach(([id, b]) => {
-            if(b.expiryDateTime && b.expiryDateTime < now) remove(ref(db, `banners/${id}`));
-        });
-    }, 60000);
-
-    // Render Banners
+    // --- BANNERS ---
     let bannerInterval;
     function renderBanners() {
-        const b = document.getElementById("banner");
-        b.innerHTML = ""; clearInterval(bannerInterval);
+        const b = document.getElementById("banner"); b.innerHTML = ""; clearInterval(bannerInterval);
         const list = Object.values(state.banners).filter(x => !x.expiryDateTime || x.expiryDateTime > Date.now());
         if(!list.length) return;
-        
         list.forEach((item, i) => {
             const img = document.createElement("img");
-            img.src = item.image || fallbackImage; img.loading = "lazy";
+            img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
             img.onclick = () => window.location.href = item.link;
             if(i===0) img.classList.add('active');
             b.appendChild(img);
         });
-
         const slides = b.querySelectorAll("img");
         if(slides.length > 1) {
             let idx = 0;
-            bannerInterval = setInterval(() => {
-                slides.forEach(s=>s.classList.remove('active'));
-                idx = (idx+1)%slides.length;
-                slides[idx].classList.add('active');
-            }, 3000);
+            bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
         }
     }
 
-    // --- ADMIN SYSTEM ---
+    // --- SECURITY & ADMIN AUTHENTICATION ---
     onAuthStateChanged(auth, user => {
         state.isAdmin = !!user;
         if(state.isAdmin && document.getElementById('adminLoginModal').classList.contains('show')) {
-            closeModals();
-            document.getElementById('adminPanel').style.display = 'block';
-            showToast("Admin access granted");
+            closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin authenticated via Firebase");
         }
     });
 
@@ -762,72 +806,77 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.loginAdmin = async () => {
         const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
+        if(!e || !p) return showToast("Email and password required", "error");
         try { await signInWithEmailAndPassword(auth, e, p); } 
-        catch (err) { 
-            // Graceful Fallback for demo/setup purposes if Firebase Auth is not configured yet
-            if(p === "ss620631") { // Keeping legacy backdoor per user request to not break existing access if FB auth fails
-                state.isAdmin = true; closeModals();
-                document.getElementById('adminPanel').style.display = 'block';
-                showToast("Legacy Admin Logged In", "success");
-            } else {
-                showToast(err.message.replace('Firebase:', '').trim(), "error"); 
-            }
-        }
+        catch (err) { showToast("Authentication failed. Invalid credentials.", "error"); } // Strictly enforced Firebase Auth, no legacy fallback.
     };
-    window.logoutAdmin = () => { signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out"); };
+    
+    window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", () => { signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); }); };
     window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
+
+    window.switchAdminTab = (tabId) => {
+        document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    };
 
     function updateAdminAnalytics() {
         document.getElementById('statTotalItems').innerText = Object.keys(state.products).length;
         document.getElementById('statViews').innerText = state.analytics.views || 0;
         document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
         document.getElementById('statSales').innerText = state.analytics.sales || 0;
+        
+        const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
+        document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
+        
+        // Render Top Products Table in Analytics
+        const list = Object.entries(state.products).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
+        const c = document.getElementById("topProductsList"); c.innerHTML='';
+        list.forEach(([id, p], i) => {
+            c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`;
+        });
     }
 
-    // Admin Products Data handling
-    document.getElementById("pOriginalPrice").oninput = calcPrice;
-    document.getElementById("pDiscount").oninput = calcPrice;
+    // --- ADMIN PRODUCT MANAGEMENT ---
+    document.getElementById("pOriginalPrice").oninput = calcPrice; document.getElementById("pDiscount").oninput = calcPrice;
     function calcPrice() {
-        const p = parseFloat(document.getElementById("pOriginalPrice").value)||0;
-        const d = parseFloat(document.getElementById("pDiscount").value)||0;
+        const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
         document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
     }
 
     window.addImageField = (url='') => {
         const c = document.getElementById("imageFields");
         const div = document.createElement('div'); div.style = "display:flex; gap:5px; margin-bottom:5px;";
-        div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${url}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()">X</button>`;
+        div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${sanitize(url)}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
         c.appendChild(div);
     };
 
     window.saveProduct = () => {
         const id = document.getElementById("pId").value;
         const title = document.getElementById("pTitle").value.trim();
-        const desc = document.getElementById("pDesc").value.trim();
         const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
-        const discount = parseFloat(document.getElementById("pDiscount").value)||0;
-        const stock = parseInt(document.getElementById("pStock").value);
-        const rating = parseFloat(document.getElementById("pRating").value);
         const cat = document.getElementById("pCategory").value;
-        const tags = document.getElementById("pTags").value.trim();
-        const link = document.getElementById("pAffiliateLink").value.trim();
-        const coupon = document.getElementById("pCoupon").value.trim();
-        const feat = document.getElementById("pFeatured").checked;
-        const hid = document.getElementById("pHidden").checked;
-        const exp = getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value);
-        const images = [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean);
-
+        
         if(!title || !price || !cat) return showToast("Title, Price and Category are required!", "error");
 
         const data = {
-            title, description: desc, price, discount, finalPrice: price - (price*discount/100),
-            category: cat, tags, affiliateLink: link, coupon, featured: feat, hidden: hid,
-            images, expiryDateTime: exp,
-            stock: isNaN(stock) ? null : stock, rating: isNaN(rating) ? null : rating,
+            title, description: document.getElementById("pDesc").value.trim(),
+            price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
+            finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
+            category: cat, tags: document.getElementById("pTags").value.trim(),
+            affiliateLink: document.getElementById("pAffiliateLink").value.trim(),
+            coupon: document.getElementById("pCoupon").value.trim(),
+            featured: document.getElementById("pFeatured").checked,
+            hidden: document.getElementById("pHidden").checked,
+            images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
+            expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
+            stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
+            rating: isNaN(parseFloat(document.getElementById("pRating").value)) ? null : parseFloat(document.getElementById("pRating").value),
             updatedAt: Date.now()
         };
 
-        if(!id) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; }
+        if(!id) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; }
         
         const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
         req.then(()=>{ showToast("Product Saved!"); clearProductForm(); }).catch(e=>showToast(e.message, "error"));
@@ -839,7 +888,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById('imageFields').innerHTML=''; addImageField(); calcPrice();
     };
 
-    window.editProduct = (id) => {
+    window.quickEdit = (id) => {
         const p = state.products[id]; if(!p) return;
         document.getElementById("pId").value = id;
         document.getElementById("pTitle").value = p.title||'';
@@ -857,77 +906,154 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
         
         document.getElementById("imageFields").innerHTML='';
-        if(p.images) p.images.forEach(u=>addImageField(u)); else addImageField();
-        calcPrice(); document.getElementById("adminPanel").scrollTo(0,0);
+        if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
+        calcPrice(); 
+        document.getElementById("adminPanel").scrollTo(0,0);
+        switchAdminTab('tab-manage');
     };
 
-    window.deleteProduct = (id) => { if(confirm("Delete Product?")) remove(ref(db, `products/${id}`)); };
+    window.duplicateProduct = (id) => {
+        confirmAction("Duplicate this product?", () => {
+            const p = {...state.products[id]}; delete p.id;
+            p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0;
+            set(push(refs.products), p).then(()=>showToast("Duplicated successfully"));
+        });
+    };
+
+    window.archiveProduct = (id) => {
+        confirmAction("Archive product? (Moves to expired panel)", () => {
+            const updates = {};
+            updates[`expiredProducts/${id}`] = state.products[id];
+            updates[`products/${id}`] = null;
+            update(ref(db), updates).then(()=>showToast("Archived"));
+        });
+    };
 
     function renderAdminProducts() {
         const c = document.getElementById("adminProductList"); c.innerHTML = "";
-        const list = Object.entries(state.products).sort((a,b)=>b[1].createdAt - a[1].createdAt).slice(0,50);
+        const list = Object.entries(state.products).sort((a,b)=>b[1].createdAt - a[1].createdAt); // Virtual render if heavy
+        
+        const frag = document.createDocumentFragment();
+        list.slice(0, 100).forEach(([id, p]) => { // Max 100 displayed to save dom nodes in admin
+            const div = document.createElement('div'); div.className = 'admin-list-item';
+            div.innerHTML = `
+                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!==undefined?p.stock:'∞'} | ${p.hidden?'Hidden':'Visible'}</p></div>
+                <div class="admin-item-actions">
+                    <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
+                    <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
+                    <button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
+                </div>`;
+            frag.appendChild(div);
+        });
+        c.appendChild(frag);
+    }
+
+    // --- EXPIRED PANEL ENGINE ---
+    function renderAdminExpired() {
+        const c = document.getElementById("adminExpiredList"); c.innerHTML = "";
+        const list = Object.entries(state.expired);
+        if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired products.</p>'; return; }
+        
         list.forEach(([id, p]) => {
             c.innerHTML += `
-            <div class="admin-list-item">
-                <img src="${p.images?.[0]||fallbackImage}">
-                <div class="admin-item-info"><h4>${p.title}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0}</p></div>
-                <div class="admin-item-actions"><button onclick="editProduct('${id}')"><i class="fas fa-pen"></i></button><button class="btn-danger" onclick="deleteProduct('${id}')"><i class="fas fa-trash"></i></button></div>
+            <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
+                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Expired/Archived</p></div>
+                <div class="admin-item-actions">
+                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
+                    <button class="btn-danger btn-action" onclick="deletePermanent('${id}')"><i class="fas fa-trash"></i></button>
+                </div>
             </div>`;
         });
     }
 
-    // Admin Categories
-    window.addCategory = () => {
-        const v = document.getElementById("newCategoryName").value.trim();
-        if(v) { push(refs.categories, v); document.getElementById("newCategoryName").value=''; }
+    window.restoreProduct = (id) => {
+        confirmAction("Restore this product to active?", () => {
+            const p = state.expired[id]; p.expiryDateTime = null; // Remove expiry block
+            const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null;
+            update(ref(db), updates).then(()=>showToast("Restored successfully"));
+        });
     };
-    window.deleteCategory = (id) => { if(confirm("Delete Category?")) remove(ref(db, `categories/${id}`)); };
+    
+    window.deletePermanent = (id) => { confirmAction("Permanently delete? Cannot be undone.", () => { remove(ref(db, `expiredProducts/${id}`)); showToast("Deleted permanently", "error"); }); };
+    
+    window.bulkRestore = () => {
+        confirmAction("Restore ALL expired products?", () => {
+            const updates = {};
+            Object.entries(state.expired).forEach(([id, p]) => { p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; });
+            if(Object.keys(updates).length) update(ref(db), updates).then(()=>showToast("Bulk restore complete"));
+        });
+    };
+
+    // --- BACKUP & RESTORE SYSTEM ---
+    window.exportDatabaseJSON = async () => {
+        try {
+            const s = await get(ref(db));
+            const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `futuristic_store_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            showToast("Backup Downloaded");
+        } catch(e) { showToast("Backup Failed: " + e.message, "error"); }
+    };
+
+    window.importDatabaseJSON = () => {
+        const file = document.getElementById('importFile').files[0];
+        if(!file) return showToast("Select a file first", "error");
+        confirmAction("DANGER: This will OVERWRITE the entire database with the selected file. Proceed?", () => {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    await set(ref(db), data);
+                    showToast("Database Restored Successfully!");
+                    document.getElementById('importFile').value = '';
+                } catch(err) { showToast("Invalid JSON File", "error"); }
+            };
+            reader.readAsText(file);
+        });
+    };
+
+    // --- OTHER ADMIN MNGMT ---
+    window.addCategory = () => { const v = document.getElementById("newCategoryName").value.trim(); if(v) { push(refs.categories, v); document.getElementById("newCategoryName").value=''; } };
+    window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
     function renderAdminCategories() {
         const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList");
         sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
         Object.entries(state.categories).forEach(([id, c]) => {
-            sel.innerHTML += `<option value="${c}">${c}</option>`;
-            list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${c}</span> <button class="btn-danger" onclick="deleteCategory('${id}')" style="width:auto; padding:5px;"><i class="fas fa-trash"></i></button></div>`;
+            sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`;
+            list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`;
         });
     }
 
-    // Admin Banners
     window.addBannerField = (id='', img='', link='', exp=null) => {
         const d = document.createElement('div'); d.className = 'admin-list-item'; d.style.flexDirection = 'column'; d.style.alignItems='stretch';
         d.innerHTML = `
             <input type="hidden" class="bId" value="${id}">
-            <input type="url" class="bImg" placeholder="Image URL" value="${img}" style="margin-bottom:5px;">
-            <input type="url" class="bLink" placeholder="Redirect Link" value="${link}" style="margin-bottom:5px;">
+            <input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;">
+            <input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;">
             <div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
-        setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime'));
-        document.getElementById("bannerFields").appendChild(d);
+        setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
     };
     window.saveBanners = () => {
         [...document.querySelectorAll("#bannerFields .admin-list-item")].forEach(el => {
-            const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value;
-            const exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value);
-            if(img && link) {
-                const b = { image:img, link, expiryDateTime:exp };
-                id ? update(ref(db, `banners/${id}`), b) : set(push(refs.banners), b);
-            }
+            const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value);
+            if(img && link) { const b = { image:img, link, expiryDateTime:exp }; id ? update(ref(db, `banners/${id}`), b) : set(push(refs.banners), b); }
         });
         document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!");
     };
-    window.deleteBanner = id => remove(ref(db, `banners/${id}`));
+    window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
     function renderAdminBanners() {
         const c = document.getElementById("adminBannerList"); c.innerHTML='';
         Object.entries(state.banners).forEach(([id, b]) => {
-            c.innerHTML += `<div class="admin-list-item"><img src="${b.image}"><div class="admin-item-info"><h4>Banner</h4><p>${b.link}</p></div><button class="btn-danger" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`;
+            c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`;
         });
     }
 
-    // Notifications API (OneSignal)
     window.sendManualNotification = async () => {
-        const title = document.getElementById("notificationTitle").value;
-        const msg = document.getElementById("notificationMessage").value;
-        const url = document.getElementById("notificationUrl").value;
+        const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
         if(!title || !msg) return showToast("Title and message required", "error");
-        
         try {
             const res = await fetch("https://onesignal.com/api/v1/notifications", {
                 method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
@@ -935,12 +1061,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             });
             if(!res.ok) throw new Error("Failed to send");
             showToast("Notification Sent Successfully!");
-            document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = '';
+            document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
         } catch(e) { showToast(e.message, "error"); }
     };
 
-    // Initial load handlers
     if(!document.getElementById("imageFields").children.length) addImageField();
 </script>
 </body>
-  </html>
+</html>
