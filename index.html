@@ -4,8 +4,8 @@
   <meta name="google-site-verification" content="PAu0HcKbDYL_QmJ50Gpa952LCk3Pmebu0OBp9SVljGA" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product by Shailesh – Futuristic Store</title>
-  <meta name="description" content="Product Seller App is an admin controlled ecommerce dashboard where only the owner can upload products. Users can view products and get special discounts. Developer Shailesh Kumar Singh.">
+  <title>Product by Shailesh – Futuristic Store & Notes</title>
+  <meta name="description" content="Product Seller App is an admin controlled ecommerce dashboard where only the owner can upload products. Users can view products, get special discounts, and download study notes. Developer Shailesh Kumar Singh.">
   <meta name="googlebot" content="max-snippet:160">
 
   <!-- OneSignal SDK -->
@@ -189,6 +189,21 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 #adsterra-bottom-banner { position: fixed; bottom: 65px; left: 50%; transform: translateX(-50%); z-index: 998; display: flex; justify-content: center; }
 @media(max-width: 768px) { #adsterra-top-banner { display: none; } }
 @media(min-width: 769px) { #adsterra-bottom-banner { display: none; } }
+
+/* ========================================================= */
+/* NEW NOTES SYSTEM STYLES */
+/* ========================================================= */
+.note-card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
+.note-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--secondary-glow); }
+.note-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; background: #000; }
+.note-badge { font-size: 10px; padding: 3px 8px; border-radius: 5px; background: var(--primary-glow); color: #000; font-weight: bold; width: fit-content; text-transform: uppercase; }
+.note-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+.note-btn { background: linear-gradient(90deg, #00f5ff, #9b5cff); color: #fff; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; display: flex; gap: 5px; align-items: center; }
+#uploadProgress { display: none; margin-top: 10px; width: 100%; height: 10px; background: var(--input-bg); border-radius: 5px; overflow: hidden; }
+#uploadProgressBar { height: 100%; width: 0%; background: var(--primary-glow); transition: width 0.3s; }
+.notes-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.notes-controls input, .notes-controls select { padding: 12px 15px; border-radius: 30px; border: none; background: var(--input-bg); color: var(--text-color); outline: none; flex: 1; min-width: 150px; }
+.btn-upload-note { padding: 12px 25px; border-radius: 30px; border: none; background: linear-gradient(90deg, #ff4757, #ff9800); color: #fff; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); }
 </style>
 </head>
 <body>
@@ -198,7 +213,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <h1>Futuristic Store</h1>
 
-<div class="controls-container">
+<div class="controls-container" id="mainControls">
     <div class="search-container">
         <i class="fas fa-search" style="position: absolute; left: 20px; top: 18px; color: var(--text-light);"></i>
         <input type="text" id="search" placeholder="Search products, tags..." autocomplete="off" style="padding-left: 45px;">
@@ -248,6 +263,40 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
 </div>
 
+<!-- ============================================== -->
+<!-- NEW NOTES SYSTEM VIEW SECTION -->
+<!-- ============================================== -->
+<div id="notesViewWrapper" style="display:none; padding: 0 20px; margin-top: 15px;">
+    <button class="btn-upload-note" onclick="openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload Notes</button>
+    <div class="notes-controls">
+        <input type="text" id="searchNotes" placeholder="Search by Title, Subject, Class..." oninput="renderNotesGrid()">
+        <select id="filterClassNote" onchange="renderNotesGrid()">
+            <option value="">All Classes</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+            <option value="College">College</option>
+            <option value="Other">Other</option>
+        </select>
+        <select id="filterSubjectNote" onchange="renderNotesGrid()">
+            <option value="">All Subjects</option>
+            <option value="Maths">Maths</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Biology">Biology</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="English">English</option>
+            <option value="Other">Other</option>
+        </select>
+        <select id="sortNotes" onchange="renderNotesGrid()">
+            <option value="newest">Sort: Newest First</option>
+            <option value="downloads">Sort: Most Downloaded</option>
+        </select>
+    </div>
+    <div class="products" id="notesGrid" style="padding: 0; gap: 15px;"></div>
+</div>
+
 <!-- Category Generative Sections & Smart Recommendations -->
 <div id="homeBottomSections">
     <div id="categoryWiseSections"></div>
@@ -262,6 +311,50 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <!-- Product Details Modal -->
 <div class="modal" id="productModal">
     <div class="modal-content" id="modalContent"></div>
+</div>
+
+<!-- Upload Note Modal -->
+<div class="modal" id="uploadNoteModal">
+    <div class="modal-content" style="max-width: 450px;">
+        <button class="close-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px; text-align:center;"><i class="fas fa-upload" style="color: var(--primary-glow);"></i> Upload Study Notes</h3>
+        
+        <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <textarea id="noteDesc" placeholder="Description / Details" rows="2" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
+        <input type="text" id="noteUploader" placeholder="Your Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <select id="noteClass" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+                <option value="">Select Class</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+                <option value="College">College</option>
+                <option value="Other">Other</option>
+            </select>
+            <select id="noteSubject" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+                <option value="">Select Subject</option>
+                <option value="Maths">Maths</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="English">English</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <input type="url" id="noteThumb" placeholder="Thumbnail Image URL (Optional)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        
+        <div style="background:var(--input-bg); padding:15px; border-radius:8px; margin-bottom:15px;">
+            <label style="font-size:12px; color:var(--text-light); display:block; margin-bottom:5px;">Select PDF or ZIP File (Max 20MB)</label>
+            <input type="file" id="noteFile" accept=".pdf,.zip,application/pdf,application/zip" style="color:var(--text-color); width:100%;">
+            <div id="uploadProgress"><div id="uploadProgressBar"></div></div>
+        </div>
+
+        <button onclick="submitNoteUpload()" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
+    </div>
 </div>
 
 <!-- Confirm Modal -->
@@ -298,6 +391,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-notes')">Notes Mgmt</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired Data</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
@@ -398,6 +492,20 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div id="adminBannerList" style="margin-top:15px;"></div>
     </div>
 
+    <!-- NEW TAB: Notes Management -->
+    <div id="tab-notes" class="admin-tab-content">
+        <h3>Pending Notes Approval</h3>
+        <div id="adminPendingNotes" style="margin-bottom: 20px;"></div>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Approved Active Notes</h3>
+        <div id="adminApprovedNotes" style="margin-bottom: 20px;"></div>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Rejected Notes</h3>
+        <div id="adminRejectedNotes"></div>
+    </div>
+
     <!-- TAB: Analytics -->
     <div id="tab-analytics" class="admin-tab-content">
         <div class="analytics-grid">
@@ -445,6 +553,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <button onclick="switchTab('trending')" data-tab="trending"><i class="fas fa-fire"></i>Trending</button>
     <button onclick="toggleCategories()"><i class="fas fa-th-large"></i>Categories</button>
     <button onclick="switchTab('wishlist')" data-tab="wishlist"><i class="fas fa-heart"></i>Wishlist</button>
+    <!-- NEW NOTES BUTTON ADDED HERE -->
+    <button onclick="switchTab('notes')" data-tab="notes"><i class="fas fa-book"></i>Notes</button>
 </div>
 
 <!-- Toast Container -->
@@ -457,6 +567,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    // ADDED STORAGE IMPORT FOR NOTES FILE UPLOAD
+    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -468,11 +580,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
     };
 
-    let app, db, auth;
+    let app, db, auth, storage;
     try {
         app = initializeApp(firebaseConfig);
         db = getDatabase(app);
         auth = getAuth(app);
+        storage = getStorage(app); // Initialize Storage
         setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
     } catch (e) { console.error("Firebase Error:", e); }
 
@@ -482,11 +595,16 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         banners: ref(db, 'banners/'),
         categories: ref(db, 'categories/'),
         analytics: ref(db, 'analytics/totals'),
-        connected: ref(db, '.info/connected')
+        connected: ref(db, '.info/connected'),
+        // NEW REFS FOR NOTES
+        notes: ref(db, 'notes/'),
+        pendingNotes: ref(db, 'pendingNotes/'),
+        rejectedNotes: ref(db, 'rejectedNotes/')
     };
 
     let state = {
         products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
+        notes: {}, pendingNotes: {}, rejectedNotes: {}, // NEW STATE
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
@@ -574,6 +692,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
     onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
     
+    // NEW NOTES FIREBASE LISTENERS
+    onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); });
+    onValue(refs.pendingNotes, s => { state.pendingNotes = s.val() || {}; renderAdminNotes(); });
+    onValue(refs.rejectedNotes, s => { state.rejectedNotes = s.val() || {}; renderAdminNotes(); });
+
     let initialPidChecked = false;
     onValue(refs.products, (snapshot) => {
         try {
@@ -632,6 +755,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     // --- MAIN UI RENDERERS ---
     function renderAllViews() {
+        if(state.currentView === 'notes') return; // Prevent overwriting notes view
         try {
             const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
             const activeList = getActiveProducts();
@@ -808,7 +932,35 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         return card;
     }
 
-    // UX ACTIONS
+    // UX ACTIONS & MODIFIED TAB SWITCHER
+    window.switchTab = (tab) => {
+        state.currentView = tab; state.currentCategory = 'ALL'; 
+        const searchInp = document.getElementById("search");
+        if(searchInp) searchInp.value = '';
+        document.getElementById('categoriesPanel').style.display = 'none';
+
+        // Integrate Notes view toggling securely
+        const mainControls = document.getElementById('mainControls');
+        if(tab === 'notes') {
+            if(mainControls) mainControls.style.display = 'none';
+            document.getElementById("homeSections").style.display = 'none';
+            document.getElementById("homeBottomSections").style.display = 'none';
+            document.getElementById("banner").style.display = 'none';
+            document.getElementById("products").style.display = 'none';
+            document.getElementById("notesViewWrapper").style.display = 'block';
+            window.renderNotesGrid();
+        } else {
+            if(mainControls) mainControls.style.display = 'flex';
+            document.getElementById("notesViewWrapper").style.display = 'none';
+            document.getElementById("products").style.display = 'grid';
+            renderAllViews(); 
+            renderCategories(); 
+        }
+
+        updateNavHighlight(tab); window.scrollTo(0,0);
+    };
+    function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
+
     window.toggleWishlist = (id, event) => {
         if(event) event.stopPropagation();
         const idx = state.wishlist.indexOf(id);
@@ -846,14 +998,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
     if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
     if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
-
-    window.switchTab = (tab) => {
-        state.currentView = tab; state.currentCategory = 'ALL'; 
-        if(searchInp) searchInp.value = '';
-        document.getElementById('categoriesPanel').style.display = 'none';
-        updateNavHighlight(tab); renderAllViews(); renderCategories(); window.scrollTo(0,0);
-    };
-    function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
 
     // Native Sharing System (Feature 1) integrated
     window.nativeShare = (id, title) => {
@@ -1239,8 +1383,211 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 
+
     // ==========================================
-    // ADDED MISSING STABILITY ENGINES 
+    // NEW NOTES SYSTEM IMPLEMENTATION ENGINE
+    // ==========================================
+
+    window.openNoteUploadModal = () => document.getElementById('uploadNoteModal').classList.add('show');
+
+    window.submitNoteUpload = async () => {
+        const title = document.getElementById('noteTitle').value.trim();
+        const desc = document.getElementById('noteDesc').value.trim();
+        const uploader = document.getElementById('noteUploader').value.trim();
+        const cls = document.getElementById('noteClass').value;
+        const subj = document.getElementById('noteSubject').value;
+        const fileInput = document.getElementById('noteFile');
+        const file = fileInput.files[0];
+        const thumb = document.getElementById('noteThumb').value.trim();
+
+        if(!title || !uploader || !file) return showToast("Title, Name, and File are required!", "error");
+
+        const ext = file.name.split('.').pop().toLowerCase();
+        if(!['pdf', 'zip'].includes(ext)) return showToast("Only PDF or ZIP allowed", "error");
+        if(file.size > 20 * 1024 * 1024) return showToast("File size must be less than 20MB", "error");
+
+        document.getElementById('uploadProgress').style.display = 'block';
+        const pBar = document.getElementById('uploadProgressBar');
+
+        try {
+            const fileRef = sRef(storage, `notes_uploads/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(fileRef, file);
+
+            uploadTask.on('state_changed',
+                (snap) => {
+                    const prog = (snap.bytesTransferred / snap.totalBytes) * 100;
+                    pBar.style.width = prog + '%';
+                },
+                (err) => { 
+                    showToast("Upload failed: " + err.message, "error"); 
+                    document.getElementById('uploadProgress').style.display = 'none'; 
+                },
+                async () => {
+                    const url = await getDownloadURL(uploadTask.snapshot.ref);
+                    const noteData = {
+                        title, description: desc, uploader, class: cls, subject: subj,
+                        fileURL: url, thumbnail: thumb || fallbackImage,
+                        views: 0, downloads: 0, createdAt: Date.now(), status: 'pending'
+                    };
+                    await set(push(refs.pendingNotes), noteData);
+                    showToast("Note submitted successfully for admin approval!");
+                    
+                    document.getElementById('uploadNoteModal').classList.remove('show');
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    pBar.style.width = '0%';
+                    // Clear inputs
+                    document.getElementById('noteTitle').value=''; document.getElementById('noteDesc').value='';
+                    document.getElementById('noteUploader').value=''; document.getElementById('noteThumb').value='';
+                    fileInput.value='';
+                }
+            );
+        } catch(e) { showToast("Upload error: " + e.message, "error"); }
+    };
+
+    window.renderNotesGrid = () => {
+        const container = document.getElementById("notesGrid"); if(!container) return;
+        const searchQ = document.getElementById("searchNotes").value.toLowerCase();
+        const fClass = document.getElementById("filterClassNote").value;
+        const fSubj = document.getElementById("filterSubjectNote").value;
+        const sortQ = document.getElementById("sortNotes").value;
+
+        let list = Object.entries(state.notes || {}).map(([id, n]) => ({id, ...n}));
+
+        list = list.filter(n => {
+            if(searchQ && !(n.title||'').toLowerCase().includes(searchQ) && !(n.subject||'').toLowerCase().includes(searchQ) && !(n.class||'').toLowerCase().includes(searchQ)) return false;
+            if(fClass && n.class !== fClass) return false;
+            if(fSubj && n.subject !== fSubj) return false;
+            return true;
+        });
+
+        list.sort((a,b) => {
+            if(sortQ === 'downloads') return (b.downloads||0) - (a.downloads||0);
+            return (b.createdAt||0) - (a.createdAt||0);
+        });
+
+        container.innerHTML = "";
+        if(list.length === 0) { 
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>No study notes found here.</p></div>`; 
+            return; 
+        }
+
+        const frag = document.createDocumentFragment();
+        list.forEach(n => {
+            const d = new Date(n.createdAt).toLocaleDateString();
+            const div = document.createElement("div"); div.className = "note-card";
+            div.innerHTML = `
+                <div style="position:relative;">
+                    <img src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'">
+                    ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">Class ${sanitize(n.class)}</div>` : ''}
+                    ${n.subject ? `<div class="note-badge" style="position:absolute; top:10px; right:10px; background:#e91e63; color:#fff;">${sanitize(n.subject)}</div>` : ''}
+                </div>
+                <h3 style="font-size:16px; margin-bottom:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sanitize(n.title)}</h3>
+                <p style="font-size:12px; color:var(--text-light); margin-bottom:5px;">By ${sanitize(n.uploader)} • ${d}</p>
+                <p style="font-size:13px; opacity:0.9; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
+                <div class="note-actions">
+                    <div style="font-size:12px; opacity:0.8;"><i class="fas fa-eye"></i> ${n.views||0} &nbsp;&nbsp; <i class="fas fa-download"></i> ${n.downloads||0}</div>
+                    <button class="note-btn" onclick="downloadNote('${n.id}', '${sanitize(n.fileURL)}')"><i class="fas fa-download"></i> Download</button>
+                </div>
+            `;
+            frag.appendChild(div);
+        });
+        container.appendChild(frag);
+    };
+
+    window.downloadNote = (id, url) => {
+        window.open(url, '_blank');
+        try {
+            const updates = {};
+            updates[`notes/${id}/downloads`] = increment(1);
+            updates[`notes/${id}/views`] = increment(1);
+            update(ref(db), updates).catch(e=>console.warn(e));
+        } catch(e){}
+    };
+
+    function renderAdminNotes() {
+        // Pending
+        const pCont = document.getElementById("adminPendingNotes");
+        if(pCont) {
+            pCont.innerHTML = "";
+            const pendList = Object.entries(state.pendingNotes || {});
+            if(!pendList.length) pCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No pending notes.</p>";
+            pendList.forEach(([id, n]) => {
+                pCont.innerHTML += `
+                    <div class="admin-list-item">
+                        <img src="${sanitize(n.thumbnail||fallbackImage)}">
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>By: ${sanitize(n.uploader)} | Class: ${sanitize(n.class)}</p></div>
+                        <div class="admin-item-actions">
+                            <button class="btn-secondary btn-action" onclick="window.open('${sanitize(n.fileURL)}','_blank')"><i class="fas fa-eye"></i> View</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000; border:none; padding:6px 10px; border-radius:5px;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-danger btn-action" onclick="rejectNote('${id}')"><i class="fas fa-times"></i> Reject</button>
+                        </div>
+                    </div>`;
+            });
+        }
+        
+        // Approved
+        const aCont = document.getElementById("adminApprovedNotes");
+        if(aCont) {
+            aCont.innerHTML = "";
+            const appList = Object.entries(state.notes || {});
+            if(!appList.length) aCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No active notes.</p>";
+            appList.forEach(([id, n]) => {
+                aCont.innerHTML += `
+                    <div class="admin-list-item">
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Downloads: ${n.downloads||0}</p></div>
+                        <div class="admin-item-actions">
+                            <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // Rejected
+        const rCont = document.getElementById("adminRejectedNotes");
+        if(rCont) {
+            rCont.innerHTML = "";
+            const rejList = Object.entries(state.rejectedNotes || {});
+            if(!rejList.length) rCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No rejected notes.</p>";
+            rejList.forEach(([id, n]) => {
+                rCont.innerHTML += `
+                    <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Rejected</p></div>
+                        <div class="admin-item-actions">
+                            <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>`;
+            });
+        }
+    }
+
+    window.approveNote = async (id) => {
+        const note = state.pendingNotes[id]; if(!note) return;
+        note.status = 'approved';
+        note.approvedAt = Date.now();
+        const updates = {};
+        updates[`notes/${id}`] = note;
+        updates[`pendingNotes/${id}`] = null;
+        try { await update(ref(db), updates); showToast("Note Approved Successfully!"); } catch(e){}
+    };
+
+    window.rejectNote = async (id) => {
+        const note = state.pendingNotes[id]; if(!note) return;
+        note.status = 'rejected';
+        const updates = {};
+        updates[`rejectedNotes/${id}`] = note;
+        updates[`pendingNotes/${id}`] = null;
+        try { await update(ref(db), updates); showToast("Note Rejected!", "error"); } catch(e){}
+    };
+
+    window.deleteNote = async (id, listPath) => {
+        confirmAction("Delete Note permanently?", async () => {
+            try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){}
+        });
+    };
+
+
+    // ==========================================
+    // STABILITY ENGINES 
     // ==========================================
 
     window.triggerAutoNotification = async (product, customMsg) => {
@@ -1300,4 +1647,4 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 </script>
 </body>
-    </html>
+</html>
