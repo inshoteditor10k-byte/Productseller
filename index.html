@@ -360,6 +360,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div class="admin-checkboxes" style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
             <label><input type="checkbox" id="pFeatured"> Featured Product</label>
             <label><input type="checkbox" id="pAutoBanner"> Auto-Sync to Top Banner</label>
+            <label><input type="checkbox" id="pShowInBanner"> Show in Banner</label>
+            <label><input type="checkbox" id="pIsTrending"> Trending Product</label>
+            <label><input type="checkbox" id="pAutoNotify"> Auto Notify</label>
         </div>
 
         <div id="imageFields" style="margin-bottom: 10px;"></div>
@@ -414,7 +417,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <!-- TAB: Expired Data -->
     <div id="tab-expired" class="admin-tab-content">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3>Expired & Archived</h3>
+            <h3>Expired & Trashed Data</h3>
             <button onclick="bulkRestore()" class="btn-secondary" style="width:auto; padding:8px;"><i class="fas fa-undo"></i> Bulk Restore</button>
         </div>
         <div id="adminExpiredList"></div>
@@ -584,7 +587,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 initialPidChecked = true;
                 const params = new URLSearchParams(window.location.search);
                 const pid = params.get('pid');
-                if (pid && state.products[pid]) {
+                if (pid && state.products[pid] && !state.products[pid].inTrash) {
                     setTimeout(() => openProduct(pid), 500);
                 }
             }
@@ -601,12 +604,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const now = Date.now();
         return Object.entries(state.products || {})
             .filter(([id, p]) => {
-                if(!p) return false;
+                if(!p || p.inTrash) return false;
                 if(p.expiryDateTime && p.expiryDateTime < now) return false;
                 
                 let isVisible = true;
-                if(p.visibility === 'private') isVisible = false;
-                if(p.visibility === 'scheduled' && p.scheduleTime && p.scheduleTime > now) isVisible = false;
+                if(p.visibility === 'private' || p.status === 'private') isVisible = false;
+                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
                 if(!p.visibility && p.hidden) isVisible = false; // Fallback to old schema logic
                 
                 return isVisible || state.isAdmin; // Admin sees all
@@ -616,40 +619,19 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     function trackEvent(type, productId) {
         try {
+            if(!state.products) return;
             const dateStr = new Date().toISOString().split('T')[0];
             const updates = {};
             updates[`analytics/totals/${type}`] = increment(1);
-            if(productId && state.products[productId]) {
+            if(productId && state.products[productId] && !state.products[productId].inTrash) {
                 updates[`products/${productId}/${type}`] = increment(1);
                 updates[`analytics/products/${productId}/${type}`] = increment(1);
                 if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
             }
             updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-            update(ref(db), updates).catch(e => console.warn(e));
+            update(ref(db), updates).catch(e => console.warn("Analytics safely skipped", e));
         } catch(e) { console.error(e); }
     }
-
-    // Auto Expiry & Scheduled Publisher Background Controller
-    setInterval(() => {
-        try {
-            const now = Date.now();
-            const updates = {};
-            let changed = false;
-            
-            Object.entries(state.products || {}).forEach(([id, p]) => {
-                if(p && p.expiryDateTime && p.expiryDateTime < now) {
-                    updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; changed = true;
-                }
-                if(p && p.visibility === 'scheduled' && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
-                    updates[`products/${id}/visibility`] = 'public'; updates[`products/${id}/hidden`] = false; changed = true;
-                }
-            });
-            Object.entries(state.banners || {}).forEach(([id, b]) => {
-                if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
-            });
-            if(changed) update(ref(db), updates).catch(e => console.warn(e));
-        } catch(e) {}
-    }, 60000);
 
     // --- MAIN UI RENDERERS ---
     function renderAllViews() {
@@ -664,7 +646,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
                 renderScrollingProducts(activeList);
                 renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=>((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0))).slice(0, 10), "trendingWrapper");
+                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=> {
+                    if (a.isTrending !== b.isTrending) return a.isTrending ? -1 : 1;
+                    return ((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0));
+                }).slice(0, 10), "trendingWrapper");
                 document.getElementById("mainGridTitle").innerText = "Just Arrived";
                 renderCategorySections(activeList);
                 renderRecommendations(activeList);
@@ -700,7 +685,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         }
 
         const frag = document.createDocumentFragment();
-        list.forEach(p => frag.appendChild(createProductCard(p)));
+        list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
         container.appendChild(frag);
     }
 
@@ -710,7 +695,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if (list.length === 0) { wrapper.style.display = 'none'; return; }
         wrapper.style.display = 'block'; container.innerHTML = "";
         const frag = document.createDocumentFragment();
-        list.forEach(p => frag.appendChild(createProductCard(p)));
+        list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
         container.appendChild(frag);
     }
 
@@ -724,6 +709,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         wrapper.style.display = "block"; container.innerHTML = "";
         const frag = document.createDocumentFragment();
         list.forEach(p => {
+            if (!p) return;
             const card = document.createElement("div");
             card.className = "scroll-card";
             card.onclick = () => openProduct(p.id);
@@ -747,7 +733,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         container.innerHTML = "";
         
         const catMap = {};
-        activeList.forEach(p => { const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
+        activeList.forEach(p => { if(!p) return; const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
         const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
 
         const frag = document.createDocumentFragment();
@@ -764,7 +750,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             const prods = catMap[cat], cEl = document.getElementById(`catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`);
             if (cEl) {
                 const cFrag = document.createDocumentFragment();
-                prods.forEach(p => cFrag.appendChild(createProductCard(p)));
+                prods.forEach(p => { if (p) cFrag.appendChild(createProductCard(p)); });
                 cEl.appendChild(cFrag);
             }
         });
@@ -779,7 +765,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
         wrapper.style.display = "block"; container.innerHTML = "";
         const frag = document.createDocumentFragment();
-        shuffled.forEach(p => frag.appendChild(createProductCard(p)));
+        shuffled.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
         container.appendChild(frag);
     }
 
@@ -884,7 +870,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     window.openProduct = (id) => {
-        const p = state.products[id]; if(!p) return;
+        const p = state.products[id]; if(!p || p.inTrash) return;
         trackEvent('views', id);
         document.body.style.overflow = 'hidden';
         
@@ -941,12 +927,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         
         let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
         
-        // Dynamic Inject Auto-Banners
+        // Dynamic Inject Auto-Banners and Show-in-Banner
         const now = Date.now();
         Object.entries(state.products || {}).forEach(([id, p]) => {
-            if (p && p.autoBanner && p.images && p.images[0]) {
+            if(!p || p.inTrash) return;
+            if ((p.autoBanner || p.showInBanner) && p.images && p.images[0]) {
                 let isVisible = true;
-                if(p.visibility === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
+                if(p.visibility === 'private' || p.status === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
                 if(p.expiryDateTime && p.expiryDateTime < now) isVisible = false;
                 if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
             }
@@ -994,14 +981,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     function updateAdminAnalytics() {
-        document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).length;
+        document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).filter(k=>!state.products[k]?.inTrash).length;
         document.getElementById('statViews').innerText = state.analytics.views || 0;
         document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
         document.getElementById('statSales').innerText = state.analytics.sales || 0;
         const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
         document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
         
-        const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
+        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
         const c = document.getElementById("topProductsList"); if(c) {
             c.innerHTML='';
             list.forEach(([id, p], i) => { c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`; });
@@ -1031,9 +1018,15 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.saveProduct = async () => {
         try {
-            const id = document.getElementById("pId").value, title = document.getElementById("pTitle").value.trim();
-            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0, cat = document.getElementById("pCategory").value;
-            if(!title || !price || !cat) return showToast("Title, Price and Category are required!", "error");
+            const id = document.getElementById("pId").value;
+            const title = document.getElementById("pTitle").value.trim();
+            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
+            const cat = document.getElementById("pCategory").value;
+            const affLink = document.getElementById("pAffiliateLink").value.trim();
+
+            if(!title || !price || !cat || !affLink) {
+                return showToast("Title, Price, Category, and Affiliate Link are required!", "error");
+            }
 
             const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
             let scheduleTime = null;
@@ -1042,18 +1035,30 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 if (st) scheduleTime = new Date(st).getTime();
             }
 
+            const showInBanner = document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false;
+            const isTrending = document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false;
+            const autoNotify = document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false;
+
             const data = {
                 title, description: document.getElementById("pDesc").value.trim(),
                 price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
                 finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
                 category: cat, tags: document.getElementById("pTags").value.trim(),
-                affiliateLink: document.getElementById("pAffiliateLink").value.trim(),
+                affiliateLink: affLink,
                 coupon: document.getElementById("pCoupon").value.trim(),
                 featured: document.getElementById("pFeatured").checked,
                 visibility: visRadio,
                 scheduleTime: scheduleTime,
-                hidden: (visRadio === 'private' || visRadio === 'scheduled'), // Maintain DB schema fallback structure
+                hidden: (visRadio === 'private' || visRadio === 'scheduled'),
                 autoBanner: document.getElementById("pAutoBanner").checked,
+                
+                showInBanner: showInBanner,
+                isTrending: isTrending,
+                autoNotify: autoNotify,
+                status: visRadio,
+                isDraft: false,
+                inTrash: false,
+
                 images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
                 expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
                 stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
@@ -1061,16 +1066,30 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 updatedAt: Date.now()
             };
 
-            if(!id) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; }
+            const isNewProduct = !id;
+            if(isNewProduct) { 
+                data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; 
+            }
             
             const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
-            await req; showToast("Product Saved!"); clearProductForm(); 
+            await req; 
+            showToast("Product Saved!"); 
+
+            if (autoNotify && typeof window.triggerAutoNotification === 'function') {
+                if (isNewProduct && visRadio === 'public') {
+                    window.triggerAutoNotification(data, "New product added! Check it out now.");
+                } else if (data.featured && visRadio === 'public') {
+                    window.triggerAutoNotification(data, "Featured Deal! Don't miss this.");
+                }
+            }
+
+            clearProductForm(); 
         } catch (e) { console.error(e); showToast("Save failed", "error"); }
     };
 
     window.clearProductForm = () => {
         ['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime','pScheduleTime'].forEach(i=> { if(document.getElementById(i)) document.getElementById(i).value=''; });
-        ['pFeatured','pAutoBanner'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
+        ['pFeatured','pAutoBanner','pShowInBanner','pIsTrending','pAutoNotify'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
         if(document.getElementById('imageFields')){ document.getElementById('imageFields').innerHTML=''; addImageField(); }
         const r = document.querySelector('input[name="pVisibility"][value="public"]'); if(r) r.checked = true;
         toggleSchedule(); calcPrice();
@@ -1091,6 +1110,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById("pCoupon").value = p.coupon||'';
         document.getElementById("pFeatured").checked = p.featured||false;
         document.getElementById("pAutoBanner").checked = p.autoBanner||false;
+        
+        if(document.getElementById("pShowInBanner")) document.getElementById("pShowInBanner").checked = p.showInBanner||false;
+        if(document.getElementById("pIsTrending")) document.getElementById("pIsTrending").checked = p.isTrending||false;
+        if(document.getElementById("pAutoNotify")) document.getElementById("pAutoNotify").checked = p.autoNotify||false;
+
         setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
         
         const vis = p.visibility || (p.hidden ? 'private' : 'public');
@@ -1112,24 +1136,24 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.archiveProduct = (id) => {
         confirmAction("Archive product? (Moves to expired panel)", async () => {
-            try { const updates = {}; updates[`expiredProducts/${id}`] = state.products[id]; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
+            try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
         });
     };
 
     function renderAdminProducts() {
         const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
-        const list = Object.entries(state.products || {}).filter(x=>x[1]).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
+        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
         
         const frag = document.createDocumentFragment();
         list.slice(0, 100).forEach(([id, p]) => { 
-            let visText = p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public');
-            if(!p.visibility) visText = p.hidden ? 'Hidden' : 'Public';
+            let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
+            if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
             const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
 
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold;">${visText}</span></p></div>
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold; text-transform:uppercase;">${visText}</span></p></div>
                 <div class="admin-item-actions">
                     <button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
                     <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
@@ -1141,19 +1165,33 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         c.appendChild(frag);
     }
 
-    // --- EXPIRED PANEL ENGINE ---
+    // --- EXPIRED & TRASH PANEL ENGINE ---
     function renderAdminExpired() {
         const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
         const list = Object.entries(state.expired || {}).filter(x=>x[1]);
-        if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired products.</p>'; return; }
+        if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired or trashed products.</p>'; return; }
+        const frag = document.createDocumentFragment();
         list.forEach(([id, p]) => {
-            c.innerHTML += `<div class="admin-list-item" style="border-left: 3px solid #ff4757;"><img src="${sanitize(p.images?.[0]||fallbackImage)}"><div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Expired/Archived</p></div><div class="admin-item-actions"><button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button><button class="btn-danger btn-action" onclick="deletePermanent('${id}')"><i class="fas fa-trash"></i></button></div></div>`;
+            if(!p) return;
+            const isTrash = p.inTrash;
+            const div = document.createElement('div');
+            div.className = "admin-list-item";
+            div.style.borderLeft = isTrash ? "3px solid #777" : "3px solid #ff4757";
+            div.innerHTML = `
+                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
+                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>${isTrash ? 'In Trash' : 'Expired/Archived'}</p></div>
+                <div class="admin-item-actions">
+                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
+                    ${!isTrash ? `<button class="btn-danger btn-action" onclick="deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
+                </div>`;
+            frag.appendChild(div);
         });
+        c.appendChild(frag);
     }
 
-    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
-    window.deletePermanent = (id) => { confirmAction("Permanently delete?", async () => { try { await remove(ref(db, `expiredProducts/${id}`)); showToast("Deleted", "error"); } catch(e) {} }); };
-    window.bulkRestore = () => { confirmAction("Restore ALL expired products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
+    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
+    window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
+    window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
 
     // --- BACKUP & RESTORE SYSTEM ---
     window.exportDatabaseJSON = async () => {
@@ -1203,6 +1241,66 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
+
+    // ==========================================
+    // ADDED MISSING STABILITY ENGINES 
+    // ==========================================
+
+    window.triggerAutoNotification = async (product, customMsg) => {
+        if(!product || !product.title) return;
+        const title = "New Update: " + product.title;
+        const msg = customMsg || "Check out our latest product deal now!";
+        const url = product.affiliateLink || window.location.origin;
+        try {
+            const res = await fetch("https://onesignal.com/api/v1/notifications", {
+                method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
+                body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url })
+            });
+            if(res.ok) console.log("Auto notification sent for", product.title);
+        } catch(e) { console.warn("Auto notification failed", e); }
+    };
+
+    // Auto Expiry & Scheduled Publisher Background Controller (Runs every 30s safely)
+    setInterval(() => {
+        try {
+            const now = Date.now();
+            const updates = {};
+            let changed = false;
+            
+            Object.entries(state.products || {}).forEach(([id, p]) => {
+                if(!p || p.inTrash) return;
+                
+                // Expiry Engine
+                if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') {
+                    const expiredP = { ...p, status: 'expired', inTrash: false };
+                    updates[`expiredProducts/${id}`] = expiredP; 
+                    updates[`products/${id}`] = null; 
+                    changed = true;
+                }
+                
+                // Scheduler Engine
+                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
+                    updates[`products/${id}/visibility`] = 'public'; 
+                    updates[`products/${id}/hidden`] = false; 
+                    updates[`products/${id}/status`] = 'public';
+                    changed = true;
+                    if (p.autoNotify && typeof window.triggerAutoNotification === 'function') {
+                        window.triggerAutoNotification(p, "Scheduled product is now live!");
+                    }
+                }
+            });
+            
+            Object.entries(state.banners || {}).forEach(([id, b]) => {
+                if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
+            });
+            
+            if(changed && Object.keys(updates).length > 0) {
+                // Specific path updates only (prevents overwriting root)
+                update(ref(db), updates).catch(e => console.warn("Background Engine Update Error:", e));
+            }
+        } catch(e) { console.error("Background Engine Crash:", e); }
+    }, 30000);
+
 </script>
 </body>
-</html>
+  </html>
