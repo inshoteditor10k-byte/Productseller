@@ -1,39 +1,42 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta name="google-site-verification" content="PAu0HcKbDYL_QmJ50Gpa952LCk3Pmebu0OBp9SVljGA" />
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product by Shailesh – Futuristic Store</title>
-  <meta name="description" content="Product Seller App is an admin controlled ecommerce dashboard where only the owner can upload products. Users can view products and get special discounts. Developer Shailesh Kumar Singh.">
-  <meta name="googlebot" content="max-snippet:160">
+<meta name="google-site-verification" content="PAu0HcKbDYL_QmJ50Gpa952LCk3Pmebu0OBp9SVljGA" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product by Shailesh – Futuristic Store</title>
+<meta name="description" content="Product Seller App is an admin controlled ecommerce dashboard where only the owner can upload products. Users can view products and get special discounts. Developer Shailesh Kumar Singh.">
+<meta name="googlebot" content="max-snippet:160">
 
-  <!-- OneSignal SDK -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignal = window.OneSignal || [];
-    OneSignal.push(function() { OneSignal.init({ appId: "9406475a-99fb-4a88-a3d4-5e2a434d8c50" }); });
-  </script>
+<!-- OneSignal SDK -->
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+<script>
+window.OneSignal = window.OneSignal || [];
+OneSignal.push(function() { OneSignal.init({ appId: "9406475a-99fb-4a88-a3d4-5e2a434d8c50" }); });
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
 /* CORE STYLES (UNCHANGED) */
 html { scroll-behavior: smooth; }
 :root {
-    --primary-glow: #00f5ff; --secondary-glow: #9b5cff;
-    --card-bg: rgba(255, 255, 255, 0.08); --text-light: rgba(255, 255, 255, 0.8);
-    --text-color: #fff; --bg-gradient: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
-    --modal-bg: rgba(0, 0, 0, 0.9); --modal-content-bg: #111;
-    --panel-bg: #0a0a0a; --input-bg: rgba(255, 255, 255, 0.1);
+--primary-glow: #00f5ff; --secondary-glow: #9b5cff;
+--card-bg: rgba(255, 255, 255, 0.08); --text-light: rgba(255, 255, 255, 0.8);
+--text-color: #fff; --bg-gradient: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
+--modal-bg: rgba(0, 0, 0, 0.9); --modal-content-bg: #111;
+--panel-bg: #0a0a0a; --input-bg: rgba(255, 255, 255, 0.1);
 }
 body.light-mode {
-    --primary-glow: #0088cc; --secondary-glow: #8e44ad;
-    --card-bg: rgba(0, 0, 0, 0.05); --text-light: rgba(0, 0, 0, 0.6);
-    --text-color: #111; --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    --modal-bg: rgba(255, 255, 255, 0.9); --modal-content-bg: #fff;
-    --panel-bg: #f4f4f4; --input-bg: rgba(0, 0, 0, 0.05);
+--primary-glow: #0088cc; --secondary-glow: #8e44ad;
+--card-bg: rgba(0, 0, 0, 0.05); --text-light: rgba(0, 0, 0, 0.6);
+--text-color: #111; --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+--modal-bg: rgba(255, 255, 255, 0.9); --modal-content-bg: #fff;
+--panel-bg: #f4f4f4; --input-bg: rgba(0, 0, 0, 0.05);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; transition: background-color 0.3s, color 0.3s; }
 body { background: var(--bg-gradient); color: var(--text-color); min-height: 100vh; overflow-x: hidden; padding-bottom: 120px; }
@@ -77,13 +80,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .scroll-card-title { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; font-weight: bold; font-size: 15px; }
 
 /* FEATURE 3: Strict Mobile 2-Column Rules */
-@media(max-width: 768px) { 
-    .products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
-    .card .image-container { height: 130px !important; }
-    .card h3 { font-size: 13px !important; }
-    .price-container { flex-direction: column; align-items: flex-start; gap: 2px !important; }
-    .final-price { font-size: 16px !important; }
-    .original-price { font-size: 11px !important; }
+@media(max-width: 768px) {
+.products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
+.card .image-container { height: 130px !important; }
+.card h3 { font-size: 13px !important; }
+.price-container { flex-direction: column; align-items: flex-start; gap: 2px !important; }
+.final-price { font-size: 16px !important; }
+.original-price { font-size: 11px !important; }
 }
 
 /* SKELETON & EMPTY STATES */
@@ -97,7 +100,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--primary-glow); }
 .card .image-container { width: 100%; height: 150px; position: relative; overflow: hidden; background: var(--input-bg); }
 .card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; opacity: 0; }
-.card .image-container img.loaded { opacity: 1; } 
+.card .image-container img.loaded { opacity: 1; }
 .card:hover .image-container img { transform: scale(1.05); }
 .badge { position: absolute; top: 10px; padding: 4px 8px; font-size: 10px; font-weight: bold; border-radius: 5px; color: #fff; text-transform: uppercase; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 .discount-badge { left: 10px; background: var(--primary-glow); color: #000; animation: pulse 2s infinite; }
@@ -190,1114 +193,1164 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 @media(max-width: 768px) { #adsterra-top-banner { display: none; } }
 @media(min-width: 769px) { #adsterra-bottom-banner { display: none; } }
 </style>
+
 </head>
 <body>
+
 <div class="top-actions">
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+<button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
 </div>
 
 <h1>Futuristic Store</h1>
 
 <div class="controls-container">
-    <div class="search-container">
-        <i class="fas fa-search" style="position: absolute; left: 20px; top: 18px; color: var(--text-light);"></i>
-        <input type="text" id="search" placeholder="Search products, tags..." autocomplete="off" style="padding-left: 45px;">
-        <button id="searchBtn">Search</button>
-        <div id="suggestions"></div>
-    </div>
-    <div class="sort-container">
-        <select id="sortProducts">
-            <option value="latest">Sort: Latest</option>
-            <option value="popular">Most Popular</option>
-            <option value="discount">Highest Discount</option>
-            <option value="price-low-high">Price: Low to High</option>
-            <option value="price-high-low">Price: High to Low</option>
-        </select>
-    </div>
+<div class="search-container">
+<i class="fas fa-search" style="position: absolute; left: 20px; top: 18px; color: var(--text-light);"></i>
+<input type="text" id="search" placeholder="Search products, tags..." autocomplete="off" style="padding-left: 45px;">
+<button id="searchBtn">Search</button>
+<div id="suggestions"></div>
+</div>
+<div class="sort-container">
+<select id="sortProducts">
+<option value="latest">Sort: Latest</option>
+<option value="popular">Most Popular</option>
+<option value="discount">Highest Discount</option>
+<option value="price-low-high">Price: Low to High</option>
+<option value="price-high-low">Price: High to Low</option>
+</select>
+</div>
 </div>
 
 <div id="adsterra-top-banner">
-  <script>atOptions={'key':'8dd0b4eb3b8a5835eeea9dae52d5c9ab','format':'iframe','height':60,'width':468,'params':{}};</script>
-  <script src="https://www.highperformanceformat.com/8dd0b4eb3b8a5835eeea9dae52d5c9ab/invoke.js"></script>
+<script>atOptions={'key':'8dd0b4eb3b8a5835eeea9dae52d5c9ab','format':'iframe','height':60,'width':468,'params':{}};</script>
+<script src="https://www.highperformanceformat.com/8dd0b4eb3b8a5835eeea9dae52d5c9ab/invoke.js"></script>
 </div>
 
 <div class="banner" id="banner"></div>
 <div class="categories-panel" id="categoriesPanel"></div>
 
 <!-- Dynamic Homepage Sections -->
+
 <div id="homeSections">
-    <div id="scrollingWrapper" style="display:none;">
-        <div class="section-title"><h3><i class="fas fa-fire-flame-curved" style="color: #ff4757;"></i> Hot Drops</h3></div>
-        <div class="carousel" id="scrollingCarousel"></div>
-    </div>
-    
-    <div id="featuredWrapper" style="display:none;">
-        <div class="section-title"><h3><i class="fas fa-star" style="color: #e91e63;"></i> Featured Products</h3></div>
-        <div class="carousel" id="featuredProducts"></div>
-    </div>
-    
-    <div id="trendingWrapper" style="display:none;">
-        <div class="section-title"><h3><i class="fas fa-fire" style="color: #ff9800;"></i> Trending Now</h3></div>
-        <div class="carousel" id="trendingCarousel"></div>
-    </div>
-    
-    <div class="section-title"><h3 id="mainGridTitle">All Products</h3></div>
+<div id="scrollingWrapper" style="display:none;">
+<div class="section-title"><h3><i class="fas fa-fire-flame-curved" style="color: #ff4757;"></i> Hot Drops</h3></div>
+<div class="carousel" id="scrollingCarousel"></div>
+</div>
+
+code
+Code
+download
+content_copy
+expand_less
+<div id="featuredWrapper" style="display:none;">
+    <div class="section-title"><h3><i class="fas fa-star" style="color: #e91e63;"></i> Featured Products</h3></div>
+    <div class="carousel" id="featuredProducts"></div>
+</div>
+
+<div id="trendingWrapper" style="display:none;">
+    <div class="section-title"><h3><i class="fas fa-fire" style="color: #ff9800;"></i> Trending Now</h3></div>
+    <div class="carousel" id="trendingCarousel"></div>
+</div>
+
+<div class="section-title"><h3 id="mainGridTitle">All Products</h3></div>
 </div>
 
 <div class="products" id="products">
-    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
 </div>
 
 <!-- Category Generative Sections & Smart Recommendations -->
+
 <div id="homeBottomSections">
-    <div id="categoryWiseSections"></div>
-    <div id="recommendationWrapper" style="display:none;">
-        <div class="section-title"><h3><i class="fas fa-magic" style="color: var(--primary-glow);"></i> You May Also Like</h3></div>
-        <div class="products" id="recommendationGrid"></div>
-    </div>
+<div id="categoryWiseSections"></div>
+<div id="recommendationWrapper" style="display:none;">
+<div class="section-title"><h3><i class="fas fa-magic" style="color: var(--primary-glow);"></i> You May Also Like</h3></div>
+<div class="products" id="recommendationGrid"></div>
+</div>
 </div>
 
 <div class="admin-btn" onclick="openAdminAuth()"><i class="fas fa-user-shield"></i> Admin</div>
 
 <!-- Product Details Modal -->
+
 <div class="modal" id="productModal">
-    <div class="modal-content" id="modalContent"></div>
+<div class="modal-content" id="modalContent"></div>
 </div>
 
 <!-- Confirm Modal -->
+
 <div class="modal" id="confirmModal" style="z-index: 4000;">
-    <div class="modal-content" style="max-width: 300px; text-align: center;">
-        <h3 id="confirmMsg" style="margin-bottom: 20px; font-size: 16px;">Are you sure?</h3>
-        <div style="display:flex; gap:10px;">
-            <button id="confirmYes" class="btn-danger" style="width: 100%; padding: 10px; border:none; border-radius:8px; color:#fff; cursor:pointer;">Yes</button>
-            <button onclick="document.getElementById('confirmModal').classList.remove('show')" style="width: 100%; padding: 10px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); cursor:pointer;">Cancel</button>
-        </div>
-    </div>
+<div class="modal-content" style="max-width: 300px; text-align: center;">
+<h3 id="confirmMsg" style="margin-bottom: 20px; font-size: 16px;">Are you sure?</h3>
+<div style="display:flex; gap:10px;">
+<button id="confirmYes" class="btn-danger" style="width: 100%; padding: 10px; border:none; border-radius:8px; color:#fff; cursor:pointer;">Yes</button>
+<button onclick="document.getElementById('confirmModal').classList.remove('show')" style="width: 100%; padding: 10px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); cursor:pointer;">Cancel</button>
+</div>
+</div>
 </div>
 
 <!-- Admin Login Modal -->
+
 <div class="modal" id="adminLoginModal">
-    <div class="modal-content" style="max-width: 350px;">
-        <button class="close-btn" onclick="closeModals()">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
-        <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
-    </div>
+<div class="modal-content" style="max-width: 350px;">
+<button class="close-btn" onclick="closeModals()">×</button>
+<h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
+<input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+<input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+<button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
+</div>
 </div>
 
 <!-- Complete Admin Panel -->
+
 <div class="admin-panel" id="adminPanel">
-    <div class="admin-header">
-        <h2>Admin Dashboard</h2>
-        <div style="display:flex; gap:5px;">
-            <button onclick="logoutAdmin()" class="btn-secondary btn-action"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            <button onclick="closeAdmin()" class="btn-danger btn-action"><i class="fas fa-times"></i></button>
+<div class="admin-header">
+<h2>Admin Dashboard</h2>
+<div style="display:flex; gap:5px;">
+<button onclick="logoutAdmin()" class="btn-secondary btn-action"><i class="fas fa-sign-out-alt"></i> Logout</button>
+<button onclick="closeAdmin()" class="btn-danger btn-action"><i class="fas fa-times"></i></button>
+</div>
+</div>
+
+code
+Code
+download
+content_copy
+expand_less
+<div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
+    <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
+    <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired Data</button>
+    <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
+</div>
+
+<!-- TAB: Manage Products & Store -->
+<div id="tab-manage" class="admin-tab-content active">
+    <h3>Product Form</h3>
+    <input type="hidden" id="pId">
+    <input type="text" id="pTitle" placeholder="Product Title">
+    <textarea id="pDesc" placeholder="Full Description" rows="3"></textarea>
+    
+    <div class="admin-grid">
+        <input type="number" id="pOriginalPrice" placeholder="Price (₹)">
+        <input type="number" id="pDiscount" placeholder="Discount (%)">
+        <input type="number" id="pStock" placeholder="Stock Qty">
+        <input type="number" id="pRating" min="1" max="5" step="0.1" placeholder="Rating (1 to 5)">
+    </div>
+    <p style="margin-bottom:10px;">Final Price: <span id="finalPricePreview" style="color:var(--primary-glow); font-weight:bold;">₹ 0.00</span></p>
+
+    <div class="admin-grid">
+        <input type="date" id="pExpiryDate" title="Offer Expiry Date">
+        <input type="time" id="pExpiryTime" title="Offer Expiry Time">
+    </div>
+    
+    <div class="admin-grid">
+        <select id="pCategory"></select>
+        <input type="text" id="pTags" placeholder="Tags (comma separated)">
+    </div>
+
+    <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
+    <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
+
+    <!-- Feature 2: Triple Visibility Mode & Banner Auto-Sync -->
+    <div style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
+        <label style="font-size:12px; font-weight:bold; margin-bottom:8px; display:block; color:var(--primary-glow);">Visibility Control (Public / Private / Scheduled)</label>
+        <div class="admin-checkboxes" style="margin-bottom:8px;">
+            <label><input type="radio" name="pVisibility" value="public" checked onchange="toggleSchedule()"> Public</label>
+            <label><input type="radio" name="pVisibility" value="private" onchange="toggleSchedule()"> Private Link Only</label>
+            <label><input type="radio" name="pVisibility" value="scheduled" onchange="toggleSchedule()"> Scheduled Time</label>
+        </div>
+        <input type="datetime-local" id="pScheduleTime" style="display:none; width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:var(--panel-bg); color:var(--text-color);">
+    </div>
+
+    <div class="admin-checkboxes" style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
+        <label><input type="checkbox" id="pFeatured"> Featured Product</label>
+        <label><input type="checkbox" id="pAutoBanner"> Auto-Sync to Top Banner</label>
+        <label><input type="checkbox" id="pShowInBanner"> Show in Banner</label>
+        <label><input type="checkbox" id="pIsTrending"> Trending Product</label>
+        <label><input type="checkbox" id="pAutoNotify"> Auto Notify</label>
+    </div>
+
+    <div id="imageFields" style="margin-bottom: 10px;"></div>
+    <button onclick="addImageField()" class="btn-secondary">+ Add Image URL</button>
+    
+    <div style="display:flex; gap:10px; margin-top:15px;">
+        <button onclick="saveProduct()">Save Product</button>
+        <button onclick="clearProductForm()" class="btn-secondary">Clear</button>
+    </div>
+
+    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+    <h3>All Products List (Active & Private)</h3>
+    <div id="adminProductList"></div>
+
+    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+    <div class="admin-grid">
+        <div>
+            <h3>Categories</h3>
+            <div style="display:flex; gap:5px;"><input type="text" id="newCategoryName" placeholder="New Category" style="margin:0;"><button onclick="addCategory()" style="margin:0; width:80px;">Add</button></div>
+            <div id="categoryList" style="margin-top:10px;"></div>
+        </div>
+        <div>
+            <h3>Push Notification</h3>
+            <input type="text" id="notificationTitle" placeholder="Title">
+            <textarea id="notificationMessage" placeholder="Message" rows="2"></textarea>
+            <input type="url" id="notificationUrl" placeholder="Redirect URL (Optional)">
+            <button onclick="sendManualNotification()"><i class="fas fa-paper-plane"></i> Broadcast</button>
         </div>
     </div>
 
-    <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired Data</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
+    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+    <h3>Banners</h3>
+    <div id="bannerFields"></div>
+    <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
+    <button onclick="saveBanners()">Save Banners</button>
+    <div id="adminBannerList" style="margin-top:15px;"></div>
+</div>
+
+<!-- TAB: Analytics -->
+<div id="tab-analytics" class="admin-tab-content">
+    <div class="analytics-grid">
+        <div class="stat-card"><i class="fas fa-box"></i> <h4 id="statTotalItems">0</h4> <p>Active Products</p></div>
+        <div class="stat-card"><i class="fas fa-eye"></i> <h4 id="statViews">0</h4> <p>Total Store Views</p></div>
+        <div class="stat-card"><i class="fas fa-mouse-pointer"></i> <h4 id="statClicks">0</h4> <p>Total Link Clicks</p></div>
+        <div class="stat-card"><i class="fas fa-shopping-cart"></i> <h4 id="statSales">0</h4> <p>Total Sales (Proxy)</p></div>
+        <div class="stat-card"><i class="fas fa-chart-line"></i> <h4 id="statConvRate">0%</h4> <p>Conversion Rate</p></div>
+        <div class="stat-card"><i class="fas fa-database"></i> <h4 id="statStorage">0 KB</h4> <p>Storage Used</p></div>
+        <div class="stat-card"><i class="fas fa-tags"></i> <h4 id="statTotalCats">0</h4> <p>Total Categories</p></div>
+        <div class="stat-card"><i class="fas fa-image"></i> <h4 id="statTotalBanners">0</h4> <p>Total Banners</p></div>
     </div>
+    <h3>Top Performing Products</h3>
+    <div id="topProductsList" style="margin-top:10px;"></div>
+</div>
 
-    <!-- TAB: Manage Products & Store -->
-    <div id="tab-manage" class="admin-tab-content active">
-        <h3>Product Form</h3>
-        <input type="hidden" id="pId">
-        <input type="text" id="pTitle" placeholder="Product Title">
-        <textarea id="pDesc" placeholder="Full Description" rows="3"></textarea>
-        
-        <div class="admin-grid">
-            <input type="number" id="pOriginalPrice" placeholder="Price (₹)">
-            <input type="number" id="pDiscount" placeholder="Discount (%)">
-            <input type="number" id="pStock" placeholder="Stock Qty">
-            
-            <select id="pRating">
-                <option value="">Rating (Select)</option>
-                <option value="5.0">5.0 ⭐⭐⭐⭐⭐</option>
-                <option value="4.5">4.5 ⭐⭐⭐⭐✨</option>
-                <option value="4.0">4.0 ⭐⭐⭐⭐</option>
-                <option value="3.5">3.5 ⭐⭐⭐✨</option>
-                <option value="3.0">3.0 ⭐⭐⭐</option>
-                <option value="2.5">2.5 ⭐⭐✨</option>
-                <option value="2.0">2.0 ⭐⭐</option>
-                <option value="1.5">1.5 ⭐✨</option>
-                <option value="1.0">1.0 ⭐</option>
-            </select>
-        </div>
-        <p style="margin-bottom:10px;">Final Price: <span id="finalPricePreview" style="color:var(--primary-glow); font-weight:bold;">₹ 0.00</span></p>
-
-        <div class="admin-grid">
-            <input type="date" id="pExpiryDate" title="Offer Expiry Date">
-            <input type="time" id="pExpiryTime" title="Offer Expiry Time">
-        </div>
-        
-        <div class="admin-grid">
-            <select id="pCategory"></select>
-            <input type="text" id="pTags" placeholder="Tags (comma separated)">
-        </div>
-
-        <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
-        <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
-
-        <!-- Feature 2: Triple Visibility Mode & Banner Auto-Sync -->
-        <div style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
-            <label style="font-size:12px; font-weight:bold; margin-bottom:8px; display:block; color:var(--primary-glow);">Visibility Control (Public / Private / Scheduled)</label>
-            <div class="admin-checkboxes" style="margin-bottom:8px;">
-                <label><input type="radio" name="pVisibility" value="public" checked onchange="toggleSchedule()"> Public</label>
-                <label><input type="radio" name="pVisibility" value="private" onchange="toggleSchedule()"> Private Link Only</label>
-                <label><input type="radio" name="pVisibility" value="scheduled" onchange="toggleSchedule()"> Scheduled Time</label>
-            </div>
-            <input type="datetime-local" id="pScheduleTime" style="display:none; width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); background:var(--panel-bg); color:var(--text-color);">
-        </div>
-
-        <div class="admin-checkboxes" style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
-            <label><input type="checkbox" id="pFeatured"> Featured Product</label>
-            <label><input type="checkbox" id="pAutoBanner"> Auto-Sync to Top Banner</label>
-            <label><input type="checkbox" id="pShowInBanner"> Show in Banner</label>
-            <label><input type="checkbox" id="pIsTrending"> Trending Product</label>
-            <label><input type="checkbox" id="pAutoNotify"> Auto Notify</label>
-        </div>
-
-        <div id="imageFields" style="margin-bottom: 10px;"></div>
-        <button onclick="addImageField()" class="btn-secondary">+ Add Image URL</button>
-        
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <button onclick="saveProduct()">Save Product</button>
-            <button onclick="clearProductForm()" class="btn-secondary">Clear</button>
-        </div>
-
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>All Products List (Active & Private)</h3>
-        <div id="adminProductList"></div>
-
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <div class="admin-grid">
-            <div>
-                <h3>Categories</h3>
-                <div style="display:flex; gap:5px;"><input type="text" id="newCategoryName" placeholder="New Category" style="margin:0;"><button onclick="addCategory()" style="margin:0; width:80px;">Add</button></div>
-                <div id="categoryList" style="margin-top:10px;"></div>
-            </div>
-            <div>
-                <h3>Push Notification</h3>
-                <input type="text" id="notificationTitle" placeholder="Title">
-                <textarea id="notificationMessage" placeholder="Message" rows="2"></textarea>
-                <input type="url" id="notificationUrl" placeholder="Redirect URL (Optional)">
-                <button onclick="sendManualNotification()"><i class="fas fa-paper-plane"></i> Broadcast</button>
-            </div>
-        </div>
-
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Banners</h3>
-        <div id="bannerFields"></div>
-        <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
-        <button onclick="saveBanners()">Save Banners</button>
-        <div id="adminBannerList" style="margin-top:15px;"></div>
+<!-- TAB: Expired Data -->
+<div id="tab-expired" class="admin-tab-content">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3>Expired & Trashed Data</h3>
+        <button onclick="bulkRestore()" class="btn-secondary" style="width:auto; padding:8px;"><i class="fas fa-undo"></i> Bulk Restore</button>
     </div>
+    <div id="adminExpiredList"></div>
+</div>
 
-    <!-- TAB: Analytics -->
-    <div id="tab-analytics" class="admin-tab-content">
-        <div class="analytics-grid">
-            <div class="stat-card"><i class="fas fa-box"></i> <h4 id="statTotalItems">0</h4> <p>Active Products</p></div>
-            <div class="stat-card"><i class="fas fa-eye"></i> <h4 id="statViews">0</h4> <p>Total Store Views</p></div>
-            <div class="stat-card"><i class="fas fa-mouse-pointer"></i> <h4 id="statClicks">0</h4> <p>Total Link Clicks</p></div>
-            <div class="stat-card"><i class="fas fa-shopping-cart"></i> <h4 id="statSales">0</h4> <p>Total Sales (Proxy)</p></div>
-            <div class="stat-card"><i class="fas fa-chart-line"></i> <h4 id="statConvRate">0%</h4> <p>Conversion Rate</p></div>
-        </div>
-        <h3>Top Performing Products</h3>
-        <div id="topProductsList" style="margin-top:10px;"></div>
-    </div>
-
-    <!-- TAB: Expired Data -->
-    <div id="tab-expired" class="admin-tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3>Expired & Trashed Data</h3>
-            <button onclick="bulkRestore()" class="btn-secondary" style="width:auto; padding:8px;"><i class="fas fa-undo"></i> Bulk Restore</button>
-        </div>
-        <div id="adminExpiredList"></div>
-    </div>
-
-    <!-- TAB: Backup & Restore -->
-    <div id="tab-backup" class="admin-tab-content">
-        <h3>System Backup</h3>
-        <p style="font-size:12px; opacity:0.8; margin-bottom:15px;">Export your complete database as a JSON file, or restore from a previous backup to prevent data loss.</p>
-        <button onclick="exportDatabaseJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
-        
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Restore Database</h3>
-        <input type="file" id="importFile" accept="application/json" style="background:none; border:none; padding:0;">
-        <button onclick="importDatabaseJSON()" class="btn-danger"><i class="fas fa-upload"></i> Overwrite & Restore DB</button>
-    </div>
+<!-- TAB: Backup & Restore -->
+<div id="tab-backup" class="admin-tab-content">
+    <h3>System Backup</h3>
+    <p style="font-size:12px; opacity:0.8; margin-bottom:15px;">Export your complete database as a JSON file, or restore from a previous backup to prevent data loss.</p>
+    <button onclick="exportDatabaseJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
+    
+    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+    <h3>Restore Database</h3>
+    <input type="file" id="importFile" accept="application/json" style="background:none; border:none; padding:0;">
+    <button onclick="importDatabaseJSON()" class="btn-danger"><i class="fas fa-upload"></i> Overwrite & Restore DB</button>
+</div>
 </div>
 
 <!-- Adsterra Bottom Banner -->
+
 <div id="adsterra-bottom-banner">
-    <script>atOptions={'key':'71f469a0676044942280f6e5f52c9392','format':'iframe','height':50,'width':320,'params':{}};</script>
-    <script src="//www.topcreativeformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
+<script>atOptions={'key':'71f469a0676044942280f6e5f52c9392','format':'iframe','height':50,'width':320,'params':{}};</script>
+<script src="//www.topcreativeformat.com/71f469a0676044942280f6e5f52c9392/invoke.js"></script>
 </div>
 
 <!-- Bottom Navigation -->
+
 <div class="bottom-nav" id="bottomNav">
-    <button onclick="switchTab('home')" class="active" data-tab="home"><i class="fas fa-home"></i>Home</button>
-    <button onclick="switchTab('trending')" data-tab="trending"><i class="fas fa-fire"></i>Trending</button>
-    <button onclick="toggleCategories()"><i class="fas fa-th-large"></i>Categories</button>
-    <button onclick="switchTab('wishlist')" data-tab="wishlist"><i class="fas fa-heart"></i>Wishlist</button>
+<button onclick="switchTab('home')" class="active" data-tab="home"><i class="fas fa-home"></i>Home</button>
+<button onclick="switchTab('trending')" data-tab="trending"><i class="fas fa-fire"></i>Trending</button>
+<button onclick="toggleCategories()"><i class="fas fa-th-large"></i>Categories</button>
+<button onclick="switchTab('wishlist')" data-tab="wishlist"><i class="fas fa-heart"></i>Wishlist</button>
 </div>
 
 <!-- Toast Container -->
+
 <div id="toast-container"></div>
 
 <!-- ============================================== -->
+
 <!-- SCRIPT SECTION - FIREBASE & FULL LOGIC INTEGRATED -->
+
 <!-- ============================================== -->
+
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
-        authDomain: "product-seller-app.firebaseapp.com",
-        databaseURL: "https://product-seller-app-default-rtdb.firebaseio.com",
-        projectId: "product-seller-app",
-        storageBucket: "product-seller-app.firebasestorage.app",
-        messagingSenderId: "1046644480118",
-        appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
-    };
-
-    let app, db, auth;
-    try {
-        app = initializeApp(firebaseConfig);
-        db = getDatabase(app);
-        auth = getAuth(app);
-        setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
-    } catch (e) { console.error("Firebase Error:", e); }
-
-    const refs = {
-        products: ref(db, 'products/'),
-        expired: ref(db, 'expiredProducts/'),
-        banners: ref(db, 'banners/'),
-        categories: ref(db, 'categories/'),
-        analytics: ref(db, 'analytics/totals'),
-        connected: ref(db, '.info/connected')
-    };
-
-    let state = {
-        products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
-        currentCategory: "ALL", currentView: "home",
-        wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
-        theme: localStorage.getItem('theme') || 'dark',
-        isAdmin: false
-    };
-
-    const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
-    if (state.theme === 'light') document.body.classList.add('light-mode');
-
-    // UTILITIES
-    window.showToast = (msg, type = 'success') => {
-        const t = document.createElement('div'); t.className = `toast ${type}`;
-        t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
-        document.getElementById('toast-container').appendChild(t);
-        setTimeout(() => t.remove(), 3000);
-    };
-
-    window.toggleTheme = () => {
-        document.body.classList.toggle('light-mode');
-        state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-        localStorage.setItem('theme', state.theme);
-    };
-
-    const debounce = (func, wait) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); }; };
-    
-    function sanitize(str) {
-        if(typeof str !== 'string') return str;
-        const div = document.createElement('div'); div.innerText = str; return div.innerHTML;
-    }
-
-    let confirmCallback = null;
-    window.confirmAction = (msg, callback) => {
-        document.getElementById("confirmMsg").innerText = msg;
-        document.getElementById("confirmModal").classList.add("show");
-        confirmCallback = callback;
-    };
-    document.getElementById("confirmYes").onclick = () => {
-        document.getElementById("confirmModal").classList.remove("show");
-        if(confirmCallback) confirmCallback();
-    };
-
-    // TIME & TIMERS
-    function getTimestamp(d, t) { 
-        if (!d) return null;
-        const parsed = new Date(`${d}T${t || '00:00:00'}`).getTime();
-        return isNaN(parsed) ? null : parsed;
-    }
-    
-    function setInputsDate(ts, dInp, tInp) {
-        if (!ts) { dInp.value = ''; tInp.value = ''; return; }
-        const d = new Date(ts);
-        dInp.value = d.toISOString().split('T')[0];
-        tInp.value = d.toTimeString().substring(0,5);
-    }
-    
-    function formatCountdown(ms) {
-        if (ms <= 0) return 'Expired';
-        const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
-        return `Ends in: ${d}d ${h}h ${m}m ${s}s`;
-    }
-
-    function runTimers() {
-        const now = Date.now();
-        document.querySelectorAll('.countdown-timer').forEach(el => {
-            const exp = parseInt(el.dataset.expiry);
-            if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
-        });
-        requestAnimationFrame(runTimers);
-    }
-    requestAnimationFrame(runTimers);
-
-    const lazyObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.onload = () => img.classList.add('loaded');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
-    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
-    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
-    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
-    
-    let initialPidChecked = false;
-    onValue(refs.products, (snapshot) => {
-        try {
-            state.products = snapshot.val() || {};
-            
-            // Feature 1: Native Share Check PID
-            if (!initialPidChecked) {
-                initialPidChecked = true;
-                const params = new URLSearchParams(window.location.search);
-                const pid = params.get('pid');
-                if (pid && state.products[pid] && !state.products[pid].inTrash) {
-                    setTimeout(() => openProduct(pid), 500);
-                }
-            }
-
-            renderAllViews(); 
-            renderAdminProducts(); 
-            updateAdminAnalytics();
-            renderBanners(); // Ensure auto-banners map latest product data
-        } catch(e) { console.error("Render Data Error:", e); }
-    });
-
-    // TRIPLE VISIBILITY LOGIC (Public/Private/Scheduled)
-    function getActiveProducts() {
-        const now = Date.now();
-        return Object.entries(state.products || {})
-            .filter(([id, p]) => {
-                if(!p || p.inTrash) return false;
-                if(p.expiryDateTime && p.expiryDateTime < now) return false;
-                
-                let isVisible = true;
-                if(p.visibility === 'private' || p.status === 'private') isVisible = false;
-                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
-                if(!p.visibility && p.hidden) isVisible = false; // Fallback to old schema logic
-                
-                return isVisible || state.isAdmin; // Admin sees all
-            })
-            .map(([id, p]) => ({ id, ...p }));
-    }
-
-    function trackEvent(type, productId) {
-        try {
-            if(!state.products) return;
-            const dateStr = new Date().toISOString().split('T')[0];
-            const updates = {};
-            updates[`analytics/totals/${type}`] = increment(1);
-            if(productId && state.products[productId] && !state.products[productId].inTrash) {
-                updates[`products/${productId}/${type}`] = increment(1);
-                updates[`analytics/products/${productId}/${type}`] = increment(1);
-                if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
-            }
-            updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-            update(ref(db), updates).catch(e => console.warn("Analytics safely skipped", e));
-        } catch(e) { console.error(e); }
-    }
-
-    // --- MAIN UI RENDERERS ---
-    function renderAllViews() {
-        try {
-            const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
-            const activeList = getActiveProducts();
-            
-            document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-            document.getElementById("homeBottomSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-            document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-
-            if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
-                renderScrollingProducts(activeList);
-                renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=> {
-                    if (a.isTrending !== b.isTrending) return a.isTrending ? -1 : 1;
-                    return ((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0));
-                }).slice(0, 10), "trendingWrapper");
-                document.getElementById("mainGridTitle").innerText = "Just Arrived";
-                renderCategorySections(activeList);
-                renderRecommendations(activeList);
-            } else {
-                if(document.getElementById("scrollingWrapper")) document.getElementById("scrollingWrapper").style.display = "none";
-                if(document.getElementById("categoryWiseSections")) document.getElementById("categoryWiseSections").innerHTML = "";
-                if(document.getElementById("recommendationWrapper")) document.getElementById("recommendationWrapper").style.display = "none";
-            }
-
-            renderMainGrid(activeList, query);
-        } catch(e) { console.error("Render View Error:", e); }
-    }
-
-    function renderMainGrid(list, query) {
-        const container = document.getElementById("products"); if(!container) return;
-        container.innerHTML = "";
-
-        if (query) list = list.filter(p => (p.title||'').toLowerCase().includes(query) || (p.tags||'').toLowerCase().includes(query));
-        else if (state.currentView === 'wishlist') list = list.filter(p => state.wishlist.includes(p.id));
-        else if (state.currentCategory !== "ALL") list = list.filter(p => p.category === state.currentCategory);
-
-        const sortBy = document.getElementById("sortProducts").value;
-        list.sort((a, b) => {
-            if (sortBy === 'popular') return ((b.views||0)+(b.clicks||0)) - ((a.views||0)+(a.clicks||0));
-            if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0);
-            if (sortBy === 'price-low-high') return (a.finalPrice || 0) - (b.finalPrice || 0);
-            if (sortBy === 'price-high-low') return (b.finalPrice || 0) - (a.finalPrice || 0);
-            return (b.createdAt || 0) - (a.createdAt || 0);
-        });
-
-        if (list.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return;
-        }
-
-        const frag = document.createDocumentFragment();
-        list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
-        container.appendChild(frag);
-    }
-
-    function renderCarousel(containerId, list, wrapperId) {
-        const wrapper = document.getElementById(wrapperId), container = document.getElementById(containerId);
-        if(!wrapper || !container) return;
-        if (list.length === 0) { wrapper.style.display = 'none'; return; }
-        wrapper.style.display = 'block'; container.innerHTML = "";
-        const frag = document.createDocumentFragment();
-        list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
-        container.appendChild(frag);
-    }
-
-    // Feature 2: Scrolling Horizontal Full Image Products
-    function renderScrollingProducts(activeList) {
-        const wrapper = document.getElementById("scrollingWrapper"), container = document.getElementById("scrollingCarousel");
-        if (!wrapper || !container) return;
-        const list = [...activeList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 8);
-        if (list.length === 0) { wrapper.style.display = "none"; return; }
-        
-        wrapper.style.display = "block"; container.innerHTML = "";
-        const frag = document.createDocumentFragment();
-        list.forEach(p => {
-            if (!p) return;
-            const card = document.createElement("div");
-            card.className = "scroll-card";
-            card.onclick = () => openProduct(p.id);
-            card.innerHTML = `
-                <div class="image-container">
-                    <img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
-                    ${p.discount > 0 ? `<div class="badge discount-badge">${p.discount}% OFF</div>` : ''}
-                </div>
-                <div class="scroll-card-title">${sanitize(p.title)}</div>
-            `;
-            const lazyImg = card.querySelector('.lazy-img');
-            if(lazyImg) lazyObserver.observe(lazyImg);
-            frag.appendChild(card);
-        });
-        container.appendChild(frag);
-    }
-
-    // Feature 4: Category-Wise Layouts
-    function renderCategorySections(activeList) {
-        const container = document.getElementById("categoryWiseSections"); if (!container) return;
-        container.innerHTML = "";
-        
-        const catMap = {};
-        activeList.forEach(p => { if(!p) return; const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
-        const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
-
-        const frag = document.createDocumentFragment();
-        sortedCats.forEach(cat => {
-            const prods = catMap[cat]; if (prods.length === 0) return;
-            const wId = `catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`;
-            const wrapper = document.createElement("div");
-            wrapper.innerHTML = `<div class="section-title"><h3>${sanitize(cat)} Collection</h3></div><div class="carousel" id="${wId}"></div>`;
-            frag.appendChild(wrapper);
-        });
-        container.appendChild(frag);
-
-        sortedCats.forEach(cat => {
-            const prods = catMap[cat], cEl = document.getElementById(`catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`);
-            if (cEl) {
-                const cFrag = document.createDocumentFragment();
-                prods.forEach(p => { if (p) cFrag.appendChild(createProductCard(p)); });
-                cEl.appendChild(cFrag);
-            }
-        });
-    }
-
-    // Feature 5: Smart Recommendation Randomizer
-    function renderRecommendations(activeList) {
-        const wrapper = document.getElementById("recommendationWrapper"), container = document.getElementById("recommendationGrid");
-        if (!wrapper || !container) return;
-        if (activeList.length < 2) { wrapper.style.display = "none"; return; }
-        
-        const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
-        wrapper.style.display = "block"; container.innerHTML = "";
-        const frag = document.createDocumentFragment();
-        shuffled.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
-        container.appendChild(frag);
-    }
-
-    function createProductCard(p) {
-        const card = document.createElement("div"); card.className = "card";
-        let badges = [];
-        if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
-        if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
-        if (p.stock != null && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
-        else if (p.stock != null && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`); 
-
-        let stars = Array(5).fill('<i class="far fa-star"></i>');
-        if (p.rating) {
-            let r = Math.round(p.rating * 2) / 2;
-            for(let i=0; i<Math.floor(r); i++) stars[i] = '<i class="fas fa-star"></i>';
-            if(r % 1 !== 0) stars[Math.floor(r)] = '<i class="fas fa-star-half-alt"></i>';
-        }
-
-        const isWished = state.wishlist.includes(p.id);
-
-        card.innerHTML = `
-            <div class="image-container">
-                <img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
-                ${badges.join('')}
-            </div>
-            <div class="card-content">
-                <h3>${sanitize(p.title || 'Untitled')}</h3>
-                <p class="category-text">${sanitize(p.category || 'General')}</p>
-                <div class="card-stats"><span class="stars">${stars.join('')}</span> <span><i class="fas fa-eye"></i> ${p.views || 0}</span></div>
-                <div class="price-container">
-                    <span class="final-price">₹ ${p.finalPrice?.toFixed(2)}</span>
-                    ${p.discount > 0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span>` : ''}
-                </div>
-                ${p.expiryDateTime ? `<div class="countdown-timer" data-expiry="${p.expiryDateTime}"></div>` : ''}
-                <div class="btn-group">
-                    <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="fas fa-heart"></i></button>
-                    <button class="view-button" onclick="openProduct('${p.id}')">Details</button>
-                </div>
-            </div>
-        `;
-        const lazyImg = card.querySelector('.lazy-img');
-        if(lazyImg) lazyObserver.observe(lazyImg);
-        return card;
-    }
-
-    // UX ACTIONS
-    window.toggleWishlist = (id, event) => {
-        if(event) event.stopPropagation();
-        const idx = state.wishlist.indexOf(id);
-        if (idx > -1) { state.wishlist.splice(idx, 1); showToast("Removed from wishlist", "error"); } 
-        else { state.wishlist.push(id); showToast("Added to wishlist", "success"); }
-        localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
-        renderAllViews();
-    };
-
-    function renderCategories() {
-        const panel = document.getElementById("categoriesPanel"); if(!panel) return;
-        panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="setCategory('ALL')">ALL</div>`;
-        Object.values(state.categories || {}).sort().forEach(cat => {
-            if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
-        });
-    }
-    
-    window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
-    window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
-
-    const searchInp = document.getElementById("search"), suggBox = document.getElementById("suggestions");
-    if(searchInp) {
-        searchInp.addEventListener("input", debounce(() => {
-            const q = searchInp.value.trim().toLowerCase();
-            if(q.length > 0) {
-                const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
-                if(matches.length > 0) {
-                    suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
-                    suggBox.style.display = 'block';
-                } else suggBox.style.display = 'none';
-            } else suggBox.style.display = 'none';
-            renderAllViews();
-        }, 300));
-    }
-    window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
-    if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
-    if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
-
-    window.switchTab = (tab) => {
-        state.currentView = tab; state.currentCategory = 'ALL'; 
-        if(searchInp) searchInp.value = '';
-        document.getElementById('categoriesPanel').style.display = 'none';
-        updateNavHighlight(tab); renderAllViews(); renderCategories(); window.scrollTo(0,0);
-    };
-    function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
-
-    // Native Sharing System (Feature 1) integrated
-    window.nativeShare = (id, title) => {
-        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
-        if (navigator.share) {
-            navigator.share({ title: title, text: 'Check out this awesome product!', url: prodUrl })
-            .then(() => trackEvent('shares', id)).catch(e => console.warn('Share rejected', e));
-        } else {
-            copyShare(id, prodUrl);
-        }
-    };
-
-    window.openProduct = (id) => {
-        const p = state.products[id]; if(!p || p.inTrash) return;
-        trackEvent('views', id);
-        document.body.style.overflow = 'hidden';
-        
-        const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
-        const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
-        
-        let cpnHtml = '';
-        if(p.coupon) {
-            cpnHtml = `<div class="coupon-box"><span style="font-size:12px; opacity:0.8;">Use Code:</span>
-                <code id="cpnText">${sanitize(p.coupon)}</code><button class="icon-btn" onclick="copyCoupon('${sanitize(p.coupon)}')"><i class="fas fa-copy"></i></button></div>`;
-        }
-
-        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
-        const shareUrl = encodeURIComponent(prodUrl);
-        const shareText = encodeURIComponent(`Check out ${p.title} on Futuristic Store!`);
-        const safeTitle = sanitize(p.title).replace(/'/g, "\\'").replace(/"/g, "&quot;");
-
-        document.getElementById("modalContent").innerHTML = `
-            <button class="close-btn" onclick="closeModals()">×</button>
-            <div class="modal-image-gallery">${gallery||`<img src="${fallbackImage}" class="modal-gallery-image">`}</div>
-            <h2>${sanitize(p.title)}</h2>
-            <div class="tags-container">${tags}</div>
-            <div style="font-size:11px; margin-top:5px; opacity:0.6;"><i class="fas fa-share-alt"></i> ${p.shares||0} shares</div>
-            <div class="price-container" style="margin: 15px 0;">
-                <span class="final-price" style="font-size:24px;">₹ ${p.finalPrice?.toFixed(2)}</span>
-                ${p.discount>0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span> <span class="badge discount-badge" style="position:relative; top:0; left:0;">${p.discount}% OFF</span>` : ''}
-            </div>
-            <p style="opacity:0.9; font-size:14px; line-height:1.6;">${sanitize(p.description)}</p>
-            ${cpnHtml}
-            <div style="margin-top: 20px;">
-                <button onclick="buyProduct('${id}', '${p.affiliateLink}')" style="width:100%; padding:15px; border-radius:10px; background:linear-gradient(90deg, #00f5ff, #9b5cff); border:none; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(0,245,255,0.4);"><i class="fas fa-shopping-cart"></i> Get Deal Now</button>
-            </div>
-            <div class="share-links">
-                <button class="share-btn wa" onclick="shareProduct('${id}', 'https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
-                <button class="share-btn tg" onclick="shareProduct('${id}', 'https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
-                <button class="share-btn cp" onclick="copyShare('${id}', '${prodUrl}')" title="Copy Link"><i class="fas fa-link"></i></button>
-                <button class="share-btn ns" onclick="nativeShare('${id}', '${safeTitle}')" title="More Sharing Options"><i class="fas fa-share-nodes"></i></button>
-            </div>
-        `;
-        document.getElementById("productModal").classList.add('show');
-    };
-
-    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); };
-    window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
-    window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
-    window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
-    window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
-
-    // BANNERS (With Auto-Sync System)
-    let bannerInterval;
-    function renderBanners() {
-        const b = document.getElementById("banner"); if(!b) return;
-        b.innerHTML = ""; clearInterval(bannerInterval);
-        
-        let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
-        
-        // Dynamic Inject Auto-Banners and Show-in-Banner
-        const now = Date.now();
-        Object.entries(state.products || {}).forEach(([id, p]) => {
-            if(!p || p.inTrash) return;
-            if ((p.autoBanner || p.showInBanner) && p.images && p.images[0]) {
-                let isVisible = true;
-                if(p.visibility === 'private' || p.status === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
-                if(p.expiryDateTime && p.expiryDateTime < now) isVisible = false;
-                if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
-            }
-        });
-
-        if(!list.length) return;
-        
-        list.forEach((item, i) => {
-            const img = document.createElement("img");
-            img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
-            img.onclick = () => window.location.href = item.link;
-            if(i===0) img.classList.add('active');
-            b.appendChild(img);
-        });
-        const slides = b.querySelectorAll("img");
-        if(slides.length > 1) {
-            let idx = 0;
-            bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
-        }
-    }
-
-    // AUTH ENGINE
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            state.isAdmin = true;
-            if(document.getElementById('adminLoginModal').classList.contains('show')) {
-                closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
-            }
-        } else { state.isAdmin = false; }
-    });
-
-    window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
-    window.loginAdmin = async () => {
-        const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
-        if(!e || !p) return showToast("Email and password required", "error");
-        try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); } 
-        catch (err) { showToast("Authentication failed: " + err.message, "error"); } 
-    };
-    window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
-    window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
-    window.switchAdminTab = (tabId) => {
-        document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
-    };
-
-    function updateAdminAnalytics() {
-        document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).filter(k=>!state.products[k]?.inTrash).length;
-        document.getElementById('statViews').innerText = state.analytics.views || 0;
-        document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
-        document.getElementById('statSales').innerText = state.analytics.sales || 0;
-        const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
-        document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
-        
-        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
-        const c = document.getElementById("topProductsList"); if(c) {
-            c.innerHTML='';
-            list.forEach(([id, p], i) => { c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`; });
-        }
-    }
-
-    // --- ADMIN PRODUCT MANAGEMENT ---
-    if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice; 
-    if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
-    
-    function calcPrice() {
-        const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
-        document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
-    }
-
-    window.addImageField = (url='') => {
-        const c = document.getElementById("imageFields");
-        const div = document.createElement('div'); div.style = "display:flex; gap:5px; margin-bottom:5px;";
-        div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${sanitize(url)}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-        c.appendChild(div);
-    };
-
-    window.toggleSchedule = () => {
-        const val = document.querySelector('input[name="pVisibility"]:checked')?.value || 'public';
-        document.getElementById("pScheduleTime").style.display = val === 'scheduled' ? 'block' : 'none';
-    };
-
-    window.saveProduct = async () => {
-        try {
-            const id = document.getElementById("pId").value;
-            const title = document.getElementById("pTitle").value.trim();
-            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
-            const cat = document.getElementById("pCategory").value;
-            const affLink = document.getElementById("pAffiliateLink").value.trim();
-
-            if(!title || !price || !cat || !affLink) {
-                return showToast("Title, Price, Category, and Affiliate Link are required!", "error");
-            }
-
-            const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
-            let scheduleTime = null;
-            if (visRadio === 'scheduled') {
-                const st = document.getElementById("pScheduleTime").value;
-                if (st) scheduleTime = new Date(st).getTime();
-            }
-
-            const showInBanner = document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false;
-            const isTrending = document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false;
-            const autoNotify = document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false;
-
-            const data = {
-                title, description: document.getElementById("pDesc").value.trim(),
-                price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
-                finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
-                category: cat, tags: document.getElementById("pTags").value.trim(),
-                affiliateLink: affLink,
-                coupon: document.getElementById("pCoupon").value.trim(),
-                featured: document.getElementById("pFeatured").checked,
-                visibility: visRadio,
-                scheduleTime: scheduleTime,
-                hidden: (visRadio === 'private' || visRadio === 'scheduled'),
-                autoBanner: document.getElementById("pAutoBanner").checked,
-                
-                showInBanner: showInBanner,
-                isTrending: isTrending,
-                autoNotify: autoNotify,
-                status: visRadio,
-                isDraft: false,
-                inTrash: false,
-
-                images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
-                expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
-                stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
-                rating: document.getElementById("pRating").value ? parseFloat(document.getElementById("pRating").value) : null,
-                updatedAt: Date.now()
-            };
-
-            const isNewProduct = !id;
-            if(isNewProduct) { 
-                data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; 
-            }
-            
-            const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
-            await req; 
-            showToast("Product Saved!"); 
-
-            if (autoNotify && typeof window.triggerAutoNotification === 'function') {
-                if (isNewProduct && visRadio === 'public') {
-                    window.triggerAutoNotification(data, "New product added! Check it out now.");
-                } else if (data.featured && visRadio === 'public') {
-                    window.triggerAutoNotification(data, "Featured Deal! Don't miss this.");
-                }
-            }
-
-            clearProductForm(); 
-        } catch (e) { console.error(e); showToast("Save failed", "error"); }
-    };
-
-    window.clearProductForm = () => {
-        ['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime','pScheduleTime'].forEach(i=> { if(document.getElementById(i)) document.getElementById(i).value=''; });
-        ['pFeatured','pAutoBanner','pShowInBanner','pIsTrending','pAutoNotify'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
-        if(document.getElementById('imageFields')){ document.getElementById('imageFields').innerHTML=''; addImageField(); }
-        const r = document.querySelector('input[name="pVisibility"][value="public"]'); if(r) r.checked = true;
-        toggleSchedule(); calcPrice();
-    };
-
-    window.quickEdit = (id) => {
-        const p = state.products[id]; if(!p) return;
-        document.getElementById("pId").value = id;
-        document.getElementById("pTitle").value = p.title||'';
-        document.getElementById("pDesc").value = p.description||'';
-        document.getElementById("pOriginalPrice").value = p.price||'';
-        document.getElementById("pDiscount").value = p.discount||'';
-        document.getElementById("pStock").value = p.stock!=null?p.stock:'';
-        document.getElementById("pRating").value = p.rating ? p.rating.toFixed(1) : '';
-        document.getElementById("pCategory").value = p.category||'';
-        document.getElementById("pTags").value = p.tags||'';
-        document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
-        document.getElementById("pCoupon").value = p.coupon||'';
-        document.getElementById("pFeatured").checked = p.featured||false;
-        document.getElementById("pAutoBanner").checked = p.autoBanner||false;
-        
-        if(document.getElementById("pShowInBanner")) document.getElementById("pShowInBanner").checked = p.showInBanner||false;
-        if(document.getElementById("pIsTrending")) document.getElementById("pIsTrending").checked = p.isTrending||false;
-        if(document.getElementById("pAutoNotify")) document.getElementById("pAutoNotify").checked = p.autoNotify||false;
-
-        setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
-        
-        const vis = p.visibility || (p.hidden ? 'private' : 'public');
-        const rdo = document.querySelector(`input[name="pVisibility"][value="${vis}"]`); if(rdo) rdo.checked = true;
-        if (p.scheduleTime) document.getElementById("pScheduleTime").value = new Date(p.scheduleTime).toISOString().slice(0,16);
-        else document.getElementById("pScheduleTime").value = '';
-        toggleSchedule();
-
-        document.getElementById("imageFields").innerHTML='';
-        if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
-        calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
-    };
-
-    window.duplicateProduct = (id) => {
-        confirmAction("Duplicate this product?", async () => {
-            try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {}
-        });
-    };
-
-    window.archiveProduct = (id) => {
-        confirmAction("Archive product? (Moves to expired panel)", async () => {
-            try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
-        });
-    };
-
-    function renderAdminProducts() {
-        const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
-        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
-        
-        const frag = document.createDocumentFragment();
-        list.slice(0, 100).forEach(([id, p]) => { 
-            let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
-            if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
-            const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
-
-            const div = document.createElement('div'); div.className = 'admin-list-item';
-            div.innerHTML = `
-                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold; text-transform:uppercase;">${visText}</span></p></div>
-                <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
-                    <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
-                    <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
-                    <button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
-                </div>`;
-            frag.appendChild(div);
-        });
-        c.appendChild(frag);
-    }
-
-    // --- EXPIRED & TRASH PANEL ENGINE ---
-    function renderAdminExpired() {
-        const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
-        const list = Object.entries(state.expired || {}).filter(x=>x[1]);
-        if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired or trashed products.</p>'; return; }
-        const frag = document.createDocumentFragment();
-        list.forEach(([id, p]) => {
-            if(!p) return;
-            const isTrash = p.inTrash;
-            const div = document.createElement('div');
-            div.className = "admin-list-item";
-            div.style.borderLeft = isTrash ? "3px solid #777" : "3px solid #ff4757";
-            div.innerHTML = `
-                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>${isTrash ? 'In Trash' : 'Expired/Archived'}</p></div>
-                <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
-                    ${!isTrash ? `<button class="btn-danger btn-action" onclick="deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
-                </div>`;
-            frag.appendChild(div);
-        });
-        c.appendChild(frag);
-    }
-
-    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
-    window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
-    window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
-
-    // --- BACKUP & RESTORE SYSTEM ---
-    window.exportDatabaseJSON = async () => {
-        try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); }
-    };
-    window.importDatabaseJSON = () => {
-        const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error");
-        confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => {
-            const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file);
-        });
-    };
-
-    // --- OTHER ADMIN MGMT ---
-    window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
-    window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
-    function renderAdminCategories() {
-        const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList"); if(!sel || !list) return;
-        sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
-        Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
-    }
-
-    window.addBannerField = (id='', img='', link='', exp=null) => {
-        const d = document.createElement('div'); d.className = 'admin-list-item'; d.style.flexDirection = 'column'; d.style.alignItems='stretch';
-        d.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;"><input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;"><div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
-        setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
-    };
-    window.saveBanners = async () => {
-        try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {}
-    };
-    window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
-    function renderAdminBanners() {
-        const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML='';
-        Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; });
-    }
-
-    window.sendManualNotification = async () => {
-        const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
-        if(!title || !msg) return showToast("Title and message required", "error");
-        try {
-            const res = await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
-                body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url || undefined })
-            });
-            if(!res.ok) throw new Error("Failed to send");
-            showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
-        } catch(e) { showToast(e.message, "error"); }
-    };
-
-    if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
-
-    // ==========================================
-    // ADDED MISSING STABILITY ENGINES 
-    // ==========================================
-
-    window.triggerAutoNotification = async (product, customMsg) => {
-        if(!product || !product.title) return;
-        const title = "New Update: " + product.title;
-        const msg = customMsg || "Check out our latest product deal now!";
-        const url = product.affiliateLink || window.location.origin;
-        try {
-            const res = await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
-                body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url })
-            });
-            if(res.ok) console.log("Auto notification sent for", product.title);
-        } catch(e) { console.warn("Auto notification failed", e); }
-    };
-
-    // Auto Expiry & Scheduled Publisher Background Controller (Runs every 30s safely)
-    setInterval(() => {
-        try {
-            const now = Date.now();
-            const updates = {};
-            let changed = false;
-            
-            Object.entries(state.products || {}).forEach(([id, p]) => {
-                if(!p || p.inTrash) return;
-                
-                // Expiry Engine
-                if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') {
-                    const expiredP = { ...p, status: 'expired', inTrash: false };
-                    updates[`expiredProducts/${id}`] = expiredP; 
-                    updates[`products/${id}`] = null; 
-                    changed = true;
-                }
-                
-                // Scheduler Engine
-                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
-                    updates[`products/${id}/visibility`] = 'public'; 
-                    updates[`products/${id}/hidden`] = false; 
-                    updates[`products/${id}/status`] = 'public';
-                    changed = true;
-                    if (p.autoNotify && typeof window.triggerAutoNotification === 'function') {
-                        window.triggerAutoNotification(p, "Scheduled product is now live!");
-                    }
-                }
-            });
-            
-            Object.entries(state.banners || {}).forEach(([id, b]) => {
-                if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
-            });
-            
-            if(changed && Object.keys(updates).length > 0) {
-                // Specific path updates only (prevents overwriting root)
-                update(ref(db), updates).catch(e => console.warn("Background Engine Update Error:", e));
-            }
-        } catch(e) { console.error("Background Engine Crash:", e); }
-    }, 30000);
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+window.popupLoaded = false;
+window.loadPopupAd = () => {
+if(window.popupLoaded) return;
+const s = document.createElement("script");
+s.src = "https://pl28750759.effectivegatecpm.com/28/b7/77/28b7770062cf1401c510514ab77dccf2.js";
+s.async = true;
+document.body.appendChild(s);
+window.popupLoaded = true;
+};
+
+const searchInputEl = document.getElementById("search");
+if(searchInputEl) searchInputEl.addEventListener("click", window.loadPopupAd);
+
+const adminBtnEl = document.querySelector(".admin-btn");
+if(adminBtnEl) adminBtnEl.addEventListener("click", window.loadPopupAd);
+
+const firebaseConfig = {
+apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
+authDomain: "product-seller-app.firebaseapp.com",
+databaseURL: "https://product-seller-app-default-rtdb.firebaseio.com",
+projectId: "product-seller-app",
+storageBucket: "product-seller-app.firebasestorage.app",
+messagingSenderId: "1046644480118",
+appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
+};
+
+let app, db, auth;
+try {
+app = initializeApp(firebaseConfig);
+db = getDatabase(app);
+auth = getAuth(app);
+setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
+} catch (e) { console.error("Firebase Error:", e); }
+
+const refs = {
+products: ref(db, 'products/'),
+expired: ref(db, 'expiredProducts/'),
+banners: ref(db, 'banners/'),
+categories: ref(db, 'categories/'),
+analytics: ref(db, 'analytics/totals'),
+connected: ref(db, '.info/connected')
+};
+
+let state = {
+products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
+currentCategory: "ALL", currentView: "home",
+wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
+theme: localStorage.getItem('theme') || 'dark',
+isAdmin: false
+};
+
+const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
+if (state.theme === 'light') document.body.classList.add('light-mode');
+
+window.showToast = (msg, type = 'success') => {
+const t = document.createElement('div'); t.className = `toast ${type}`;
+t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
+document.getElementById('toast-container').appendChild(t);
+setTimeout(() => t.remove(), 3000);
+};
+
+window.toggleTheme = () => {
+document.body.classList.toggle('light-mode');
+state.theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+localStorage.setItem('theme', state.theme);
+};
+
+const debounce = (func, wait) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); }; };
+
+function sanitize(str) {
+if(typeof str !== 'string') return str;
+const div = document.createElement('div'); div.innerText = str; return div.innerHTML;
+}
+
+let confirmCallback = null;
+window.confirmAction = (msg, callback) => {
+document.getElementById("confirmMsg").innerText = msg;
+document.getElementById("confirmModal").classList.add("show");
+confirmCallback = callback;
+};
+document.getElementById("confirmYes").onclick = () => {
+document.getElementById("confirmModal").classList.remove("show");
+if(confirmCallback) confirmCallback();
+};
+
+function getTimestamp(d, t) {
+if (!d) return null;
+const parsed = new Date(`${d}T${t || '00:00:00'}`).getTime();
+return isNaN(parsed) ? null : parsed;
+}
+
+function setInputsDate(ts, dInp, tInp) {
+if (!ts) { dInp.value = ''; tInp.value = ''; return; }
+const d = new Date(ts);
+dInp.value = d.toISOString().split('T')[0];
+tInp.value = d.toTimeString().substring(0,5);
+}
+
+function formatCountdown(ms) {
+if (ms <= 0) return 'Expired';
+const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
+return `Ends in: ${d}d ${h}h ${m}m ${s}s`;
+}
+
+function runTimers() {
+const now = Date.now();
+document.querySelectorAll('.countdown-timer').forEach(el => {
+const exp = parseInt(el.dataset.expiry);
+if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
+});
+requestAnimationFrame(runTimers);
+}
+requestAnimationFrame(runTimers);
+
+const lazyObserver = new IntersectionObserver((entries, observer) => {
+entries.forEach(entry => {
+if(entry.isIntersecting) {
+const img = entry.target;
+img.src = img.dataset.src;
+img.onload = () => img.classList.add('loaded');
+observer.unobserve(img);
+}
+});
+});
+
+onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
+onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
+onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
+onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
+
+let initialPidChecked = false;
+onValue(refs.products, (snapshot) => {
+try {
+state.products = snapshot.val() || {};
+
+if (!initialPidChecked) {
+initialPidChecked = true;
+const params = new URLSearchParams(window.location.search);
+const pid = params.get('pid');
+if (pid && state.products[pid] && !state.products[pid].inTrash) {
+setTimeout(() => openProduct(pid), 500);
+}
+}
+
+renderAllViews();
+renderAdminProducts();
+updateAdminAnalytics();
+renderBanners();
+} catch(e) { console.error("Render Data Error:", e); }
+});
+
+function getActiveProducts() {
+if(!state.products) return [];
+const now = Date.now();
+return Object.entries(state.products)
+.filter(([id, p]) => {
+if(!p || p.inTrash) return false;
+if(p.expiryDateTime && p.expiryDateTime < now) return false;
+
+let isVisible = true;
+if(p.visibility === 'private' || p.status === 'private') isVisible = false;
+if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
+if(!p.visibility && p.hidden) isVisible = false;
+
+return isVisible || state.isAdmin;
+})
+.map(([id, p]) => ({ id, ...p }));
+}
+
+function trackEvent(type, productId) {
+try {
+if(!state.products) return;
+const dateStr = new Date().toISOString().split('T')[0];
+const updates = {};
+updates[`analytics/totals/${type}`] = increment(1);
+if(productId && state.products[productId] && !state.products[productId].inTrash) {
+updates[`products/${productId}/${type}`] = increment(1);
+updates[`analytics/products/${productId}/${type}`] = increment(1);
+if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
+}
+updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
+update(ref(db), updates).catch(e => console.warn("Analytics safely skipped", e));
+} catch(e) { console.error(e); }
+}
+
+function renderAllViews() {
+try {
+if(!state.products) return;
+const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
+const activeList = getActiveProducts();
+
+document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+document.getElementById("homeBottomSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+
+if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
+renderScrollingProducts(activeList);
+renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
+renderCarousel("trendingCarousel", [...activeList].sort((a,b)=> {
+if (a.isTrending !== b.isTrending) return a.isTrending ? -1 : 1;
+return ((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0));
+}).slice(0, 10), "trendingWrapper");
+document.getElementById("mainGridTitle").innerText = "Just Arrived";
+renderCategorySections(activeList);
+renderRecommendations(activeList);
+} else {
+if(document.getElementById("scrollingWrapper")) document.getElementById("scrollingWrapper").style.display = "none";
+if(document.getElementById("categoryWiseSections")) document.getElementById("categoryWiseSections").innerHTML = "";
+if(document.getElementById("recommendationWrapper")) document.getElementById("recommendationWrapper").style.display = "none";
+}
+
+renderMainGrid(activeList, query);
+} catch(e) { console.error("Render View Error:", e); }
+}
+
+function renderMainGrid(list, query) {
+const container = document.getElementById("products"); if(!container) return;
+container.innerHTML = "";
+
+let filtered = list;
+if (query) {
+filtered = filtered.filter(p => (p.title||'').toLowerCase().includes(query) || (p.tags||'').toLowerCase().includes(query));
+} else if (state.currentView === 'wishlist') {
+filtered = filtered.filter(p => state.wishlist.includes(p.id));
+} else if (state.currentCategory && state.currentCategory !== "ALL") {
+filtered = filtered.filter(p => p.category === state.currentCategory);
+}
+
+const sortBy = document.getElementById("sortProducts").value;
+filtered.sort((a, b) => {
+if (sortBy === 'popular') return ((b.views||0)+(b.clicks||0)) - ((a.views||0)+(a.clicks||0));
+if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0);
+if (sortBy === 'price-low-high') return (a.finalPrice || 0) - (b.finalPrice || 0);
+if (sortBy === 'price-high-low') return (b.finalPrice || 0) - (a.finalPrice || 0);
+return (b.createdAt || 0) - (a.createdAt || 0);
+});
+
+if (filtered.length === 0) {
+container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return;
+}
+
+const frag = document.createDocumentFragment();
+filtered.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
+container.appendChild(frag);
+}
+
+function renderCarousel(containerId, list, wrapperId) {
+const wrapper = document.getElementById(wrapperId), container = document.getElementById(containerId);
+if(!wrapper || !container) return;
+if (list.length === 0) { wrapper.style.display = 'none'; return; }
+wrapper.style.display = 'block'; container.innerHTML = "";
+const frag = document.createDocumentFragment();
+list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
+container.appendChild(frag);
+}
+
+function renderScrollingProducts(activeList) {
+const wrapper = document.getElementById("scrollingWrapper"), container = document.getElementById("scrollingCarousel");
+if (!wrapper || !container) return;
+const list = [...activeList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 8);
+if (list.length === 0) { wrapper.style.display = "none"; return; }
+
+wrapper.style.display = "block"; container.innerHTML = "";
+const frag = document.createDocumentFragment();
+list.forEach(p => {
+if (!p) return;
+const card = document.createElement("div");
+card.className = "scroll-card";
+card.onclick = () => openProduct(p.id);
+card.innerHTML = `
+<div class="image-container">
+<img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
+${p.discount > 0 ? `<div class="badge discount-badge">${p.discount}% OFF</div>` : ''}
+</div>
+<div class="scroll-card-title">${sanitize(p.title)}</div>
+`;
+const lazyImg = card.querySelector('.lazy-img');
+if(lazyImg) lazyObserver.observe(lazyImg);
+frag.appendChild(card);
+});
+container.appendChild(frag);
+}
+
+function renderCategorySections(activeList) {
+const container = document.getElementById("categoryWiseSections"); if (!container) return;
+container.innerHTML = "";
+
+const catMap = {};
+activeList.forEach(p => { if(!p) return; const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
+const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
+
+const frag = document.createDocumentFragment();
+sortedCats.forEach(cat => {
+const prods = catMap[cat]; if (prods.length === 0) return;
+const wId = `catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`;
+const wrapper = document.createElement("div");
+wrapper.innerHTML = `<div class="section-title"><h3>${sanitize(cat)} Collection</h3></div><div class="carousel" id="${wId}"></div>`;
+frag.appendChild(wrapper);
+});
+container.appendChild(frag);
+
+sortedCats.forEach(cat => {
+const prods = catMap[cat], cEl = document.getElementById(`catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`);
+if (cEl) {
+const cFrag = document.createDocumentFragment();
+prods.forEach(p => { if (p) cFrag.appendChild(createProductCard(p)); });
+cEl.appendChild(cFrag);
+}
+});
+}
+
+function renderRecommendations(activeList) {
+const wrapper = document.getElementById("recommendationWrapper"), container = document.getElementById("recommendationGrid");
+if (!wrapper || !container) return;
+if (activeList.length < 2) { wrapper.style.display = "none"; return; }
+
+const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
+wrapper.style.display = "block"; container.innerHTML = "";
+const frag = document.createDocumentFragment();
+shuffled.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
+container.appendChild(frag);
+}
+
+function createProductCard(p) {
+const card = document.createElement("div"); card.className = "card";
+let badges = [];
+if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
+if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
+if (p.stock != null && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
+else if (p.stock != null && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`);
+
+let stars = Array(5).fill('<i class="far fa-star"></i>');
+if (p.rating) {
+let r = Math.round(p.rating * 2) / 2;
+for(let i=0; i<Math.floor(r); i++) stars[i] = '<i class="fas fa-star"></i>';
+if(r % 1 !== 0) stars[Math.floor(r)] = '<i class="fas fa-star-half-alt"></i>';
+}
+
+const isWished = state.wishlist.includes(p.id);
+
+card.innerHTML = `
+<div class="image-container">
+<img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
+${badges.join('')}
+</div>
+<div class="card-content">
+<h3>${sanitize(p.title || 'Untitled')}</h3>
+<p class="category-text">${sanitize(p.category || 'General')}</p>
+<div class="card-stats"><span class="stars">${stars.join('')}</span> <span><i class="fas fa-eye"></i> ${p.views || 0}</span></div>
+<div class="price-container">
+<span class="final-price">₹ ${p.finalPrice?.toFixed(2)}</span>
+${p.discount > 0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span>` : ''}
+</div>
+${p.expiryDateTime ? `<div class="countdown-timer" data-expiry="${p.expiryDateTime}"></div>` : ''}
+<div class="btn-group">
+<button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="fas fa-heart"></i></button>
+<button class="view-button" onclick="openProduct('${p.id}')">Details</button>
+</div>
+</div>
+`;
+const lazyImg = card.querySelector('.lazy-img');
+if(lazyImg) lazyObserver.observe(lazyImg);
+return card;
+}
+
+window.toggleWishlist = (id, event) => {
+if(event) event.stopPropagation();
+const idx = state.wishlist.indexOf(id);
+if (idx > -1) { state.wishlist.splice(idx, 1); showToast("Removed from wishlist", "error"); }
+else { state.wishlist.push(id); showToast("Added to wishlist", "success"); }
+localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
+renderAllViews();
+};
+
+window.filterProducts = (category) => {
+state.currentCategory = (category === "all" || category.toUpperCase() === "ALL") ? "ALL" : category;
+state.currentView = 'home';
+updateNavHighlight();
+renderAllViews();
+renderCategories();
+};
+
+window.setCategory = window.filterProducts;
+
+function renderCategories() {
+const panel = document.getElementById("categoriesPanel"); if(!panel) return;
+panel.innerHTML = `<div class="category-chip ${state.currentCategory==='ALL'?'active':''}" onclick="filterProducts('ALL')">ALL</div>`;
+Object.values(state.categories || {}).sort().forEach(cat => {
+if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="filterProducts('${sanitize(cat).replace(/'/g, "\\'")}')">${sanitize(cat)}</div>`;
+});
+
+document.querySelectorAll(".category-chip").forEach(btn => btn.addEventListener("click", window.loadPopupAd));
+}
+
+window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
+
+const searchInp = document.getElementById("search"), suggBox = document.getElementById("suggestions");
+if(searchInp) {
+searchInp.addEventListener("input", debounce(() => {
+const q = searchInp.value.trim().toLowerCase();
+if(q.length > 0) {
+const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
+if(matches.length > 0) {
+suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
+suggBox.style.display = 'block';
+} else suggBox.style.display = 'none';
+} else suggBox.style.display = 'none';
+renderAllViews();
+}, 300));
+}
+window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
+if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
+if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
+
+window.switchTab = (tab) => {
+state.currentView = tab; state.currentCategory = 'ALL';
+if(searchInp) searchInp.value = '';
+document.getElementById('categoriesPanel').style.display = 'none';
+updateNavHighlight(tab); renderAllViews(); renderCategories(); window.scrollTo(0,0);
+};
+function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
+
+window.nativeShare = (id, title) => {
+const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
+if (navigator.share) {
+navigator.share({ title: title, text: 'Check out this awesome product!', url: prodUrl })
+.then(() => trackEvent('shares', id)).catch(e => console.warn('Share rejected', e));
+} else {
+copyShare(id, prodUrl);
+}
+};
+
+window.openProduct = (id) => {
+if(!state.products) return;
+const p = state.products[id]; if(!p || p.inTrash) return;
+trackEvent('views', id);
+document.body.style.overflow = 'hidden';
+
+const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
+const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
+
+let cpnHtml = '';
+if(p.coupon) {
+cpnHtml = `<div class="coupon-box"><span style="font-size:12px; opacity:0.8;">Use Code:</span>
+<code id="cpnText">${sanitize(p.coupon)}</code><button class="icon-btn" onclick="copyCoupon('${sanitize(p.coupon)}')"><i class="fas fa-copy"></i></button></div>`;
+}
+
+const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
+const shareUrl = encodeURIComponent(prodUrl);
+const shareText = encodeURIComponent(`Check out ${p.title} on Futuristic Store!`);
+const safeTitle = sanitize(p.title).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+document.getElementById("modalContent").innerHTML = `
+<button class="close-btn" onclick="closeModals()">×</button>
+<div class="modal-image-gallery">${gallery||`<img src="${fallbackImage}" class="modal-gallery-image">`}</div>
+<h2>${sanitize(p.title)}</h2>
+<div class="tags-container">${tags}</div>
+<div style="font-size:11px; margin-top:5px; opacity:0.6;"><i class="fas fa-share-alt"></i> ${p.shares||0} shares</div>
+<div class="price-container" style="margin: 15px 0;">
+<span class="final-price" style="font-size:24px;">₹ ${p.finalPrice?.toFixed(2)}</span>
+${p.discount>0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span> <span class="badge discount-badge" style="position:relative; top:0; left:0;">${p.discount}% OFF</span>` : ''}
+</div>
+<p style="opacity:0.9; font-size:14px; line-height:1.6;">${sanitize(p.description)}</p>
+${cpnHtml}
+<div style="margin-top: 20px;">
+<button onclick="buyProduct('${id}', '${p.affiliateLink}')" style="width:100%; padding:15px; border-radius:10px; background:linear-gradient(90deg, #00f5ff, #9b5cff); border:none; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(0,245,255,0.4);"><i class="fas fa-shopping-cart"></i> Get Deal Now</button>
+</div>
+<div class="share-links">
+<button class="share-btn wa" onclick="shareProduct('${id}', 'https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
+<button class="share-btn tg" onclick="shareProduct('${id}', 'https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
+<button class="share-btn cp" onclick="copyShare('${id}', '${prodUrl}')" title="Copy Link"><i class="fas fa-link"></i></button>
+<button class="share-btn ns" onclick="nativeShare('${id}', '${safeTitle}')" title="More Sharing Options"><i class="fas fa-share-nodes"></i></button>
+</div>
+`;
+document.getElementById("productModal").classList.add('show');
+};
+
+window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); };
+window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
+window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
+window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
+window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
+
+let bannerInterval;
+function renderBanners() {
+if(!state.products) return;
+const b = document.getElementById("banner"); if(!b) return;
+b.innerHTML = ""; clearInterval(bannerInterval);
+
+let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
+
+const now = Date.now();
+Object.entries(state.products || {}).forEach(([id, p]) => {
+if(!p || p.inTrash) return;
+if ((p.autoBanner || p.showInBanner) && p.images && p.images[0]) {
+let isVisible = true;
+if(p.visibility === 'private' || p.status === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
+if(p.expiryDateTime && p.expiryDateTime < now) isVisible = false;
+if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
+}
+});
+
+if(!list.length) return;
+
+list.forEach((item, i) => {
+const img = document.createElement("img");
+img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
+img.onclick = () => window.location.href = item.link;
+if(i===0) img.classList.add('active');
+b.appendChild(img);
+});
+const slides = b.querySelectorAll("img");
+if(slides.length > 1) {
+let idx = 0;
+bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
+}
+}
+
+onAuthStateChanged(auth, user => {
+if (user) {
+state.isAdmin = true;
+if(document.getElementById('adminLoginModal').classList.contains('show')) {
+closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
+}
+} else { state.isAdmin = false; }
+});
+
+window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
+window.loginAdmin = async () => {
+const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
+if(!e || !p) return showToast("Email and password required", "error");
+try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); }
+catch (err) { showToast("Authentication failed: " + err.message, "error"); }
+};
+window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
+window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
+window.switchAdminTab = (tabId) => {
+document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
+};
+
+function updateAdminAnalytics() {
+if(!state.products) return;
+document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).filter(k=>!state.products[k]?.inTrash).length;
+document.getElementById('statViews').innerText = state.analytics.views || 0;
+document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
+document.getElementById('statSales').innerText = state.analytics.sales || 0;
+const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
+document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
+
+try {
+const sizeBytes = new Blob([JSON.stringify(state)]).size;
+const sizeMB = (sizeBytes / (1024 * 1024)).toFixed(2);
+const sizeKB = (sizeBytes / 1024).toFixed(2);
+const displaySize = sizeMB >= 1.00 ? `${sizeMB} MB` : `${sizeKB} KB`;
+
+const storageEl = document.getElementById('statStorage');
+if(storageEl) storageEl.innerText = displaySize;
+const catEl = document.getElementById('statTotalCats');
+if(catEl) catEl.innerText = Object.keys(state.categories||{}).length;
+const banEl = document.getElementById('statTotalBanners');
+if(banEl) banEl.innerText = Object.keys(state.banners||{}).length;
+} catch(e) { console.warn("Storage stat error", e); }
+
+const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
+const c = document.getElementById("topProductsList"); if(c) {
+c.innerHTML='';
+list.forEach(([id, p], i) => { c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`; });
+}
+}
+
+if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice;
+if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
+
+function calcPrice() {
+const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
+document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
+}
+
+window.addImageField = (url='') => {
+const c = document.getElementById("imageFields");
+const div = document.createElement('div'); div.style = "display:flex; gap:5px; margin-bottom:5px;";
+div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${sanitize(url)}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+c.appendChild(div);
+};
+
+window.toggleSchedule = () => {
+const val = document.querySelector('input[name="pVisibility"]:checked')?.value || 'public';
+document.getElementById("pScheduleTime").style.display = val === 'scheduled' ? 'block' : 'none';
+};
+
+window.saveProduct = async () => {
+try {
+const id = document.getElementById("pId").value;
+const title = document.getElementById("pTitle").value.trim();
+const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
+const cat = document.getElementById("pCategory").value;
+const affLink = document.getElementById("pAffiliateLink").value.trim();
+
+if(!title || !price || !cat || !affLink) {
+return showToast("Title, Price, Category, and Affiliate Link are required!", "error");
+}
+
+const rawRating = document.getElementById("pRating").value;
+let validatedRating = rawRating ? parseFloat(rawRating) : null;
+if(validatedRating !== null && !isNaN(validatedRating)) {
+validatedRating = Math.max(1, Math.min(5, validatedRating));
+} else {
+validatedRating = null;
+}
+
+const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
+let scheduleTime = null;
+if (visRadio === 'scheduled') {
+const st = document.getElementById("pScheduleTime").value;
+if (st) scheduleTime = new Date(st).getTime();
+}
+
+const showInBanner = document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false;
+const isTrending = document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false;
+const autoNotify = document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false;
+
+const data = {
+title, description: document.getElementById("pDesc").value.trim(),
+price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
+finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
+category: cat, tags: document.getElementById("pTags").value.trim(),
+affiliateLink: affLink,
+coupon: document.getElementById("pCoupon").value.trim(),
+featured: document.getElementById("pFeatured").checked,
+visibility: visRadio,
+scheduleTime: scheduleTime,
+hidden: (visRadio === 'private' || visRadio === 'scheduled'),
+autoBanner: document.getElementById("pAutoBanner").checked,
+
+showInBanner: showInBanner,
+isTrending: isTrending,
+autoNotify: autoNotify,
+status: visRadio,
+isDraft: false,
+inTrash: false,
+
+images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
+expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
+stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
+rating: validatedRating,
+updatedAt: Date.now()
+};
+
+const isNewProduct = !id;
+if(isNewProduct) {
+data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0;
+}
+
+const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
+await req;
+showToast("Product Saved!");
+
+if (autoNotify && typeof window.triggerAutoNotification === 'function') {
+if (isNewProduct && visRadio === 'public') {
+window.triggerAutoNotification(data, "New product added! Check it out now.");
+} else if (data.featured && visRadio === 'public') {
+window.triggerAutoNotification(data, "Featured Deal! Don't miss this.");
+}
+}
+
+clearProductForm();
+} catch (e) { console.error(e); showToast("Save failed", "error"); }
+};
+
+window.clearProductForm = () => {
+['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime','pScheduleTime'].forEach(i=> { if(document.getElementById(i)) document.getElementById(i).value=''; });
+['pFeatured','pAutoBanner','pShowInBanner','pIsTrending','pAutoNotify'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
+if(document.getElementById('imageFields')){ document.getElementById('imageFields').innerHTML=''; addImageField(); }
+const r = document.querySelector('input[name="pVisibility"][value="public"]'); if(r) r.checked = true;
+toggleSchedule(); calcPrice();
+};
+
+window.quickEdit = (id) => {
+if(!state.products) return;
+const p = state.products[id]; if(!p) return;
+document.getElementById("pId").value = id;
+document.getElementById("pTitle").value = p.title||'';
+document.getElementById("pDesc").value = p.description||'';
+document.getElementById("pOriginalPrice").value = p.price||'';
+document.getElementById("pDiscount").value = p.discount||'';
+document.getElementById("pStock").value = p.stock!=null?p.stock:'';
+document.getElementById("pRating").value = p.rating != null ? p.rating : '';
+document.getElementById("pCategory").value = p.category||'';
+document.getElementById("pTags").value = p.tags||'';
+document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
+document.getElementById("pCoupon").value = p.coupon||'';
+document.getElementById("pFeatured").checked = p.featured||false;
+document.getElementById("pAutoBanner").checked = p.autoBanner||false;
+
+if(document.getElementById("pShowInBanner")) document.getElementById("pShowInBanner").checked = p.showInBanner||false;
+if(document.getElementById("pIsTrending")) document.getElementById("pIsTrending").checked = p.isTrending||false;
+if(document.getElementById("pAutoNotify")) document.getElementById("pAutoNotify").checked = p.autoNotify||false;
+
+setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
+
+const vis = p.visibility || (p.hidden ? 'private' : 'public');
+const rdo = document.querySelector(`input[name="pVisibility"][value="${vis}"]`); if(rdo) rdo.checked = true;
+if (p.scheduleTime) document.getElementById("pScheduleTime").value = new Date(p.scheduleTime).toISOString().slice(0,16);
+else document.getElementById("pScheduleTime").value = '';
+toggleSchedule();
+
+document.getElementById("imageFields").innerHTML='';
+if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
+calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
+};
+
+window.duplicateProduct = (id) => {
+confirmAction("Duplicate this product?", async () => {
+try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {}
+});
+};
+
+window.archiveProduct = (id) => {
+confirmAction("Archive product? (Moves to expired panel)", async () => {
+try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
+});
+};
+
+function renderAdminProducts() {
+const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
+const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>b[1].createdAt - a[1].createdAt);
+
+const frag = document.createDocumentFragment();
+list.slice(0, 100).forEach(([id, p]) => {
+let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
+if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
+const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
+
+const div = document.createElement('div'); div.className = 'admin-list-item';
+div.innerHTML = `
+<img src="${sanitize(p.images?.[0]||fallbackImage)}">
+<div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold; text-transform:uppercase;">${visText}</span></p></div>
+<div class="admin-item-actions">
+<button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
+<button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
+<button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
+<button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
+</div>`;
+frag.appendChild(div);
+});
+c.appendChild(frag);
+}
+
+function renderAdminExpired() {
+const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
+const list = Object.entries(state.expired || {}).filter(x=>x[1]);
+if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired or trashed products.</p>'; return; }
+const frag = document.createDocumentFragment();
+list.forEach(([id, p]) => {
+if(!p) return;
+const isTrash = p.inTrash;
+const div = document.createElement('div');
+div.className = "admin-list-item";
+div.style.borderLeft = isTrash ? "3px solid #777" : "3px solid #ff4757";
+div.innerHTML = `
+<img src="${sanitize(p.images?.[0]||fallbackImage)}">
+<div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>${isTrash ? 'In Trash' : 'Expired/Archived'}</p></div>
+<div class="admin-item-actions">
+<button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
+${!isTrash ? `<button class="btn-danger btn-action" onclick="deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
+</div>`;
+frag.appendChild(div);
+});
+c.appendChild(frag);
+}
+
+window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
+window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
+window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
+
+window.exportDatabaseJSON = async () => {
+try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); }
+};
+window.importDatabaseJSON = () => {
+const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error");
+confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => {
+const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file);
+});
+};
+
+window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
+window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
+function renderAdminCategories() {
+const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList"); if(!sel || !list) return;
+sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
+Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
+}
+
+window.addBannerField = (id='', img='', link='', exp=null) => {
+const d = document.createElement('div'); d.className = 'admin-list-item'; d.style.flexDirection = 'column'; d.style.alignItems='stretch';
+d.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;"><input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;"><div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
+setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
+};
+window.saveBanners = async () => {
+try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {}
+};
+window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
+function renderAdminBanners() {
+const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML='';
+Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; });
+}
+
+window.sendManualNotification = async () => {
+const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
+if(!title || !msg) return showToast("Title and message required", "error");
+try {
+const res = await fetch("https://onesignal.com/api/v1/notifications", {
+method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
+body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url || undefined })
+});
+if(!res.ok) throw new Error("Failed to send");
+showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
+} catch(e) { showToast(e.message, "error"); }
+};
+
+if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
+
+window.triggerAutoNotification = async (product, customMsg) => {
+if(!product || !product.title) return;
+const title = "New Update: " + product.title;
+const msg = customMsg || "Check out our latest product deal now!";
+const url = product.affiliateLink || window.location.origin;
+try {
+const res = await fetch("https://onesignal.com/api/v1/notifications", {
+method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
+body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url })
+});
+if(res.ok) console.log("Auto notification sent for", product.title);
+} catch(e) { console.warn("Auto notification failed", e); }
+};
+
+setInterval(() => {
+try {
+const now = Date.now();
+const updates = {};
+let changed = false;
+
+Object.entries(state.products || {}).forEach(([id, p]) => {
+if(!p || p.inTrash) return;
+
+if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') {
+const expiredP = { ...p, status: 'expired', inTrash: false };
+updates[`expiredProducts/${id}`] = expiredP;
+updates[`products/${id}`] = null;
+changed = true;
+}
+
+if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
+updates[`products/${id}/visibility`] = 'public';
+updates[`products/${id}/hidden`] = false;
+updates[`products/${id}/status`] = 'public';
+changed = true;
+if (p.autoNotify && typeof window.triggerAutoNotification === 'function') {
+window.triggerAutoNotification(p, "Scheduled product is now live!");
+}
+}
+});
+
+Object.entries(state.banners || {}).forEach(([id, b]) => {
+if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
+});
+
+if(changed && Object.keys(updates).length > 0) {
+update(ref(db), updates).catch(e => console.warn("Background Engine Update Error:", e));
+}
+} catch(e) { console.error("Background Engine Crash:", e); }
+}, 30000);
 </script>
+
 </body>
-  </html>
+</html>
