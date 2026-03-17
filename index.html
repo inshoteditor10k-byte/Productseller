@@ -191,7 +191,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 @media(min-width: 769px) { #adsterra-bottom-banner { display: none; } }
 
 /* ========================================================= */
-/* NEW NOTES SYSTEM STYLES */
+/* NEW NOTES MARKETPLACE STYLES */
 /* ========================================================= */
 .note-card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
 .note-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--secondary-glow); }
@@ -199,11 +199,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .note-badge { font-size: 10px; padding: 3px 8px; border-radius: 5px; background: var(--primary-glow); color: #000; font-weight: bold; width: fit-content; text-transform: uppercase; }
 .note-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
 .note-btn { background: linear-gradient(90deg, #00f5ff, #9b5cff); color: #fff; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; display: flex; gap: 5px; align-items: center; }
+.note-btn-buy { background: linear-gradient(90deg, #ff4757, #ff9800); }
 #uploadProgress { display: none; margin-top: 10px; width: 100%; height: 10px; background: var(--input-bg); border-radius: 5px; overflow: hidden; }
 #uploadProgressBar { height: 100%; width: 0%; background: var(--primary-glow); transition: width 0.3s; }
 .notes-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 .notes-controls input, .notes-controls select { padding: 12px 15px; border-radius: 30px; border: none; background: var(--input-bg); color: var(--text-color); outline: none; flex: 1; min-width: 150px; }
 .btn-upload-note { padding: 12px 25px; border-radius: 30px; border: none; background: linear-gradient(90deg, #ff4757, #ff9800); color: #fff; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); }
+
+.help-badge { font-size: 11px; padding: 5px 10px; border-radius: 15px; background: rgba(0, 245, 255, 0.2); color: var(--primary-glow); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; border: 1px solid var(--primary-glow); margin-top: 5px;}
+.help-badge:hover { background: var(--primary-glow); color: #000; }
+.price-breakdown { font-size: 12px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; color: var(--text-light); }
+.price-breakdown strong { color: var(--primary-glow); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -264,34 +270,36 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 </div>
 
 <!-- ============================================== -->
-<!-- NEW NOTES SYSTEM VIEW SECTION -->
+<!-- ADVANCED NOTES MARKETPLACE VIEW SECTION -->
 <!-- ============================================== -->
 <div id="notesViewWrapper" style="display:none; padding: 0 20px; margin-top: 15px;">
-    <button class="btn-upload-note" onclick="openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload Notes</button>
+    <button class="btn-upload-note" onclick="openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload & Sell Notes</button>
     <div class="notes-controls">
-        <input type="text" id="searchNotes" placeholder="Search by Title, Subject, Class..." oninput="renderNotesGrid()">
+        <input type="text" id="searchNotes" placeholder="Search by Title, Keywords, Subject, Class..." oninput="renderNotesGrid()">
         <select id="filterClassNote" onchange="renderNotesGrid()">
             <option value="">All Classes</option>
-            <option value="9">Class 9</option>
-            <option value="10">Class 10</option>
-            <option value="11">Class 11</option>
-            <option value="12">Class 12</option>
-            <option value="College">College</option>
-            <option value="Other">Other</option>
-        </select>
-        <select id="filterSubjectNote" onchange="renderNotesGrid()">
-            <option value="">All Subjects</option>
-            <option value="Maths">Maths</option>
-            <option value="Physics">Physics</option>
-            <option value="Chemistry">Chemistry</option>
-            <option value="Biology">Biology</option>
-            <option value="Computer Science">Computer Science</option>
-            <option value="English">English</option>
-            <option value="Other">Other</option>
+            <option value="Pre Nursery">Pre Nursery</option><option value="Nursery">Nursery</option>
+            <option value="LKG">LKG</option><option value="UKG">UKG</option>
+            <option value="Class 1">Class 1</option><option value="Class 2">Class 2</option>
+            <option value="Class 3">Class 3</option><option value="Class 4">Class 4</option>
+            <option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
+            <option value="Class 7">Class 7</option><option value="Class 8">Class 8</option>
+            <option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+            <option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
+            <option value="Diploma">Diploma</option><option value="ITI">ITI</option>
+            <option value="Polytechnic">Polytechnic</option><option value="B.Tech">B.Tech</option>
+            <option value="M.Tech">M.Tech</option><option value="BCA">BCA</option>
+            <option value="MCA">MCA</option><option value="BSc">BSc</option>
+            <option value="MSc">MSc</option><option value="BA">BA</option>
+            <option value="MA">MA</option><option value="PhD">PhD</option>
+            <option value="Computer courses">Computer courses</option>
+            <option value="All competitive exams">All competitive exams</option>
         </select>
         <select id="sortNotes" onchange="renderNotesGrid()">
             <option value="newest">Sort: Newest First</option>
             <option value="downloads">Sort: Most Downloaded</option>
+            <option value="price-low">Sort: Lowest Price</option>
+            <option value="price-high">Sort: Highest Price</option>
         </select>
     </div>
     <div class="products" id="notesGrid" style="padding: 0; gap: 15px;"></div>
@@ -315,45 +323,119 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <!-- Upload Note Modal -->
 <div class="modal" id="uploadNoteModal">
-    <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-content" style="max-width: 500px;">
         <button class="close-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')">×</button>
         <h3 style="margin-bottom:15px; text-align:center;"><i class="fas fa-upload" style="color: var(--primary-glow);"></i> Upload Study Notes</h3>
         
         <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <textarea id="noteDesc" placeholder="Description / Details" rows="2" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
         <input type="text" id="noteUploader" placeholder="Your Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        
-        <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <select id="noteClass" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="noteKeywords" placeholder="Keywords (Comma separated)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+
+        <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+            <select id="noteClass" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteClass', 'customNoteClass')">
                 <option value="">Select Class</option>
-                <option value="9">Class 9</option>
-                <option value="10">Class 10</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-                <option value="College">College</option>
-                <option value="Other">Other</option>
+                <option value="Pre Nursery">Pre Nursery</option><option value="Nursery">Nursery</option>
+                <option value="LKG">LKG</option><option value="UKG">UKG</option>
+                <option value="Class 1">Class 1</option><option value="Class 2">Class 2</option>
+                <option value="Class 3">Class 3</option><option value="Class 4">Class 4</option>
+                <option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
+                <option value="Class 7">Class 7</option><option value="Class 8">Class 8</option>
+                <option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+                <option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
+                <option value="Diploma">Diploma</option><option value="ITI">ITI</option>
+                <option value="Polytechnic">Polytechnic</option><option value="B.Tech">B.Tech</option>
+                <option value="M.Tech">M.Tech</option><option value="BCA">BCA</option>
+                <option value="MCA">MCA</option><option value="BSc">BSc</option>
+                <option value="MSc">MSc</option><option value="BA">BA</option>
+                <option value="MA">MA</option><option value="PhD">PhD</option>
+                <option value="Computer courses">Computer courses</option>
+                <option value="All competitive exams">All competitive exams</option>
+                <option value="custom">-- Custom Input --</option>
             </select>
-            <select id="noteSubject" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="customNoteClass" placeholder="Enter Custom Class" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            
+            <select id="noteSubject" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteSubject', 'customNoteSubject')">
                 <option value="">Select Subject</option>
-                <option value="Maths">Maths</option>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Biology">Biology</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="English">English</option>
-                <option value="Other">Other</option>
+                <option value="Math">Math</option><option value="Science">Science</option>
+                <option value="Physics">Physics</option><option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option><option value="English">English</option>
+                <option value="Hindi">Hindi</option><option value="Computer">Computer</option>
+                <option value="Programming">Programming</option><option value="History">History</option>
+                <option value="Geography">Geography</option><option value="Economics">Economics</option>
+                <option value="GK">GK</option><option value="Reasoning">Reasoning</option>
+                <option value="Coding">Coding</option><option value="AI">AI</option>
+                <option value="Web Development">Web Development</option>
+                <option value="custom">-- Custom Input --</option>
             </select>
+            <input type="text" id="customNoteSubject" placeholder="Enter Custom Subject" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         </div>
 
-        <input type="url" id="noteThumb" placeholder="Thumbnail Image URL (Optional)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <input type="number" id="notePages" placeholder="Total Pages (Calculates Price)" oninput="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <select id="noteDuration" onchange="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+                <option value="lifetime">Lifetime Availability</option>
+                <option value="1month">1 Month (+ ₹20)</option>
+            </select>
+        </div>
+        
+        <div class="price-breakdown" id="notePriceBreakdown">Pages: ₹0 | Duration: ₹0 <br><strong>Total Price: ₹0</strong></div>
+
+        <div style="margin-bottom:10px;">
+            <input type="url" id="noteThumb" placeholder="Thumbnail Image URL" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <div id="helpLinksThumbContainer"></div>
+        </div>
         
         <div style="background:var(--input-bg); padding:15px; border-radius:8px; margin-bottom:15px;">
-            <label style="font-size:12px; color:var(--text-light); display:block; margin-bottom:5px;">Select PDF or ZIP File (Max 20MB)</label>
+            <label style="font-size:12px; color:var(--text-light); display:block; margin-bottom:5px;">Select PDF/ZIP File OR Paste PDF URL</label>
+            <input type="url" id="notePdfUrl" placeholder="Direct PDF URL (Optional if file uploaded)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;">
+            <div id="helpLinksPdfContainer" style="margin-bottom:10px;"></div>
             <input type="file" id="noteFile" accept=".pdf,.zip,application/pdf,application/zip" style="color:var(--text-color); width:100%;">
             <div id="uploadProgress"><div id="uploadProgressBar"></div></div>
         </div>
 
         <button onclick="submitNoteUpload()" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
+    </div>
+</div>
+
+<!-- Admin Edit Note Modal -->
+<div class="modal" id="editNoteModal">
+    <div class="modal-content" style="max-width: 400px;">
+        <button class="close-btn" onclick="document.getElementById('editNoteModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note</h3>
+        <input type="hidden" id="editNoteId">
+        <input type="hidden" id="editNotePath">
+        <input type="text" id="editNoteKeywords" placeholder="Keywords" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="number" id="editNotePages" placeholder="Pages Count" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <select id="editNoteDuration" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <option value="lifetime">Lifetime</option>
+            <option value="1month">1 Month</option>
+        </select>
+        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save Changes</button>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal" id="paymentModal">
+    <div class="modal-content" style="max-width: 400px; text-align:center;">
+        <button class="close-btn" onclick="document.getElementById('paymentModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:10px; color:var(--primary-glow);">Complete Payment</h3>
+        <p style="font-size:13px; color:var(--text-light); margin-bottom:15px;">Send <strong style="color:#fff;" id="payAmountDisplay">₹0</strong> to the UPI ID below to unlock your notes.</p>
+        
+        <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
+            <p style="font-size:12px; opacity:0.8; margin-bottom:5px;">Official UPI ID</p>
+            <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
+            <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
+        </div>
+
+        <input type="hidden" id="payNoteId">
+        <input type="hidden" id="payPrice">
+        <input type="text" id="payUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="payUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="payTxnId" placeholder="Transaction ID (Optional)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="url" id="payScreenshot" placeholder="Screenshot URL (Optional)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        
+        <button onclick="submitPaymentForm()" style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(46, 213, 115, 0.4);">Submit Verification</button>
     </div>
 </div>
 
@@ -391,9 +473,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     <div class="admin-tabs">
         <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-notes')">Notes Mgmt</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-notes')">Notes</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-payments')">Payments</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-help')">Help Links</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired Data</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
     </div>
 
@@ -506,6 +590,29 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div id="adminRejectedNotes"></div>
     </div>
 
+    <!-- NEW TAB: Payments Panel -->
+    <div id="tab-payments" class="admin-tab-content">
+        <h3>Pending Verifications</h3>
+        <div id="adminPendingPayments" style="margin-bottom: 20px;"></div>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Approved Payments</h3>
+        <div id="adminApprovedPayments"></div>
+    </div>
+
+    <!-- NEW TAB: Help Links -->
+    <div id="tab-help" class="admin-tab-content">
+        <h3>Add Help Video Link</h3>
+        <input type="text" id="helpTitle" placeholder="Video Title (e.g. How to get PDF URL)">
+        <input type="url" id="helpUrl" placeholder="YouTube or Video URL">
+        <textarea id="helpDesc" placeholder="Short description" rows="2"></textarea>
+        <button onclick="addHelpLink()">Add Link</button>
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Current Help Links</h3>
+        <div id="adminHelpLinks"></div>
+    </div>
+
     <!-- TAB: Analytics -->
     <div id="tab-analytics" class="admin-tab-content">
         <div class="analytics-grid">
@@ -567,7 +674,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    // ADDED STORAGE IMPORT FOR NOTES FILE UPLOAD
     import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -585,7 +691,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         app = initializeApp(firebaseConfig);
         db = getDatabase(app);
         auth = getAuth(app);
-        storage = getStorage(app); // Initialize Storage
+        storage = getStorage(app); 
         setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
     } catch (e) { console.error("Firebase Error:", e); }
 
@@ -596,15 +702,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         categories: ref(db, 'categories/'),
         analytics: ref(db, 'analytics/totals'),
         connected: ref(db, '.info/connected'),
-        // NEW REFS FOR NOTES
+        // NEW REFS FOR NOTES MARKETPLACE
         notes: ref(db, 'notes/'),
         pendingNotes: ref(db, 'pendingNotes/'),
-        rejectedNotes: ref(db, 'rejectedNotes/')
+        rejectedNotes: ref(db, 'rejectedNotes/'),
+        pendingPayments: ref(db, 'pendingPayments/'),
+        helpLinks: ref(db, 'helpLinks/')
     };
 
     let state = {
         products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
-        notes: {}, pendingNotes: {}, rejectedNotes: {}, // NEW STATE
+        notes: {}, pendingNotes: {}, rejectedNotes: {}, pendingPayments: {}, helpLinks: {},
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
@@ -613,6 +721,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
     if (state.theme === 'light') document.body.classList.add('light-mode');
+
+    // Create unique device ID for tracking purchases
+    let deviceId = localStorage.getItem('deviceId');
+    if(!deviceId) { deviceId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', deviceId); }
 
     // UTILITIES
     window.showToast = (msg, type = 'success') => {
@@ -692,17 +804,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
     onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
     
-    // NEW NOTES FIREBASE LISTENERS
+    // NEW FIREBASE LISTENERS
     onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); });
     onValue(refs.pendingNotes, s => { state.pendingNotes = s.val() || {}; renderAdminNotes(); });
     onValue(refs.rejectedNotes, s => { state.rejectedNotes = s.val() || {}; renderAdminNotes(); });
+    onValue(refs.pendingPayments, s => { state.pendingPayments = s.val() || {}; renderAdminPayments(); if(state.currentView === 'notes') renderNotesGrid(); });
+    onValue(refs.helpLinks, s => { state.helpLinks = s.val() || {}; renderAdminHelpLinks(); renderUserHelpLinks(); });
 
     let initialPidChecked = false;
     onValue(refs.products, (snapshot) => {
         try {
             state.products = snapshot.val() || {};
-            
-            // Feature 1: Native Share Check PID
             if (!initialPidChecked) {
                 initialPidChecked = true;
                 const params = new URLSearchParams(window.location.search);
@@ -711,30 +823,25 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                     setTimeout(() => openProduct(pid), 500);
                 }
             }
-
             renderAllViews(); 
             renderAdminProducts(); 
             updateAdminAnalytics();
-            renderBanners(); // Ensure auto-banners map latest product data
+            renderBanners(); 
         } catch(e) { console.error("Render Data Error:", e); }
     });
 
-    // TRIPLE VISIBILITY LOGIC (Public/Private/Scheduled)
     function getActiveProducts() {
         const now = Date.now();
         return Object.entries(state.products || {})
             .filter(([id, p]) => {
                 if(!p || p.inTrash) return false;
                 if(p.expiryDateTime && p.expiryDateTime < now) return false;
-                
                 let isVisible = true;
                 if(p.visibility === 'private' || p.status === 'private') isVisible = false;
                 if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
-                if(!p.visibility && p.hidden) isVisible = false; // Fallback to old schema logic
-                
-                return isVisible || state.isAdmin; // Admin sees all
-            })
-            .map(([id, p]) => ({ id, ...p }));
+                if(!p.visibility && p.hidden) isVisible = false;
+                return isVisible || state.isAdmin;
+            }).map(([id, p]) => ({ id, ...p }));
     }
 
     function trackEvent(type, productId) {
@@ -749,13 +856,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
             }
             updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-            update(ref(db), updates).catch(e => console.warn("Analytics safely skipped", e));
-        } catch(e) { console.error(e); }
+            update(ref(db), updates).catch(e => console.warn(e));
+        } catch(e) {}
     }
 
-    // --- MAIN UI RENDERERS ---
     function renderAllViews() {
-        if(state.currentView === 'notes') return; // Prevent overwriting notes view
+        if(state.currentView === 'notes') return; 
         try {
             const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
             const activeList = getActiveProducts();
@@ -781,13 +887,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             }
 
             renderMainGrid(activeList, query);
-        } catch(e) { console.error("Render View Error:", e); }
+        } catch(e) {}
     }
 
     function renderMainGrid(list, query) {
         const container = document.getElementById("products"); if(!container) return;
         container.innerHTML = "";
-
         if (query) list = list.filter(p => (p.title||'').toLowerCase().includes(query) || (p.tags||'').toLowerCase().includes(query));
         else if (state.currentView === 'wishlist') list = list.filter(p => state.wishlist.includes(p.id));
         else if (state.currentCategory !== "ALL") list = list.filter(p => p.category === state.currentCategory);
@@ -820,13 +925,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         container.appendChild(frag);
     }
 
-    // Feature 2: Scrolling Horizontal Full Image Products
     function renderScrollingProducts(activeList) {
         const wrapper = document.getElementById("scrollingWrapper"), container = document.getElementById("scrollingCarousel");
         if (!wrapper || !container) return;
         const list = [...activeList].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 8);
         if (list.length === 0) { wrapper.style.display = "none"; return; }
-        
         wrapper.style.display = "block"; container.innerHTML = "";
         const frag = document.createDocumentFragment();
         list.forEach(p => {
@@ -848,15 +951,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         container.appendChild(frag);
     }
 
-    // Feature 4: Category-Wise Layouts
     function renderCategorySections(activeList) {
         const container = document.getElementById("categoryWiseSections"); if (!container) return;
         container.innerHTML = "";
-        
         const catMap = {};
         activeList.forEach(p => { if(!p) return; const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
         const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
-
         const frag = document.createDocumentFragment();
         sortedCats.forEach(cat => {
             const prods = catMap[cat]; if (prods.length === 0) return;
@@ -877,12 +977,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         });
     }
 
-    // Feature 5: Smart Recommendation Randomizer
     function renderRecommendations(activeList) {
         const wrapper = document.getElementById("recommendationWrapper"), container = document.getElementById("recommendationGrid");
         if (!wrapper || !container) return;
         if (activeList.length < 2) { wrapper.style.display = "none"; return; }
-        
         const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
         wrapper.style.display = "block"; container.innerHTML = "";
         const frag = document.createDocumentFragment();
@@ -904,7 +1002,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             for(let i=0; i<Math.floor(r); i++) stars[i] = '<i class="fas fa-star"></i>';
             if(r % 1 !== 0) stars[Math.floor(r)] = '<i class="fas fa-star-half-alt"></i>';
         }
-
         const isWished = state.wishlist.includes(p.id);
 
         card.innerHTML = `
@@ -932,14 +1029,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         return card;
     }
 
-    // UX ACTIONS & MODIFIED TAB SWITCHER
     window.switchTab = (tab) => {
         state.currentView = tab; state.currentCategory = 'ALL'; 
         const searchInp = document.getElementById("search");
         if(searchInp) searchInp.value = '';
         document.getElementById('categoriesPanel').style.display = 'none';
 
-        // Integrate Notes view toggling securely
         const mainControls = document.getElementById('mainControls');
         if(tab === 'notes') {
             if(mainControls) mainControls.style.display = 'none';
@@ -956,7 +1051,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             renderAllViews(); 
             renderCategories(); 
         }
-
         updateNavHighlight(tab); window.scrollTo(0,0);
     };
     function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
@@ -977,7 +1071,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
         });
     }
-    
     window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
     window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
 
@@ -999,15 +1092,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
     if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
 
-    // Native Sharing System (Feature 1) integrated
     window.nativeShare = (id, title) => {
         const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
         if (navigator.share) {
             navigator.share({ title: title, text: 'Check out this awesome product!', url: prodUrl })
             .then(() => trackEvent('shares', id)).catch(e => console.warn('Share rejected', e));
-        } else {
-            copyShare(id, prodUrl);
-        }
+        } else { copyShare(id, prodUrl); }
     };
 
     window.openProduct = (id) => {
@@ -1058,17 +1148,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
     window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
     window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
+    window.copyUPI = (txt) => { navigator.clipboard.writeText(txt); showToast("UPI ID Copied!"); };
     window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
 
-    // BANNERS (With Auto-Sync System)
     let bannerInterval;
     function renderBanners() {
         const b = document.getElementById("banner"); if(!b) return;
         b.innerHTML = ""; clearInterval(bannerInterval);
-        
         let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
-        
-        // Dynamic Inject Auto-Banners and Show-in-Banner
         const now = Date.now();
         Object.entries(state.products || {}).forEach(([id, p]) => {
             if(!p || p.inTrash) return;
@@ -1079,9 +1166,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
             }
         });
-
         if(!list.length) return;
-        
         list.forEach((item, i) => {
             const img = document.createElement("img");
             img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
@@ -1096,7 +1181,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         }
     }
 
-    // AUTH ENGINE
     onAuthStateChanged(auth, user => {
         if (user) {
             state.isAdmin = true;
@@ -1136,22 +1220,18 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         }
     }
 
-    // --- ADMIN PRODUCT MANAGEMENT ---
     if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice; 
     if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
-    
     function calcPrice() {
         const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
         document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
     }
-
     window.addImageField = (url='') => {
         const c = document.getElementById("imageFields");
         const div = document.createElement('div'); div.style = "display:flex; gap:5px; margin-bottom:5px;";
         div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${sanitize(url)}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
         c.appendChild(div);
     };
-
     window.toggleSchedule = () => {
         const val = document.querySelector('input[name="pVisibility"]:checked')?.value || 'public';
         document.getElementById("pScheduleTime").style.display = val === 'scheduled' ? 'block' : 'none';
@@ -1165,10 +1245,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             const cat = document.getElementById("pCategory").value;
             const affLink = document.getElementById("pAffiliateLink").value.trim();
 
-            if(!title || !price || !cat || !affLink) {
-                return showToast("Title, Price, Category, and Affiliate Link are required!", "error");
-            }
-
+            if(!title || !price || !cat || !affLink) return showToast("Title, Price, Category, and Affiliate Link required!", "error");
             const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
             let scheduleTime = null;
             if (visRadio === 'scheduled') {
@@ -1176,30 +1253,18 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 if (st) scheduleTime = new Date(st).getTime();
             }
 
-            const showInBanner = document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false;
-            const isTrending = document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false;
-            const autoNotify = document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false;
-
             const data = {
                 title, description: document.getElementById("pDesc").value.trim(),
                 price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
                 finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
                 category: cat, tags: document.getElementById("pTags").value.trim(),
-                affiliateLink: affLink,
-                coupon: document.getElementById("pCoupon").value.trim(),
-                featured: document.getElementById("pFeatured").checked,
-                visibility: visRadio,
-                scheduleTime: scheduleTime,
-                hidden: (visRadio === 'private' || visRadio === 'scheduled'),
-                autoBanner: document.getElementById("pAutoBanner").checked,
-                
-                showInBanner: showInBanner,
-                isTrending: isTrending,
-                autoNotify: autoNotify,
-                status: visRadio,
-                isDraft: false,
-                inTrash: false,
-
+                affiliateLink: affLink, coupon: document.getElementById("pCoupon").value.trim(),
+                featured: document.getElementById("pFeatured").checked, visibility: visRadio, scheduleTime: scheduleTime,
+                hidden: (visRadio === 'private' || visRadio === 'scheduled'), autoBanner: document.getElementById("pAutoBanner").checked,
+                showInBanner: document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false,
+                isTrending: document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false,
+                autoNotify: document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false,
+                status: visRadio, isDraft: false, inTrash: false,
                 images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
                 expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
                 stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
@@ -1208,24 +1273,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             };
 
             const isNewProduct = !id;
-            if(isNewProduct) { 
-                data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; 
-            }
-            
-            const req = id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data);
-            await req; 
+            if(isNewProduct) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; }
+            await (id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data));
             showToast("Product Saved!"); 
-
-            if (autoNotify && typeof window.triggerAutoNotification === 'function') {
-                if (isNewProduct && visRadio === 'public') {
-                    window.triggerAutoNotification(data, "New product added! Check it out now.");
-                } else if (data.featured && visRadio === 'public') {
-                    window.triggerAutoNotification(data, "Featured Deal! Don't miss this.");
-                }
-            }
-
             clearProductForm(); 
-        } catch (e) { console.error(e); showToast("Save failed", "error"); }
+        } catch (e) { showToast("Save failed", "error"); }
     };
 
     window.clearProductForm = () => {
@@ -1238,59 +1290,38 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.quickEdit = (id) => {
         const p = state.products[id]; if(!p) return;
-        document.getElementById("pId").value = id;
-        document.getElementById("pTitle").value = p.title||'';
-        document.getElementById("pDesc").value = p.description||'';
-        document.getElementById("pOriginalPrice").value = p.price||'';
-        document.getElementById("pDiscount").value = p.discount||'';
-        document.getElementById("pStock").value = p.stock!=null?p.stock:'';
-        document.getElementById("pRating").value = p.rating ? p.rating.toFixed(1) : '';
-        document.getElementById("pCategory").value = p.category||'';
-        document.getElementById("pTags").value = p.tags||'';
-        document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
-        document.getElementById("pCoupon").value = p.coupon||'';
-        document.getElementById("pFeatured").checked = p.featured||false;
+        document.getElementById("pId").value = id; document.getElementById("pTitle").value = p.title||'';
+        document.getElementById("pDesc").value = p.description||''; document.getElementById("pOriginalPrice").value = p.price||'';
+        document.getElementById("pDiscount").value = p.discount||''; document.getElementById("pStock").value = p.stock!=null?p.stock:'';
+        document.getElementById("pRating").value = p.rating ? p.rating.toFixed(1) : ''; document.getElementById("pCategory").value = p.category||'';
+        document.getElementById("pTags").value = p.tags||''; document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
+        document.getElementById("pCoupon").value = p.coupon||''; document.getElementById("pFeatured").checked = p.featured||false;
         document.getElementById("pAutoBanner").checked = p.autoBanner||false;
-        
         if(document.getElementById("pShowInBanner")) document.getElementById("pShowInBanner").checked = p.showInBanner||false;
         if(document.getElementById("pIsTrending")) document.getElementById("pIsTrending").checked = p.isTrending||false;
         if(document.getElementById("pAutoNotify")) document.getElementById("pAutoNotify").checked = p.autoNotify||false;
-
         setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
-        
         const vis = p.visibility || (p.hidden ? 'private' : 'public');
         const rdo = document.querySelector(`input[name="pVisibility"][value="${vis}"]`); if(rdo) rdo.checked = true;
         if (p.scheduleTime) document.getElementById("pScheduleTime").value = new Date(p.scheduleTime).toISOString().slice(0,16);
         else document.getElementById("pScheduleTime").value = '';
         toggleSchedule();
-
         document.getElementById("imageFields").innerHTML='';
         if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
         calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
     };
 
-    window.duplicateProduct = (id) => {
-        confirmAction("Duplicate this product?", async () => {
-            try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {}
-        });
-    };
-
-    window.archiveProduct = (id) => {
-        confirmAction("Archive product? (Moves to expired panel)", async () => {
-            try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {}
-        });
-    };
+    window.duplicateProduct = (id) => { confirmAction("Duplicate this product?", async () => { try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {} }); };
+    window.archiveProduct = (id) => { confirmAction("Archive product? (Moves to expired panel)", async () => { try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {} }); };
 
     function renderAdminProducts() {
         const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
         const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
-        
         const frag = document.createDocumentFragment();
         list.slice(0, 100).forEach(([id, p]) => { 
             let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
             if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
             const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
-
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
@@ -1306,7 +1337,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         c.appendChild(frag);
     }
 
-    // --- EXPIRED & TRASH PANEL ENGINE ---
     function renderAdminExpired() {
         const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
         const list = Object.entries(state.expired || {}).filter(x=>x[1]);
@@ -1315,8 +1345,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         list.forEach(([id, p]) => {
             if(!p) return;
             const isTrash = p.inTrash;
-            const div = document.createElement('div');
-            div.className = "admin-list-item";
+            const div = document.createElement('div'); div.className = "admin-list-item";
             div.style.borderLeft = isTrash ? "3px solid #777" : "3px solid #ff4757";
             div.innerHTML = `
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
@@ -1334,18 +1363,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
     window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
 
-    // --- BACKUP & RESTORE SYSTEM ---
-    window.exportDatabaseJSON = async () => {
-        try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); }
-    };
-    window.importDatabaseJSON = () => {
-        const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error");
-        confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => {
-            const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file);
-        });
-    };
+    window.exportDatabaseJSON = async () => { try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); } };
+    window.importDatabaseJSON = () => { const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error"); confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => { const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file); }); };
 
-    // --- OTHER ADMIN MGMT ---
     window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
     window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
     function renderAdminCategories() {
@@ -1359,14 +1379,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         d.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;"><input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;"><div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
         setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
     };
-    window.saveBanners = async () => {
-        try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {}
-    };
+    window.saveBanners = async () => { try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {} };
     window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
-    function renderAdminBanners() {
-        const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML='';
-        Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; });
-    }
+    function renderAdminBanners() { const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML=''; Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; }); }
 
     window.sendManualNotification = async () => {
         const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
@@ -1380,113 +1395,132 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
         } catch(e) { showToast(e.message, "error"); }
     };
-
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 
-
     // ==========================================
-    // NEW NOTES SYSTEM IMPLEMENTATION ENGINE
+    // ADVANCED NOTES MARKETPLACE ENGINES
     // ==========================================
-
+    
     window.openNoteUploadModal = () => document.getElementById('uploadNoteModal').classList.add('show');
+    window.toggleCustomInput = (selectId, customId) => {
+        const s = document.getElementById(selectId);
+        document.getElementById(customId).style.display = s.value === 'custom' ? 'block' : 'none';
+    };
+
+    window.calcNotePrice = () => {
+        let pages = parseInt(document.getElementById('notePages').value) || 0;
+        let duration = document.getElementById('noteDuration').value;
+        let durationPrice = duration === '1month' ? 20 : 0;
+        let total = (pages * 5) + durationPrice;
+        document.getElementById('notePriceBreakdown').innerHTML = `Pages: ₹${pages*5} | Duration: ₹${durationPrice} <br><strong style="font-size:16px;">Total Price: ₹${total}</strong>`;
+        return total;
+    };
 
     window.submitNoteUpload = async () => {
         const title = document.getElementById('noteTitle').value.trim();
         const desc = document.getElementById('noteDesc').value.trim();
         const uploader = document.getElementById('noteUploader').value.trim();
-        const cls = document.getElementById('noteClass').value;
-        const subj = document.getElementById('noteSubject').value;
+        const keywords = document.getElementById('noteKeywords').value.trim();
+        
+        let cls = document.getElementById('noteClass').value;
+        if(cls === 'custom') cls = document.getElementById('customNoteClass').value.trim();
+        let subj = document.getElementById('noteSubject').value;
+        if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
+
+        const pages = parseInt(document.getElementById('notePages').value) || 0;
+        const duration = document.getElementById('noteDuration').value;
+        const price = calcNotePrice();
+        
+        const thumb = document.getElementById('noteThumb').value.trim();
+        const pdfUrl = document.getElementById('notePdfUrl').value.trim();
         const fileInput = document.getElementById('noteFile');
         const file = fileInput.files[0];
-        const thumb = document.getElementById('noteThumb').value.trim();
 
-        if(!title || !uploader || !file) return showToast("Title, Name, and File are required!", "error");
+        if(!title || !uploader || (!file && !pdfUrl)) return showToast("Title, Name, and File (or PDF URL) required!", "error");
 
-        const ext = file.name.split('.').pop().toLowerCase();
-        if(!['pdf', 'zip'].includes(ext)) return showToast("Only PDF or ZIP allowed", "error");
-        if(file.size > 20 * 1024 * 1024) return showToast("File size must be less than 20MB", "error");
+        const processUpload = async (finalUrl) => {
+            try {
+                const noteData = {
+                    title, description: desc, uploader, keywords, class: cls, subject: subj,
+                    pages, duration, price,
+                    fileURL: finalUrl, thumbnail: thumb || fallbackImage,
+                    views: 0, downloads: 0, createdAt: Date.now(), status: 'pending'
+                };
+                await set(push(refs.pendingNotes), noteData);
+                showToast("Note submitted successfully for admin approval!");
+                document.getElementById('uploadNoteModal').classList.remove('show');
+                ['noteTitle','noteDesc','noteUploader','noteKeywords','customNoteClass','customNoteSubject','notePages','noteThumb','notePdfUrl'].forEach(i=>document.getElementById(i).value='');
+                fileInput.value=''; document.getElementById('uploadProgress').style.display='none';
+            } catch(e) { showToast("Error submitting note", "error"); }
+        };
 
-        document.getElementById('uploadProgress').style.display = 'block';
-        const pBar = document.getElementById('uploadProgressBar');
-
-        try {
+        if(file) {
+            if(file.size > 20 * 1024 * 1024) return showToast("File size must be < 20MB", "error");
+            document.getElementById('uploadProgress').style.display = 'block';
+            const pBar = document.getElementById('uploadProgressBar');
             const fileRef = sRef(storage, `notes_uploads/${Date.now()}_${file.name}`);
             const uploadTask = uploadBytesResumable(fileRef, file);
-
             uploadTask.on('state_changed',
-                (snap) => {
-                    const prog = (snap.bytesTransferred / snap.totalBytes) * 100;
-                    pBar.style.width = prog + '%';
-                },
-                (err) => { 
-                    showToast("Upload failed: " + err.message, "error"); 
-                    document.getElementById('uploadProgress').style.display = 'none'; 
-                },
-                async () => {
-                    const url = await getDownloadURL(uploadTask.snapshot.ref);
-                    const noteData = {
-                        title, description: desc, uploader, class: cls, subject: subj,
-                        fileURL: url, thumbnail: thumb || fallbackImage,
-                        views: 0, downloads: 0, createdAt: Date.now(), status: 'pending'
-                    };
-                    await set(push(refs.pendingNotes), noteData);
-                    showToast("Note submitted successfully for admin approval!");
-                    
-                    document.getElementById('uploadNoteModal').classList.remove('show');
-                    document.getElementById('uploadProgress').style.display = 'none';
-                    pBar.style.width = '0%';
-                    // Clear inputs
-                    document.getElementById('noteTitle').value=''; document.getElementById('noteDesc').value='';
-                    document.getElementById('noteUploader').value=''; document.getElementById('noteThumb').value='';
-                    fileInput.value='';
-                }
+                (snap) => { pBar.style.width = ((snap.bytesTransferred/snap.totalBytes)*100) + '%'; },
+                (err) => { showToast("Upload failed", "error"); document.getElementById('uploadProgress').style.display = 'none'; },
+                async () => { const url = await getDownloadURL(uploadTask.snapshot.ref); processUpload(url); }
             );
-        } catch(e) { showToast("Upload error: " + e.message, "error"); }
+        } else {
+            processUpload(pdfUrl);
+        }
     };
 
     window.renderNotesGrid = () => {
         const container = document.getElementById("notesGrid"); if(!container) return;
         const searchQ = document.getElementById("searchNotes").value.toLowerCase();
         const fClass = document.getElementById("filterClassNote").value;
-        const fSubj = document.getElementById("filterSubjectNote").value;
         const sortQ = document.getElementById("sortNotes").value;
 
-        let list = Object.entries(state.notes || {}).map(([id, n]) => ({id, ...n}));
+        // Check purchased notes logic
+        const myPayments = Object.values(state.pendingPayments || {}).filter(p => p.deviceId === deviceId && p.status === 'approved');
+        const purchasedIds = myPayments.map(p => p.noteId);
+
+        let list = Object.entries(state.notes || {}).filter(([id, n]) => n && n.status === 'approved').map(([id, n]) => ({id, ...n}));
 
         list = list.filter(n => {
-            if(searchQ && !(n.title||'').toLowerCase().includes(searchQ) && !(n.subject||'').toLowerCase().includes(searchQ) && !(n.class||'').toLowerCase().includes(searchQ)) return false;
+            const t = (n.title||'').toLowerCase(), k = (n.keywords||'').toLowerCase(), s = (n.subject||'').toLowerCase(), c = (n.class||'').toLowerCase();
+            if(searchQ && !t.includes(searchQ) && !k.includes(searchQ) && !s.includes(searchQ) && !c.includes(searchQ)) return false;
             if(fClass && n.class !== fClass) return false;
-            if(fSubj && n.subject !== fSubj) return false;
             return true;
         });
 
         list.sort((a,b) => {
             if(sortQ === 'downloads') return (b.downloads||0) - (a.downloads||0);
+            if(sortQ === 'price-low') return (a.price||0) - (b.price||0);
+            if(sortQ === 'price-high') return (b.price||0) - (a.price||0);
             return (b.createdAt||0) - (a.createdAt||0);
         });
 
         container.innerHTML = "";
-        if(list.length === 0) { 
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>No study notes found here.</p></div>`; 
-            return; 
-        }
+        if(list.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><p>No study notes found here.</p></div>`; return; }
 
         const frag = document.createDocumentFragment();
         list.forEach(n => {
             const d = new Date(n.createdAt).toLocaleDateString();
             const div = document.createElement("div"); div.className = "note-card";
+            const isFree = (n.price || 0) <= 0;
+            const isPurchased = isFree || state.isAdmin || purchasedIds.includes(n.id);
+            
             div.innerHTML = `
                 <div style="position:relative;">
                     <img src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'">
-                    ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">Class ${sanitize(n.class)}</div>` : ''}
+                    ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">${sanitize(n.class)}</div>` : ''}
                     ${n.subject ? `<div class="note-badge" style="position:absolute; top:10px; right:10px; background:#e91e63; color:#fff;">${sanitize(n.subject)}</div>` : ''}
                 </div>
-                <h3 style="font-size:16px; margin-bottom:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sanitize(n.title)}</h3>
-                <p style="font-size:12px; color:var(--text-light); margin-bottom:5px;">By ${sanitize(n.uploader)} • ${d}</p>
-                <p style="font-size:13px; opacity:0.9; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
+                <h3 style="font-size:16px; margin-bottom:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${sanitize(n.title)}</h3>
+                <p style="font-size:11px; color:var(--text-light);">By ${sanitize(n.uploader)} • ${d} ${n.pages ? `• ${n.pages} Pages` : ''}</p>
+                <p style="font-size:12px; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
+                
                 <div class="note-actions">
-                    <div style="font-size:12px; opacity:0.8;"><i class="fas fa-eye"></i> ${n.views||0} &nbsp;&nbsp; <i class="fas fa-download"></i> ${n.downloads||0}</div>
-                    <button class="note-btn" onclick="downloadNote('${n.id}', '${sanitize(n.fileURL)}')"><i class="fas fa-download"></i> Download</button>
+                    <div style="font-size:12px; opacity:0.8;"><i class="fas fa-eye"></i> ${n.views||0} &nbsp; <i class="fas fa-download"></i> ${n.downloads||0}</div>
+                    ${isPurchased 
+                        ? `<button class="note-btn" onclick="downloadNote('${n.id}', '${sanitize(n.fileURL)}')"><i class="fas fa-download"></i> Download</button>` 
+                        : `<button class="note-btn note-btn-buy" onclick="openPaymentModal('${n.id}', ${n.price})"><i class="fas fa-lock"></i> Buy - ₹${n.price}</button>`}
                 </div>
             `;
             frag.appendChild(div);
@@ -1494,31 +1528,56 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         container.appendChild(frag);
     };
 
-    window.downloadNote = (id, url) => {
-        window.open(url, '_blank');
-        try {
-            const updates = {};
-            updates[`notes/${id}/downloads`] = increment(1);
-            updates[`notes/${id}/views`] = increment(1);
-            update(ref(db), updates).catch(e=>console.warn(e));
-        } catch(e){}
+    window.openPaymentModal = (id, price) => {
+        // Prevent duplicate if already pending
+        const existing = Object.values(state.pendingPayments || {}).find(p => p.deviceId === deviceId && p.noteId === id && p.status === 'pending');
+        if(existing) return showToast("Verification already pending for this note!", "error");
+        
+        document.getElementById('payNoteId').value = id;
+        document.getElementById('payPrice').value = price;
+        document.getElementById('payAmountDisplay').innerText = `₹${price}`;
+        document.getElementById('paymentModal').classList.add('show');
     };
 
+    window.submitPaymentForm = async () => {
+        const noteId = document.getElementById('payNoteId').value;
+        const price = document.getElementById('payPrice').value;
+        const upiName = document.getElementById('payUpiName').value.trim();
+        const upiId = document.getElementById('payUpiId').value.trim();
+        const txnId = document.getElementById('payTxnId').value.trim();
+        const screenshot = document.getElementById('payScreenshot').value.trim();
+
+        if(!upiName || !upiId) return showToast("UPI Name and ID are required!", "error");
+        
+        try {
+            const payData = { noteId, price, upiName, upiId, txnId, screenshot, deviceId, status: 'pending', timestamp: Date.now() };
+            await set(push(refs.pendingPayments), payData);
+            showToast("Payment submitted! Admin will verify shortly.");
+            document.getElementById('paymentModal').classList.remove('show');
+            ['payUpiName','payUpiId','payTxnId','payScreenshot'].forEach(i=>document.getElementById(i).value='');
+        } catch(e) { showToast("Submission failed", "error"); }
+    };
+
+    window.downloadNote = (id, url) => {
+        window.open(url, '_blank');
+        try { update(ref(db), { [`notes/${id}/downloads`]: increment(1), [`notes/${id}/views`]: increment(1) }).catch(e=>console.warn(e)); } catch(e){}
+    };
+
+    // --- ADMIN NOTES ENGINE ---
     function renderAdminNotes() {
         // Pending
         const pCont = document.getElementById("adminPendingNotes");
         if(pCont) {
-            pCont.innerHTML = "";
-            const pendList = Object.entries(state.pendingNotes || {});
+            pCont.innerHTML = ""; const pendList = Object.entries(state.pendingNotes || {});
             if(!pendList.length) pCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No pending notes.</p>";
             pendList.forEach(([id, n]) => {
                 pCont.innerHTML += `
                     <div class="admin-list-item">
                         <img src="${sanitize(n.thumbnail||fallbackImage)}">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>By: ${sanitize(n.uploader)} | Class: ${sanitize(n.class)}</p></div>
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>By: ${sanitize(n.uploader)} | Class: ${sanitize(n.class)} | ₹${n.price||0}</p></div>
                         <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="window.open('${sanitize(n.fileURL)}','_blank')"><i class="fas fa-eye"></i> View</button>
-                            <button class="btn-action" style="background:#2ed573; color:#000; border:none; padding:6px 10px; border-radius:5px;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-secondary btn-action" onclick="window.open('${sanitize(n.fileURL)}','_blank')">View</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
                             <button class="btn-danger btn-action" onclick="rejectNote('${id}')"><i class="fas fa-times"></i> Reject</button>
                         </div>
                     </div>`;
@@ -1528,14 +1587,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         // Approved
         const aCont = document.getElementById("adminApprovedNotes");
         if(aCont) {
-            aCont.innerHTML = "";
-            const appList = Object.entries(state.notes || {});
+            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved');
             if(!appList.length) aCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No active notes.</p>";
             appList.forEach(([id, n]) => {
                 aCont.innerHTML += `
                     <div class="admin-list-item">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Downloads: ${n.downloads||0}</p></div>
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Price: ₹${n.price||0} | Downloads: ${n.downloads||0}</p></div>
                         <div class="admin-item-actions">
+                            <button class="btn-secondary btn-action" onclick="openEditAdminNote('${id}', 'notes')"><i class="fas fa-pen"></i> Edit</button>
                             <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </div>`;
@@ -1545,16 +1604,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         // Rejected
         const rCont = document.getElementById("adminRejectedNotes");
         if(rCont) {
-            rCont.innerHTML = "";
-            const rejList = Object.entries(state.rejectedNotes || {});
+            rCont.innerHTML = ""; const rejList = Object.entries(state.rejectedNotes || {});
             if(!rejList.length) rCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No rejected notes.</p>";
             rejList.forEach(([id, n]) => {
                 rCont.innerHTML += `
                     <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
                         <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Rejected</p></div>
-                        <div class="admin-item-actions">
-                            <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
+                        <div class="admin-item-actions"><button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button></div>
                     </div>`;
             });
         }
@@ -1562,87 +1618,140 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.approveNote = async (id) => {
         const note = state.pendingNotes[id]; if(!note) return;
-        note.status = 'approved';
-        note.approvedAt = Date.now();
-        const updates = {};
-        updates[`notes/${id}`] = note;
-        updates[`pendingNotes/${id}`] = null;
-        try { await update(ref(db), updates); showToast("Note Approved Successfully!"); } catch(e){}
+        note.status = 'approved'; note.approvedAt = Date.now();
+        if(note.duration === '1month') note.expiryTime = Date.now() + 30*24*60*60*1000;
+        try { await update(ref(db), { [`notes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Approved Successfully!"); } catch(e){}
     };
-
     window.rejectNote = async (id) => {
         const note = state.pendingNotes[id]; if(!note) return;
         note.status = 'rejected';
-        const updates = {};
-        updates[`rejectedNotes/${id}`] = note;
-        updates[`pendingNotes/${id}`] = null;
-        try { await update(ref(db), updates); showToast("Note Rejected!", "error"); } catch(e){}
+        try { await update(ref(db), { [`rejectedNotes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
+    };
+    window.deleteNote = async (id, listPath) => { confirmAction("Delete Note permanently?", async () => { try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){} }); };
+
+    window.openEditAdminNote = (id, path) => {
+        const note = state[path][id]; if(!note) return;
+        document.getElementById('editNoteId').value = id;
+        document.getElementById('editNotePath').value = path;
+        document.getElementById('editNoteKeywords').value = note.keywords || '';
+        document.getElementById('editNotePages').value = note.pages || 0;
+        document.getElementById('editNoteDuration').value = note.duration || 'lifetime';
+        document.getElementById('editNoteModal').classList.add('show');
     };
 
-    window.deleteNote = async (id, listPath) => {
-        confirmAction("Delete Note permanently?", async () => {
-            try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){}
+    window.saveAdminNoteEdit = async () => {
+        const id = document.getElementById('editNoteId').value;
+        const path = document.getElementById('editNotePath').value;
+        const pages = parseInt(document.getElementById('editNotePages').value) || 0;
+        const duration = document.getElementById('editNoteDuration').value;
+        const keywords = document.getElementById('editNoteKeywords').value.trim();
+        const price = (pages * 5) + (duration === '1month' ? 20 : 0);
+        let expiryTime = state[path][id].expiryTime || null;
+        if(duration === '1month' && state[path][id].duration !== '1month') expiryTime = Date.now() + 30*24*60*60*1000;
+        else if (duration === 'lifetime') expiryTime = null;
+
+        try {
+            await update(ref(db, `${path}/${id}`), { keywords, pages, duration, price, expiryTime });
+            showToast("Note updated successfully");
+            document.getElementById('editNoteModal').classList.remove('show');
+        } catch(e) { showToast("Failed to update", "error"); }
+    };
+
+    // --- ADMIN PAYMENTS ENGINE ---
+    function renderAdminPayments() {
+        const pCont = document.getElementById('adminPendingPayments');
+        const aCont = document.getElementById('adminApprovedPayments');
+        if(!pCont || !aCont) return;
+        pCont.innerHTML = ""; aCont.innerHTML = "";
+        
+        Object.entries(state.pendingPayments || {}).forEach(([id, pay]) => {
+            const note = state.notes[pay.noteId] || { title: "Deleted/Unknown Note" };
+            const div = document.createElement('div'); div.className = 'admin-list-item';
+            div.innerHTML = `
+                <div class="admin-item-info">
+                    <h4>${sanitize(note.title)} - ₹${pay.price}</h4>
+                    <p>Name: ${sanitize(pay.upiName)} | ID: ${sanitize(pay.upiId)}<br>Txn: ${sanitize(pay.txnId || 'N/A')}</p>
+                </div>
+                <div class="admin-item-actions" style="flex-direction:column; gap:5px;">
+                    ${pay.screenshot ? `<button class="btn-secondary btn-action" onclick="window.open('${sanitize(pay.screenshot)}','_blank')">View Proof</button>` : ''}
+                    ${pay.status === 'pending' ? `
+                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handlePayment('${id}', 'approved')">Approve</button>
+                        <button class="btn-danger btn-action" onclick="handlePayment('${id}', 'rejected')">Reject</button>
+                    ` : `<span style="font-size:11px; padding:3px; background:var(--input-bg); border-radius:3px;">${pay.status.toUpperCase()}</span>`}
+                </div>
+            `;
+            if(pay.status === 'pending') pCont.appendChild(div);
+            else aCont.appendChild(div);
         });
+    }
+
+    window.handlePayment = async (id, status) => {
+        try { await update(ref(db, `pendingPayments/${id}`), { status }); showToast(`Payment ${status}`); } catch(e){}
     };
 
+    // --- ADMIN HELP VIDEOS ENGINE ---
+    window.addHelpLink = async () => {
+        const title = document.getElementById('helpTitle').value.trim();
+        const url = document.getElementById('helpUrl').value.trim();
+        const desc = document.getElementById('helpDesc').value.trim();
+        if(!title || !url) return showToast("Title and URL required", "error");
+        try { await set(push(refs.helpLinks), { title, url, desc, createdAt: Date.now() }); showToast("Help Link Added!"); ['helpTitle','helpUrl','helpDesc'].forEach(i=>document.getElementById(i).value=''); } catch(e){}
+    };
+    window.deleteHelpLink = id => confirmAction("Delete Help Link?", () => remove(ref(db, `helpLinks/${id}`)));
+    
+    function renderAdminHelpLinks() {
+        const c = document.getElementById('adminHelpLinks'); if(!c) return; c.innerHTML = "";
+        Object.entries(state.helpLinks || {}).forEach(([id, h]) => {
+            c.innerHTML += `<div class="admin-list-item"><div class="admin-item-info"><h4>${sanitize(h.title)}</h4><p>${sanitize(h.url)}</p></div><button class="btn-danger btn-action" onclick="deleteHelpLink('${id}')"><i class="fas fa-trash"></i></button></div>`;
+        });
+    }
+    function renderUserHelpLinks() {
+        const c1 = document.getElementById('helpLinksThumbContainer');
+        const c2 = document.getElementById('helpLinksPdfContainer');
+        if(!c1 || !c2) return; c1.innerHTML = ""; c2.innerHTML = "";
+        const linksHtml = Object.values(state.helpLinks || {}).map(h => `<a href="${sanitize(h.url)}" target="_blank" class="help-badge" title="${sanitize(h.desc)}"><i class="fab fa-youtube"></i> ${sanitize(h.title)}</a>`).join(' ');
+        c1.innerHTML = linksHtml; c2.innerHTML = linksHtml;
+    }
+
 
     // ==========================================
-    // STABILITY ENGINES 
+    // BACKGROUND STABILITY ENGINES
     // ==========================================
-
     window.triggerAutoNotification = async (product, customMsg) => {
         if(!product || !product.title) return;
         const title = "New Update: " + product.title;
-        const msg = customMsg || "Check out our latest product deal now!";
+        const msg = customMsg || "Check out our latest deal now!";
         const url = product.affiliateLink || window.location.origin;
-        try {
-            const res = await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
-                body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url })
-            });
-            if(res.ok) console.log("Auto notification sent for", product.title);
-        } catch(e) { console.warn("Auto notification failed", e); }
+        try { fetch("https://onesignal.com/api/v1/notifications", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" }, body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url }) }); } catch(e) {}
     };
 
-    // Auto Expiry & Scheduled Publisher Background Controller (Runs every 30s safely)
+    // Auto Expiry Background Controller (Runs every 30s safely)
     setInterval(() => {
         try {
             const now = Date.now();
             const updates = {};
             let changed = false;
             
+            // Products Check
             Object.entries(state.products || {}).forEach(([id, p]) => {
                 if(!p || p.inTrash) return;
-                
-                // Expiry Engine
-                if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') {
-                    const expiredP = { ...p, status: 'expired', inTrash: false };
-                    updates[`expiredProducts/${id}`] = expiredP; 
-                    updates[`products/${id}`] = null; 
-                    changed = true;
-                }
-                
-                // Scheduler Engine
+                if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') { updates[`expiredProducts/${id}`] = { ...p, status: 'expired', inTrash: false }; updates[`products/${id}`] = null; changed = true; }
                 if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
-                    updates[`products/${id}/visibility`] = 'public'; 
-                    updates[`products/${id}/hidden`] = false; 
-                    updates[`products/${id}/status`] = 'public';
-                    changed = true;
-                    if (p.autoNotify && typeof window.triggerAutoNotification === 'function') {
-                        window.triggerAutoNotification(p, "Scheduled product is now live!");
-                    }
+                    updates[`products/${id}/visibility`] = 'public'; updates[`products/${id}/hidden`] = false; updates[`products/${id}/status`] = 'public'; changed = true;
+                    if (p.autoNotify && typeof window.triggerAutoNotification === 'function') window.triggerAutoNotification(p, "Scheduled product is now live!");
                 }
             });
             
-            Object.entries(state.banners || {}).forEach(([id, b]) => {
-                if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; }
-            });
+            // Banners Check
+            Object.entries(state.banners || {}).forEach(([id, b]) => { if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; } });
             
-            if(changed && Object.keys(updates).length > 0) {
-                // Specific path updates only (prevents overwriting root)
-                update(ref(db), updates).catch(e => console.warn("Background Engine Update Error:", e));
-            }
-        } catch(e) { console.error("Background Engine Crash:", e); }
+            // Notes Marketplace Expiry Check
+            Object.entries(state.notes || {}).forEach(([id, n]) => {
+                if(n && n.status === 'approved' && n.expiryTime && n.expiryTime < now) { updates[`notes/${id}/status`] = 'expired'; changed = true; }
+            });
+
+            if(changed && Object.keys(updates).length > 0) update(ref(db), updates).catch(e=>console.warn(e));
+        } catch(e) {}
     }, 30000);
 
 </script>
