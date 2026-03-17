@@ -8,7 +8,6 @@
   <meta name="description" content="Product Seller App is an admin controlled ecommerce dashboard where only the owner can upload products. Users can view products, get special discounts, and download study notes. Developer Shailesh Kumar Singh.">
   <meta name="googlebot" content="max-snippet:160">
 
-  <!-- OneSignal SDK -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignal = window.OneSignal || [];
@@ -19,7 +18,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
 <style>
-/* CORE STYLES (UNCHANGED) */
 html { scroll-behavior: smooth; }
 :root {
     --primary-glow: #00f5ff; --secondary-glow: #9b5cff;
@@ -40,7 +38,6 @@ body { background: var(--bg-gradient); color: var(--text-color); min-height: 100
 h1, h2, h3 { text-shadow: 0 0 15px var(--primary-glow); }
 h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-/* TOP ACTIONS & CONTROLS */
 .top-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 15px; z-index: 100; }
 .icon-btn { background: var(--card-bg); border: none; color: var(--text-color); font-size: 18px; padding: 10px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 .icon-btn:hover { color: var(--primary-glow); transform: scale(1.1); }
@@ -53,7 +50,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid var(--input-bg); }
 .suggestion-item:hover { background: rgba(0,245,255,0.1); }
 
-/* BANNERS & CATEGORIES */
 .banner { width: 100%; position: relative; margin-top: 10px; border-radius: 15px; overflow: hidden; height: 180px; background-color: var(--card-bg); }
 .banner img { width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out; cursor: pointer; object-fit: cover; }
 .banner img.active { opacity: 1; position: relative; }
@@ -61,14 +57,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .category-chip { padding: 8px 15px; border-radius: 20px; background: var(--input-bg); cursor: pointer; font-size: 13px; transition: all 0.3s; border: 1px solid transparent; }
 .category-chip.active { background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); color: #fff; font-weight: 600; transform: scale(1.05); }
 
-/* SECTIONS & GRID */
 .section-title { padding: 0 20px; margin-top: 20px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
 .carousel { display: flex; overflow-x: auto; gap: 15px; padding: 15px 20px; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel .card { flex: 0 0 220px; scroll-snap-align: start; }
 .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px; }
 
-/* FEATURE 2: Horizontal Scrolling Cards Layout */
 .scroll-card { flex: 0 0 85%; max-width: 350px; scroll-snap-align: center; border-radius: 15px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.5); overflow: hidden; cursor: pointer; }
 .scroll-card .image-container { height: auto; aspect-ratio: 16/9; background: #000; overflow: hidden; }
 .scroll-card .image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; opacity: 0; }
@@ -76,7 +70,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .scroll-card .image-container img.loaded { opacity: 1; }
 .scroll-card-title { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; font-weight: bold; font-size: 15px; }
 
-/* FEATURE 3: Strict Mobile 2-Column Rules */
 @media(max-width: 768px) { 
     .products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
     .card .image-container { height: 130px !important; }
@@ -86,13 +79,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     .original-price { font-size: 11px !important; }
 }
 
-/* SKELETON & EMPTY STATES */
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 .skeleton { background: linear-gradient(90deg, var(--input-bg) 25%, rgba(255,255,255,0.2) 50%, var(--input-bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 15px; height: 280px; }
 .empty-state { grid-column: 1/-1; text-align: center; padding: 50px 20px; opacity: 0.7; font-size: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .empty-state i { font-size: 40px; color: var(--primary-glow); }
 
-/* CARDS & BADGES */
 .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.2); transition: transform 0.3s, box-shadow 0.3s; overflow: hidden; display: flex; flex-direction: column; position: relative; }
 .card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--primary-glow); }
 .card .image-container { width: 100%; height: 150px; position: relative; overflow: hidden; background: var(--input-bg); }
@@ -107,7 +98,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .low-stock-badge { top: auto; bottom: 10px; right: 10px; background: #ff9800; }
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-/* CARD DETAILS */
 .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
 .card h3 { font-size: 15px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .category-text { font-size: 11px; color: var(--text-light); margin-bottom: 5px; }
@@ -122,7 +112,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .wishlist-btn { width: 40px; border: none; border-radius: 8px; background: var(--input-bg); color: var(--text-color); cursor: pointer; font-size: 16px; transition: 0.3s; }
 .wishlist-btn.active { color: #e91e63; background: rgba(233, 30, 99, 0.2); }
 
-/* MODALS */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 2000; opacity: 0; transition: opacity 0.3s; }
 .modal.show { display: flex; opacity: 1; }
 .modal-content { background: var(--modal-content-bg); width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; overflow-y: auto; max-height: 90vh; position: relative; transform: scale(0.9); transition: transform 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
@@ -138,14 +127,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .share-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: #fff; cursor: pointer; font-size: 16px; transition: 0.3s; }
 .share-btn.wa { background: #25D366; } .share-btn.tg { background: #0088cc; } .share-btn.cp { background: #777; } .share-btn.ns { background: #ff4757; }
 
-/* TOASTS */
 #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
 .toast { background: var(--modal-content-bg); color: var(--text-color); padding: 12px 20px; border-radius: 8px; border-left: 4px solid var(--primary-glow); box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards; font-size: 14px; display: flex; align-items: center; gap: 10px; pointer-events: auto; }
 .toast.error { border-left-color: #ff4757; } .toast.success { border-left-color: #2ed573; }
 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes fadeOut { to { opacity: 0; } }
 
-/* ADMIN PANEL */
 .admin-btn { position: fixed; bottom: 80px; right: 15px; font-size: 12px; background: var(--card-bg); padding: 8px 12px; border-radius: 20px; cursor: pointer; z-index: 1001; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); }
 .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--panel-bg); display: none; overflow-y: auto; z-index: 3000; padding: 20px; }
 .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -164,14 +151,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .admin-panel .btn-danger { background: #ff4757; color: #fff; }
 .admin-panel .btn-action { width: auto; padding: 6px 10px; font-size: 12px; margin-left: 5px; }
 
-/* ANALYTICS DASHBOARD */
 .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 25px; }
 .stat-card { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .stat-card i { font-size: 24px; color: var(--primary-glow); margin-bottom: 10px; }
 .stat-card h4 { font-size: 20px; margin: 5px 0; }
 .stat-card p { font-size: 11px; opacity: 0.7; }
 
-/* ADMIN LIST ITEMS */
 .admin-list-item { background: var(--input-bg); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .admin-list-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; flex-shrink: 0; }
 .admin-item-info { flex-grow: 1; overflow: hidden; }
@@ -179,7 +164,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .admin-item-info p { font-size: 11px; opacity: 0.7; }
 .admin-item-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; }
 
-/* BOTTOM NAV & ADS */
 .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); padding: 12px 0; z-index: 999; border-top: 1px solid rgba(255,255,255,0.1); }
 .light-mode .bottom-nav { background: rgba(255,255,255,0.9); border-top: 1px solid rgba(0,0,0,0.1); }
 .bottom-nav button { background: none; border: none; color: var(--text-light); font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
@@ -190,9 +174,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 @media(max-width: 768px) { #adsterra-top-banner { display: none; } }
 @media(min-width: 769px) { #adsterra-bottom-banner { display: none; } }
 
-/* ========================================================= */
-/* NEW NOTES MARKETPLACE STYLES */
-/* ========================================================= */
 .note-card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
 .note-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--secondary-glow); }
 .note-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; background: #000; }
@@ -200,8 +181,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .note-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
 .note-btn { background: linear-gradient(90deg, #00f5ff, #9b5cff); color: #fff; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; display: flex; gap: 5px; align-items: center; }
 .note-btn-buy { background: linear-gradient(90deg, #ff4757, #ff9800); }
-#uploadProgress { display: none; margin-top: 10px; width: 100%; height: 10px; background: var(--input-bg); border-radius: 5px; overflow: hidden; }
-#uploadProgressBar { height: 100%; width: 0%; background: var(--primary-glow); transition: width 0.3s; }
 .notes-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 .notes-controls input, .notes-controls select { padding: 12px 15px; border-radius: 30px; border: none; background: var(--input-bg); color: var(--text-color); outline: none; flex: 1; min-width: 150px; }
 .btn-upload-note { padding: 12px 25px; border-radius: 30px; border: none; background: linear-gradient(90deg, #ff4757, #ff9800); color: #fff; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); }
@@ -210,6 +189,22 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .help-badge:hover { background: var(--primary-glow); color: #000; }
 .price-breakdown { font-size: 12px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; color: var(--text-light); }
 .price-breakdown strong { color: var(--primary-glow); font-size: 14px; }
+
+/* Dynamic URL List Styles */
+.url-list-item { display: flex; gap: 5px; margin-bottom: 5px; }
+.url-list-item input { margin: 0; flex: 1; }
+.url-list-item button { margin: 0; width: 40px; }
+
+/* Profile & Layout */
+.profile-panel { display: none; padding: 20px; margin-top: 10px; }
+.profile-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; }
+.profile-tab { padding: 8px 15px; background: var(--input-bg); border: none; border-radius: 20px; color: var(--text-light); cursor: pointer; white-space: nowrap; }
+.profile-tab.active { background: var(--primary-glow); color: #000; font-weight: bold; }
+.profile-content { display: none; }
+.profile-content.active { display: block; animation: fadeIn 0.3s; }
+.earning-card { background: linear-gradient(135deg, rgba(0,245,255,0.1), rgba(155,92,255,0.1)); padding: 20px; border-radius: 15px; border: 1px solid var(--primary-glow); text-align: center; margin-bottom: 15px; }
+.earning-card h2 { font-size: 32px; color: var(--primary-glow); margin: 10px 0; }
+
 </style>
 </head>
 <body>
@@ -305,7 +300,59 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="products" id="notesGrid" style="padding: 0; gap: 15px;"></div>
 </div>
 
-<!-- Category Generative Sections & Smart Recommendations -->
+<!-- ============================================== -->
+<!-- USER PROFILE SECTION -->
+<!-- ============================================== -->
+<div id="profileViewWrapper" class="profile-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h2>My Profile</h2>
+        <button onclick="logoutUser()" style="background:var(--input-bg); border:none; padding:8px 15px; border-radius:10px; color:#ff4757; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    
+    <div class="profile-tabs">
+        <button class="profile-tab active" onclick="switchProfileTab('prof-purchased')">Purchased</button>
+        <button class="profile-tab" onclick="switchProfileTab('prof-uploaded')">My Uploads</button>
+        <button class="profile-tab" onclick="switchProfileTab('prof-earnings')">Earnings</button>
+        <button class="profile-tab" onclick="switchProfileTab('prof-history')">History</button>
+    </div>
+
+    <!-- Purchased Notes -->
+    <div id="prof-purchased" class="profile-content active">
+        <div id="profilePurchasedGrid" class="products" style="padding:0; gap:15px;"></div>
+    </div>
+
+    <!-- Uploaded Notes -->
+    <div id="prof-uploaded" class="profile-content">
+        <div id="profileUploadedGrid" class="products" style="padding:0; gap:15px;"></div>
+    </div>
+
+    <!-- Earnings & Withdraw -->
+    <div id="prof-earnings" class="profile-content">
+        <div class="earning-card">
+            <p>Total Available Balance</p>
+            <h2 id="profileBalanceText">₹0.00</h2>
+            <p style="font-size:11px; opacity:0.8;">You earn 50% from every note purchase.</p>
+        </div>
+        
+        <div style="background:var(--input-bg); padding:15px; border-radius:15px;">
+            <h3>Withdraw Funds</h3>
+            <p style="font-size:12px; opacity:0.8; margin-bottom:10px;">Minimum withdraw: ₹100. System deducts 20% platform fee.</p>
+            <input type="number" id="wdAmount" placeholder="Amount (₹)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:rgba(0,0,0,0.3); color:var(--text-color); border:none;">
+            <input type="text" id="wdUpiName" placeholder="UPI Name" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:rgba(0,0,0,0.3); color:var(--text-color); border:none;">
+            <input type="text" id="wdUpiId" placeholder="UPI ID" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:rgba(0,0,0,0.3); color:var(--text-color); border:none;">
+            <button onclick="submitWithdraw()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; color:#000; cursor:pointer;">Request Withdraw</button>
+        </div>
+    </div>
+
+    <!-- History -->
+    <div id="prof-history" class="profile-content">
+        <h3>Purchase History</h3>
+        <div id="profilePurchaseHistory" style="margin-bottom:20px;"></div>
+        <h3>Withdrawal History</h3>
+        <div id="profileWithdrawHistory"></div>
+    </div>
+</div>
+
 <div id="homeBottomSections">
     <div id="categoryWiseSections"></div>
     <div id="recommendationWrapper" style="display:none;">
@@ -316,12 +363,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <div class="admin-btn" onclick="openAdminAuth()"><i class="fas fa-user-shield"></i> Admin</div>
 
-<!-- Product Details Modal -->
+<!-- Modals -->
 <div class="modal" id="productModal">
     <div class="modal-content" id="modalContent"></div>
 </div>
 
-<!-- Upload Note Modal -->
+<!-- Upload Note Modal (URL BASED + PAYMENT INSIDE) -->
 <div class="modal" id="uploadNoteModal">
     <div class="modal-content" style="max-width: 500px;">
         <button class="close-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')">×</button>
@@ -329,72 +376,55 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         
         <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <textarea id="noteDesc" placeholder="Description / Details" rows="2" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
-        <input type="text" id="noteUploader" placeholder="Your Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="text" id="noteKeywords" placeholder="Keywords (Comma separated)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
 
         <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
             <select id="noteClass" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteClass', 'customNoteClass')">
                 <option value="">Select Class</option>
                 <option value="Pre Nursery">Pre Nursery</option><option value="Nursery">Nursery</option>
-                <option value="LKG">LKG</option><option value="UKG">UKG</option>
                 <option value="Class 1">Class 1</option><option value="Class 2">Class 2</option>
-                <option value="Class 3">Class 3</option><option value="Class 4">Class 4</option>
-                <option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
-                <option value="Class 7">Class 7</option><option value="Class 8">Class 8</option>
-                <option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
-                <option value="Class 11">Class 11</option><option value="Class 12">Class 12</option>
-                <option value="Diploma">Diploma</option><option value="ITI">ITI</option>
-                <option value="Polytechnic">Polytechnic</option><option value="B.Tech">B.Tech</option>
-                <option value="M.Tech">M.Tech</option><option value="BCA">BCA</option>
-                <option value="MCA">MCA</option><option value="BSc">BSc</option>
-                <option value="MSc">MSc</option><option value="BA">BA</option>
-                <option value="MA">MA</option><option value="PhD">PhD</option>
-                <option value="Computer courses">Computer courses</option>
+                <option value="Class 10">Class 10</option><option value="Class 12">Class 12</option>
+                <option value="B.Tech">B.Tech</option><option value="BCA">BCA</option>
                 <option value="All competitive exams">All competitive exams</option>
                 <option value="custom">-- Custom Input --</option>
             </select>
-            <input type="text" id="customNoteClass" placeholder="Enter Custom Class" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="customNoteClass" placeholder="Custom Class" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
             
             <select id="noteSubject" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteSubject', 'customNoteSubject')">
                 <option value="">Select Subject</option>
-                <option value="Math">Math</option><option value="Science">Science</option>
-                <option value="Physics">Physics</option><option value="Chemistry">Chemistry</option>
-                <option value="Biology">Biology</option><option value="English">English</option>
-                <option value="Hindi">Hindi</option><option value="Computer">Computer</option>
-                <option value="Programming">Programming</option><option value="History">History</option>
-                <option value="Geography">Geography</option><option value="Economics">Economics</option>
-                <option value="GK">GK</option><option value="Reasoning">Reasoning</option>
-                <option value="Coding">Coding</option><option value="AI">AI</option>
-                <option value="Web Development">Web Development</option>
+                <option value="Math">Math</option><option value="Physics">Physics</option>
+                <option value="Computer">Computer</option><option value="Programming">Programming</option>
                 <option value="custom">-- Custom Input --</option>
             </select>
-            <input type="text" id="customNoteSubject" placeholder="Enter Custom Subject" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="customNoteSubject" placeholder="Custom Subject" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         </div>
 
-        <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <input type="number" id="notePages" placeholder="Total Pages (Calculates Price)" oninput="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-            <select id="noteDuration" onchange="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-                <option value="lifetime">Lifetime Availability</option>
-                <option value="1month">1 Month (+ ₹20)</option>
-            </select>
+        <input type="url" id="noteThumb" placeholder="Thumbnail Image URL" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <div id="helpLinksThumbContainer"></div>
+
+        <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px; margin-bottom:15px;">
+            <label style="font-size:12px; color:var(--primary-glow); font-weight:bold; display:block; margin-bottom:10px;">Note Pages (URLs)</label>
+            <div id="urlListContainer"></div>
+            <button onclick="addUrlField()" style="padding:8px 15px; background:var(--input-bg); border:none; border-radius:8px; color:#fff; cursor:pointer; font-size:12px; margin-top:5px;">+ Add URL Page</button>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-bottom:10px; align-items:center;">
+            <input type="number" id="noteDays" placeholder="Availability Days" oninput="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <label style="flex:1; display:flex; align-items:center; gap:5px; font-size:13px; cursor:pointer;"><input type="checkbox" id="noteLifetime" onchange="calcNotePrice()"> Lifetime Access</label>
         </div>
         
-        <div class="price-breakdown" id="notePriceBreakdown">Pages: ₹0 | Duration: ₹0 <br><strong>Total Price: ₹0</strong></div>
+        <div class="price-breakdown" id="notePriceBreakdown">Total Price: ₹0</div>
 
-        <div style="margin-bottom:10px;">
-            <input type="url" id="noteThumb" placeholder="Thumbnail Image URL" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-            <div id="helpLinksThumbContainer"></div>
-        </div>
-        
-        <div style="background:var(--input-bg); padding:15px; border-radius:8px; margin-bottom:15px;">
-            <label style="font-size:12px; color:var(--text-light); display:block; margin-bottom:5px;">Select PDF/ZIP File OR Paste PDF URL</label>
-            <input type="url" id="notePdfUrl" placeholder="Direct PDF URL (Optional if file uploaded)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;">
-            <div id="helpLinksPdfContainer" style="margin-bottom:10px;"></div>
-            <input type="file" id="noteFile" accept=".pdf,.zip,application/pdf,application/zip" style="color:var(--text-color); width:100%;">
-            <div id="uploadProgress"><div id="uploadProgressBar"></div></div>
+        <!-- Uploader Payment Box -->
+        <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
+            <p style="font-size:13px; color:var(--text-light); margin-bottom:10px;">To submit your note for approval, please pay to the UPI ID below:</p>
+            <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
+            <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px; margin-bottom:10px;"><i class="fas fa-copy"></i> Copy UPI</button>
+            <input type="text" id="upUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:10px; margin-bottom:5px; border-radius:5px; background:rgba(0,0,0,0.3); border:none; color:#fff;">
+            <input type="text" id="upUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:10px; border-radius:5px; background:rgba(0,0,0,0.3); border:none; color:#fff;">
         </div>
 
-        <button onclick="submitNoteUpload()" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
+        <button onclick="submitNoteUpload()" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Pay & Submit for Approval</button>
     </div>
 </div>
 
@@ -406,20 +436,15 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="hidden" id="editNoteId">
         <input type="hidden" id="editNotePath">
         <input type="text" id="editNoteKeywords" placeholder="Keywords" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="number" id="editNotePages" placeholder="Pages Count" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <select id="editNoteDuration" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-            <option value="lifetime">Lifetime</option>
-            <option value="1month">1 Month</option>
-        </select>
         <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save Changes</button>
     </div>
 </div>
 
-<!-- Payment Modal -->
+<!-- Buy Note Payment Modal -->
 <div class="modal" id="paymentModal">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
         <button class="close-btn" onclick="document.getElementById('paymentModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:10px; color:var(--primary-glow);">Complete Payment</h3>
+        <h3 style="margin-bottom:10px; color:var(--primary-glow);">Complete Purchase</h3>
         <p style="font-size:13px; color:var(--text-light); margin-bottom:15px;">Send <strong style="color:#fff;" id="payAmountDisplay">₹0</strong> to the UPI ID below to unlock your notes.</p>
         
         <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
@@ -431,11 +456,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="hidden" id="payNoteId">
         <input type="hidden" id="payPrice">
         <input type="text" id="payUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="text" id="payUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="text" id="payTxnId" placeholder="Transaction ID (Optional)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="url" id="payScreenshot" placeholder="Screenshot URL (Optional)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="payUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         
-        <button onclick="submitPaymentForm()" style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(46, 213, 115, 0.4);">Submit Verification</button>
+        <button onclick="submitBuyForm()" style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(46, 213, 115, 0.4);">Submit Payment</button>
     </div>
 </div>
 
@@ -450,14 +473,57 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     </div>
 </div>
 
+<!-- User Login Modal -->
+<div class="modal" id="userLoginModal">
+    <div class="modal-content" style="max-width: 350px;">
+        <button class="close-btn" onclick="document.getElementById('userLoginModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px; text-align:center;">Login to Profile</h3>
+        <input type="email" id="userEmail" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="password" id="userPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <button onclick="loginUserEmail()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000; margin-bottom:10px;">Login / Register</button>
+        <div style="text-align:center; margin-bottom:10px; font-size:12px;">OR</div>
+        <button onclick="loginUserGoogle()" style="width:100%; padding:12px; background:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000; display:flex; justify-content:center; align-items:center; gap:10px;"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20"> Continue with Google</button>
+    </div>
+</div>
+
 <!-- Admin Login Modal -->
 <div class="modal" id="adminLoginModal">
     <div class="modal-content" style="max-width: 350px;">
         <button class="close-btn" onclick="closeModals()">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
+        <h3 style="margin-bottom:15px; text-align:center;">Admin Email Login</h3>
         <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
+        <button onclick="loginAdminEmailStep()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Next Step</button>
+    </div>
+</div>
+
+<!-- Admin Setup PIN Modal -->
+<div class="modal" id="setupPinModal" style="z-index: 4001;">
+    <div class="modal-content" style="max-width: 300px;">
+        <h3 style="margin-bottom:15px; text-align:center;">Create Security PIN</h3>
+        <p style="font-size:12px; text-align:center; margin-bottom:15px; opacity:0.8;">First time setup. This PIN is required for future admin logins.</p>
+        <input type="password" id="newAdminPin" placeholder="Enter PIN" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; text-align:center; letter-spacing:5px;">
+        <input type="password" id="confAdminPin" placeholder="Confirm PIN" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; text-align:center; letter-spacing:5px;">
+        <button onclick="saveAdminPin()" style="width:100%; padding:12px; background:#2ed573; border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save PIN</button>
+    </div>
+</div>
+
+<!-- Admin Enter PIN Modal -->
+<div class="modal" id="enterPinModal" style="z-index: 4001;">
+    <div class="modal-content" style="max-width: 300px;">
+        <button class="close-btn" onclick="document.getElementById('enterPinModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px; text-align:center;">Enter Security PIN</h3>
+        <input type="password" id="verifyAdminPin" placeholder="****" style="width:100%; padding:15px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; text-align:center; letter-spacing:10px; font-size:20px;">
+        <button onclick="verifyAdminPinStep()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Verify & Enter Admin</button>
+    </div>
+</div>
+
+<!-- Note Download Viewer Modal -->
+<div class="modal" id="noteViewerModal">
+    <div class="modal-content" style="max-width: 600px;">
+        <button class="close-btn" onclick="document.getElementById('noteViewerModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px;">Note Pages</h3>
+        <div id="noteUrlsList" style="display:flex; flex-direction:column; gap:10px;"></div>
     </div>
 </div>
 
@@ -472,16 +538,15 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     </div>
 
     <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-notes')">Notes</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-payments')">Payments</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-help')">Help Links</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired</button>
-        <button class="admin-tab" onclick="switchAdminTab('tab-backup')">Backup</button>
+        <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage Store</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-notes-up')">Note Uploads</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-notes-buy')">Note Sales</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-withdraws')">Withdrawals</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-help')">Help Videos</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-security')">Security</button>
     </div>
 
-    <!-- TAB: Manage Products & Store -->
+    <!-- TAB: Manage Store -->
     <div id="tab-manage" class="admin-tab-content active">
         <h3>Product Form</h3>
         <input type="hidden" id="pId">
@@ -500,9 +565,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 <option value="4.0">4.0 ⭐⭐⭐⭐</option>
                 <option value="3.5">3.5 ⭐⭐⭐✨</option>
                 <option value="3.0">3.0 ⭐⭐⭐</option>
-                <option value="2.5">2.5 ⭐⭐✨</option>
-                <option value="2.0">2.0 ⭐⭐</option>
-                <option value="1.5">1.5 ⭐✨</option>
                 <option value="1.0">1.0 ⭐</option>
             </select>
         </div>
@@ -521,7 +583,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="url" id="pAffiliateLink" placeholder="Affiliate/Buy Link">
         <input type="text" id="pCoupon" placeholder="Coupon Code (Optional)">
 
-        <!-- Feature 2: Triple Visibility Mode & Banner Auto-Sync -->
         <div style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
             <label style="font-size:12px; font-weight:bold; margin-bottom:8px; display:block; color:var(--primary-glow);">Visibility Control (Public / Private / Scheduled)</label>
             <div class="admin-checkboxes" style="margin-bottom:8px;">
@@ -535,9 +596,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div class="admin-checkboxes" style="background:var(--input-bg); padding:12px; border-radius:8px; margin-bottom:10px;">
             <label><input type="checkbox" id="pFeatured"> Featured Product</label>
             <label><input type="checkbox" id="pAutoBanner"> Auto-Sync to Top Banner</label>
-            <label><input type="checkbox" id="pShowInBanner"> Show in Banner</label>
-            <label><input type="checkbox" id="pIsTrending"> Trending Product</label>
-            <label><input type="checkbox" id="pAutoNotify"> Auto Notify</label>
         </div>
 
         <div id="imageFields" style="margin-bottom: 10px;"></div>
@@ -549,36 +607,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         </div>
 
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>All Products List (Active & Private)</h3>
+        <h3>All Products List</h3>
         <div id="adminProductList"></div>
-
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <div class="admin-grid">
-            <div>
-                <h3>Categories</h3>
-                <div style="display:flex; gap:5px;"><input type="text" id="newCategoryName" placeholder="New Category" style="margin:0;"><button onclick="addCategory()" style="margin:0; width:80px;">Add</button></div>
-                <div id="categoryList" style="margin-top:10px;"></div>
-            </div>
-            <div>
-                <h3>Push Notification</h3>
-                <input type="text" id="notificationTitle" placeholder="Title">
-                <textarea id="notificationMessage" placeholder="Message" rows="2"></textarea>
-                <input type="url" id="notificationUrl" placeholder="Redirect URL (Optional)">
-                <button onclick="sendManualNotification()"><i class="fas fa-paper-plane"></i> Broadcast</button>
-            </div>
-        </div>
-
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Banners</h3>
-        <div id="bannerFields"></div>
-        <button onclick="addBannerField()" class="btn-secondary">+ Add Banner</button>
-        <button onclick="saveBanners()">Save Banners</button>
-        <div id="adminBannerList" style="margin-top:15px;"></div>
     </div>
 
-    <!-- NEW TAB: Notes Management -->
-    <div id="tab-notes" class="admin-tab-content">
-        <h3>Pending Notes Approval</h3>
+    <!-- TAB: Note Uploads Approval -->
+    <div id="tab-notes-up" class="admin-tab-content">
+        <h3>Pending Upload Approvals</h3>
         <div id="adminPendingNotes" style="margin-bottom: 20px;"></div>
         
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
@@ -586,65 +621,42 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div id="adminApprovedNotes" style="margin-bottom: 20px;"></div>
         
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Rejected Notes</h3>
+        <h3>Rejected Uploads</h3>
         <div id="adminRejectedNotes"></div>
     </div>
 
-    <!-- NEW TAB: Payments Panel -->
-    <div id="tab-payments" class="admin-tab-content">
-        <h3>Pending Verifications</h3>
-        <div id="adminPendingPayments" style="margin-bottom: 20px;"></div>
-        
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Approved Payments</h3>
-        <div id="adminApprovedPayments"></div>
+    <!-- TAB: Note Purchases Approval -->
+    <div id="tab-notes-buy" class="admin-tab-content">
+        <h3>Pending Note Purchases</h3>
+        <div id="adminPendingPurchases" style="margin-bottom: 20px;"></div>
     </div>
 
-    <!-- NEW TAB: Help Links -->
+    <!-- TAB: Withdrawals -->
+    <div id="tab-withdraws" class="admin-tab-content">
+        <h3>Pending Withdrawals</h3>
+        <div id="adminPendingWithdrawals" style="margin-bottom: 20px;"></div>
+    </div>
+
+    <!-- TAB: Help Links -->
     <div id="tab-help" class="admin-tab-content">
-        <h3>Add Help Video Link</h3>
-        <input type="text" id="helpTitle" placeholder="Video Title (e.g. How to get PDF URL)">
+        <h3>Add Help Video For Feature</h3>
+        <input type="text" id="helpTitle" placeholder="Feature Name (e.g. How to get URL)">
         <input type="url" id="helpUrl" placeholder="YouTube or Video URL">
         <textarea id="helpDesc" placeholder="Short description" rows="2"></textarea>
         <button onclick="addHelpLink()">Add Link</button>
         
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Current Help Links</h3>
+        <h3>Current Help Videos</h3>
         <div id="adminHelpLinks"></div>
     </div>
 
-    <!-- TAB: Analytics -->
-    <div id="tab-analytics" class="admin-tab-content">
-        <div class="analytics-grid">
-            <div class="stat-card"><i class="fas fa-box"></i> <h4 id="statTotalItems">0</h4> <p>Active Products</p></div>
-            <div class="stat-card"><i class="fas fa-eye"></i> <h4 id="statViews">0</h4> <p>Total Store Views</p></div>
-            <div class="stat-card"><i class="fas fa-mouse-pointer"></i> <h4 id="statClicks">0</h4> <p>Total Link Clicks</p></div>
-            <div class="stat-card"><i class="fas fa-shopping-cart"></i> <h4 id="statSales">0</h4> <p>Total Sales (Proxy)</p></div>
-            <div class="stat-card"><i class="fas fa-chart-line"></i> <h4 id="statConvRate">0%</h4> <p>Conversion Rate</p></div>
-        </div>
-        <h3>Top Performing Products</h3>
-        <div id="topProductsList" style="margin-top:10px;"></div>
-    </div>
-
-    <!-- TAB: Expired Data -->
-    <div id="tab-expired" class="admin-tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3>Expired & Trashed Data</h3>
-            <button onclick="bulkRestore()" class="btn-secondary" style="width:auto; padding:8px;"><i class="fas fa-undo"></i> Bulk Restore</button>
-        </div>
-        <div id="adminExpiredList"></div>
-    </div>
-
-    <!-- TAB: Backup & Restore -->
-    <div id="tab-backup" class="admin-tab-content">
-        <h3>System Backup</h3>
-        <p style="font-size:12px; opacity:0.8; margin-bottom:15px;">Export your complete database as a JSON file, or restore from a previous backup to prevent data loss.</p>
-        <button onclick="exportDatabaseJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
-        
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-        <h3>Restore Database</h3>
-        <input type="file" id="importFile" accept="application/json" style="background:none; border:none; padding:0;">
-        <button onclick="importDatabaseJSON()" class="btn-danger"><i class="fas fa-upload"></i> Overwrite & Restore DB</button>
+    <!-- TAB: Security Settings -->
+    <div id="tab-security" class="admin-tab-content">
+        <h3>Change Security PIN</h3>
+        <input type="password" id="chgOldPin" placeholder="Current PIN" style="letter-spacing:5px;">
+        <input type="password" id="chgNewPin" placeholder="New PIN" style="letter-spacing:5px;">
+        <input type="password" id="chgConfPin" placeholder="Confirm New PIN" style="letter-spacing:5px;">
+        <button onclick="changeAdminPin()">Update Security PIN</button>
     </div>
 </div>
 
@@ -658,23 +670,21 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div class="bottom-nav" id="bottomNav">
     <button onclick="switchTab('home')" class="active" data-tab="home"><i class="fas fa-home"></i>Home</button>
     <button onclick="switchTab('trending')" data-tab="trending"><i class="fas fa-fire"></i>Trending</button>
-    <button onclick="toggleCategories()"><i class="fas fa-th-large"></i>Categories</button>
-    <button onclick="switchTab('wishlist')" data-tab="wishlist"><i class="fas fa-heart"></i>Wishlist</button>
-    <!-- NEW NOTES BUTTON ADDED HERE -->
     <button onclick="switchTab('notes')" data-tab="notes"><i class="fas fa-book"></i>Notes</button>
+    <button onclick="switchTab('wishlist')" data-tab="wishlist"><i class="fas fa-heart"></i>Wishlist</button>
+    <button onclick="switchTab('profile')" data-tab="profile"><i class="fas fa-user"></i>Profile</button>
 </div>
 
 <!-- Toast Container -->
 <div id="toast-container"></div>
 
 <!-- ============================================== -->
-<!-- SCRIPT SECTION - FIREBASE & FULL LOGIC INTEGRATED -->
+<!-- SCRIPT SECTION -->
 <!-- ============================================== -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -686,34 +696,28 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         appId: "1:1046644480118:web:08bc8e114a43bd5dcea757"
     };
 
-    let app, db, auth, storage;
-    try {
-        app = initializeApp(firebaseConfig);
-        db = getDatabase(app);
-        auth = getAuth(app);
-        storage = getStorage(app); 
-        setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
-    } catch (e) { console.error("Firebase Error:", e); }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+    setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
 
     const refs = {
         products: ref(db, 'products/'),
-        expired: ref(db, 'expiredProducts/'),
-        banners: ref(db, 'banners/'),
         categories: ref(db, 'categories/'),
-        analytics: ref(db, 'analytics/totals'),
-        connected: ref(db, '.info/connected'),
-        // NEW REFS FOR NOTES MARKETPLACE
         notes: ref(db, 'notes/'),
-        pendingNotes: ref(db, 'pendingNotes/'),
-        rejectedNotes: ref(db, 'rejectedNotes/'),
-        pendingPayments: ref(db, 'pendingPayments/'),
+        pendingUploads: ref(db, 'pendingUploads/'),
+        rejectedUploads: ref(db, 'rejectedUploads/'),
+        pendingPurchases: ref(db, 'pendingPurchases/'),
+        pendingWithdrawals: ref(db, 'pendingWithdrawals/'),
+        userLibrary: ref(db, 'userLibrary/'),
+        earnings: ref(db, 'earnings/'),
         helpLinks: ref(db, 'helpLinks/')
     };
 
     let state = {
-        products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
-        notes: {}, pendingNotes: {}, rejectedNotes: {}, pendingPayments: {}, helpLinks: {},
-        currentCategory: "ALL", currentView: "home",
+        products: {}, categories: {}, notes: {}, pendingUploads: {}, rejectedUploads: {}, pendingPurchases: {}, pendingWithdrawals: {}, userLibrary: {}, earnings: {}, helpLinks: {},
+        currentCategory: "ALL", currentView: "home", currentUser: null,
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
         isAdmin: false
@@ -722,11 +726,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
     if (state.theme === 'light') document.body.classList.add('light-mode');
 
-    // Create unique device ID for tracking purchases
-    let deviceId = localStorage.getItem('deviceId');
-    if(!deviceId) { deviceId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('deviceId', deviceId); }
-
-    // UTILITIES
     window.showToast = (msg, type = 'success') => {
         const t = document.createElement('div'); t.className = `toast ${type}`;
         t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${msg}`;
@@ -740,8 +739,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         localStorage.setItem('theme', state.theme);
     };
 
-    const debounce = (func, wait) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), wait); }; };
-    
     function sanitize(str) {
         if(typeof str !== 'string') return str;
         const div = document.createElement('div'); div.innerText = str; return div.innerHTML;
@@ -758,35 +755,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(confirmCallback) confirmCallback();
     };
 
-    // TIME & TIMERS
     function getTimestamp(d, t) { 
         if (!d) return null;
         const parsed = new Date(`${d}T${t || '00:00:00'}`).getTime();
         return isNaN(parsed) ? null : parsed;
     }
-    
     function setInputsDate(ts, dInp, tInp) {
         if (!ts) { dInp.value = ''; tInp.value = ''; return; }
         const d = new Date(ts);
         dInp.value = d.toISOString().split('T')[0];
         tInp.value = d.toTimeString().substring(0,5);
     }
-    
-    function formatCountdown(ms) {
-        if (ms <= 0) return 'Expired';
-        const d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
-        return `Ends in: ${d}d ${h}h ${m}m ${s}s`;
-    }
-
-    function runTimers() {
-        const now = Date.now();
-        document.querySelectorAll('.countdown-timer').forEach(el => {
-            const exp = parseInt(el.dataset.expiry);
-            if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
-        });
-        requestAnimationFrame(runTimers);
-    }
-    requestAnimationFrame(runTimers);
 
     const lazyObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -799,35 +778,29 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         });
     });
 
-    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); renderAdminCategories(); });
-    onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
-    onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
-    onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
-    
-    // NEW FIREBASE LISTENERS
-    onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); });
-    onValue(refs.pendingNotes, s => { state.pendingNotes = s.val() || {}; renderAdminNotes(); });
-    onValue(refs.rejectedNotes, s => { state.rejectedNotes = s.val() || {}; renderAdminNotes(); });
-    onValue(refs.pendingPayments, s => { state.pendingPayments = s.val() || {}; renderAdminPayments(); if(state.currentView === 'notes') renderNotesGrid(); });
+    // FIREBASE LISTENERS
+    onValue(refs.categories, s => { state.categories = s.val() || {}; renderCategories(); });
+    onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); renderProfile(); });
+    onValue(refs.pendingUploads, s => { state.pendingUploads = s.val() || {}; renderAdminNotes(); renderProfile(); });
+    onValue(refs.rejectedUploads, s => { state.rejectedUploads = s.val() || {}; renderAdminNotes(); renderProfile(); });
+    onValue(refs.pendingPurchases, s => { state.pendingPurchases = s.val() || {}; renderAdminPurchases(); renderProfile(); });
+    onValue(refs.pendingWithdrawals, s => { state.pendingWithdrawals = s.val() || {}; renderAdminWithdrawals(); renderProfile(); });
     onValue(refs.helpLinks, s => { state.helpLinks = s.val() || {}; renderAdminHelpLinks(); renderUserHelpLinks(); });
 
-    let initialPidChecked = false;
+    onAuthStateChanged(auth, user => {
+        state.currentUser = user;
+        if(user) {
+            onValue(ref(db, `userLibrary/${user.uid}`), s => { state.userLibrary = s.val() || {}; renderProfile(); if(state.currentView === 'notes') renderNotesGrid(); });
+            onValue(ref(db, `earnings/${user.uid}`), s => { state.earnings = s.val() || { balance: 0 }; renderProfile(); });
+        } else {
+            state.userLibrary = {}; state.earnings = { balance: 0 };
+        }
+    });
+
     onValue(refs.products, (snapshot) => {
-        try {
-            state.products = snapshot.val() || {};
-            if (!initialPidChecked) {
-                initialPidChecked = true;
-                const params = new URLSearchParams(window.location.search);
-                const pid = params.get('pid');
-                if (pid && state.products[pid] && !state.products[pid].inTrash) {
-                    setTimeout(() => openProduct(pid), 500);
-                }
-            }
-            renderAllViews(); 
-            renderAdminProducts(); 
-            updateAdminAnalytics();
-            renderBanners(); 
-        } catch(e) { console.error("Render Data Error:", e); }
+        state.products = snapshot.val() || {};
+        renderAllViews(); 
+        renderAdminProducts(); 
     });
 
     function getActiveProducts() {
@@ -839,55 +812,26 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 let isVisible = true;
                 if(p.visibility === 'private' || p.status === 'private') isVisible = false;
                 if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
-                if(!p.visibility && p.hidden) isVisible = false;
                 return isVisible || state.isAdmin;
             }).map(([id, p]) => ({ id, ...p }));
     }
 
-    function trackEvent(type, productId) {
-        try {
-            if(!state.products) return;
-            const dateStr = new Date().toISOString().split('T')[0];
-            const updates = {};
-            updates[`analytics/totals/${type}`] = increment(1);
-            if(productId && state.products[productId] && !state.products[productId].inTrash) {
-                updates[`products/${productId}/${type}`] = increment(1);
-                updates[`analytics/products/${productId}/${type}`] = increment(1);
-                if(type === 'views') updates[`products/${productId}/lastViewed`] = Date.now();
-            }
-            updates[`analytics/daily/${dateStr}/${type}`] = increment(1);
-            update(ref(db), updates).catch(e => console.warn(e));
-        } catch(e) {}
-    }
-
     function renderAllViews() {
-        if(state.currentView === 'notes') return; 
-        try {
-            const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
-            const activeList = getActiveProducts();
-            
-            document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-            document.getElementById("homeBottomSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
-            document.getElementById("banner").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+        if(state.currentView === 'notes' || state.currentView === 'profile') return; 
+        const query = document.getElementById("search")?.value.trim().toLowerCase() || "";
+        const activeList = getActiveProducts();
+        
+        document.getElementById("homeSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
+        document.getElementById("homeBottomSections").style.display = (query || state.currentView !== 'home') ? 'none' : 'block';
 
-            if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
-                renderScrollingProducts(activeList);
-                renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=> {
-                    if (a.isTrending !== b.isTrending) return a.isTrending ? -1 : 1;
-                    return ((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0));
-                }).slice(0, 10), "trendingWrapper");
-                document.getElementById("mainGridTitle").innerText = "Just Arrived";
-                renderCategorySections(activeList);
-                renderRecommendations(activeList);
-            } else {
-                if(document.getElementById("scrollingWrapper")) document.getElementById("scrollingWrapper").style.display = "none";
-                if(document.getElementById("categoryWiseSections")) document.getElementById("categoryWiseSections").innerHTML = "";
-                if(document.getElementById("recommendationWrapper")) document.getElementById("recommendationWrapper").style.display = "none";
-            }
+        if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
+            renderScrollingProducts(activeList);
+            renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
+            renderCarousel("trendingCarousel", activeList.slice(0, 10), "trendingWrapper");
+            document.getElementById("mainGridTitle").innerText = "Just Arrived";
+        }
 
-            renderMainGrid(activeList, query);
-        } catch(e) {}
+        renderMainGrid(activeList, query);
     }
 
     function renderMainGrid(list, query) {
@@ -899,17 +843,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         const sortBy = document.getElementById("sortProducts").value;
         list.sort((a, b) => {
-            if (sortBy === 'popular') return ((b.views||0)+(b.clicks||0)) - ((a.views||0)+(a.clicks||0));
             if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0);
             if (sortBy === 'price-low-high') return (a.finalPrice || 0) - (b.finalPrice || 0);
             if (sortBy === 'price-high-low') return (b.finalPrice || 0) - (a.finalPrice || 0);
             return (b.createdAt || 0) - (a.createdAt || 0);
         });
 
-        if (list.length === 0) {
-            container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return;
-        }
-
+        if (list.length === 0) { container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return; }
         const frag = document.createDocumentFragment();
         list.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
         container.appendChild(frag);
@@ -934,57 +874,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const frag = document.createDocumentFragment();
         list.forEach(p => {
             if (!p) return;
-            const card = document.createElement("div");
-            card.className = "scroll-card";
+            const card = document.createElement("div"); card.className = "scroll-card";
             card.onclick = () => openProduct(p.id);
-            card.innerHTML = `
-                <div class="image-container">
-                    <img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">
-                    ${p.discount > 0 ? `<div class="badge discount-badge">${p.discount}% OFF</div>` : ''}
-                </div>
-                <div class="scroll-card-title">${sanitize(p.title)}</div>
-            `;
-            const lazyImg = card.querySelector('.lazy-img');
-            if(lazyImg) lazyObserver.observe(lazyImg);
+            card.innerHTML = `<div class="image-container"><img data-src="${sanitize(p.images?.[0] || fallbackImage)}" class="lazy-img" onerror="this.src='${fallbackImage}'">${p.discount > 0 ? `<div class="badge discount-badge">${p.discount}% OFF</div>` : ''}</div><div class="scroll-card-title">${sanitize(p.title)}</div>`;
+            const lazyImg = card.querySelector('.lazy-img'); if(lazyImg) lazyObserver.observe(lazyImg);
             frag.appendChild(card);
         });
-        container.appendChild(frag);
-    }
-
-    function renderCategorySections(activeList) {
-        const container = document.getElementById("categoryWiseSections"); if (!container) return;
-        container.innerHTML = "";
-        const catMap = {};
-        activeList.forEach(p => { if(!p) return; const c = p.category || 'Other'; if (!catMap[c]) catMap[c] = []; catMap[c].push(p); });
-        const sortedCats = Object.keys(catMap).sort((a, b) => catMap[b].length - catMap[a].length);
-        const frag = document.createDocumentFragment();
-        sortedCats.forEach(cat => {
-            const prods = catMap[cat]; if (prods.length === 0) return;
-            const wId = `catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`;
-            const wrapper = document.createElement("div");
-            wrapper.innerHTML = `<div class="section-title"><h3>${sanitize(cat)} Collection</h3></div><div class="carousel" id="${wId}"></div>`;
-            frag.appendChild(wrapper);
-        });
-        container.appendChild(frag);
-
-        sortedCats.forEach(cat => {
-            const prods = catMap[cat], cEl = document.getElementById(`catCarousel_${sanitize(cat).replace(/[^a-zA-Z0-9]/g, '')}`);
-            if (cEl) {
-                const cFrag = document.createDocumentFragment();
-                prods.forEach(p => { if (p) cFrag.appendChild(createProductCard(p)); });
-                cEl.appendChild(cFrag);
-            }
-        });
-    }
-
-    function renderRecommendations(activeList) {
-        const wrapper = document.getElementById("recommendationWrapper"), container = document.getElementById("recommendationGrid");
-        if (!wrapper || !container) return;
-        if (activeList.length < 2) { wrapper.style.display = "none"; return; }
-        const shuffled = [...activeList].sort(() => 0.5 - Math.random()).slice(0, 4);
-        wrapper.style.display = "block"; container.innerHTML = "";
-        const frag = document.createDocumentFragment();
-        shuffled.forEach(p => { if (p) frag.appendChild(createProductCard(p)); });
         container.appendChild(frag);
     }
 
@@ -992,16 +887,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const card = document.createElement("div"); card.className = "card";
         let badges = [];
         if (p.discount > 0) badges.push(`<div class="badge discount-badge">${p.discount}% OFF</div>`);
-        if (p.featured) badges.push(`<div class="badge featured-badge"><i class="fas fa-bolt"></i></div>`);
-        if (p.stock != null && p.stock <= 0) badges.push(`<div class="badge stock-badge">Out of Stock</div>`);
-        else if (p.stock != null && p.stock <= 5) badges.push(`<div class="badge low-stock-badge">Only ${p.stock} left</div>`); 
-
-        let stars = Array(5).fill('<i class="far fa-star"></i>');
-        if (p.rating) {
-            let r = Math.round(p.rating * 2) / 2;
-            for(let i=0; i<Math.floor(r); i++) stars[i] = '<i class="fas fa-star"></i>';
-            if(r % 1 !== 0) stars[Math.floor(r)] = '<i class="fas fa-star-half-alt"></i>';
-        }
         const isWished = state.wishlist.includes(p.id);
 
         card.innerHTML = `
@@ -1011,13 +896,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             </div>
             <div class="card-content">
                 <h3>${sanitize(p.title || 'Untitled')}</h3>
-                <p class="category-text">${sanitize(p.category || 'General')}</p>
-                <div class="card-stats"><span class="stars">${stars.join('')}</span> <span><i class="fas fa-eye"></i> ${p.views || 0}</span></div>
                 <div class="price-container">
                     <span class="final-price">₹ ${p.finalPrice?.toFixed(2)}</span>
                     ${p.discount > 0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span>` : ''}
                 </div>
-                ${p.expiryDateTime ? `<div class="countdown-timer" data-expiry="${p.expiryDateTime}"></div>` : ''}
                 <div class="btn-group">
                     <button class="wishlist-btn ${isWished ? 'active' : ''}" onclick="toggleWishlist('${p.id}', event)"><i class="fas fa-heart"></i></button>
                     <button class="view-button" onclick="openProduct('${p.id}')">Details</button>
@@ -1031,28 +913,33 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.switchTab = (tab) => {
         state.currentView = tab; state.currentCategory = 'ALL'; 
-        const searchInp = document.getElementById("search");
-        if(searchInp) searchInp.value = '';
-        document.getElementById('categoriesPanel').style.display = 'none';
-
         const mainControls = document.getElementById('mainControls');
+        
+        ['homeSections', 'homeBottomSections', 'products', 'notesViewWrapper', 'profileViewWrapper'].forEach(id => {
+            if(document.getElementById(id)) document.getElementById(id).style.display = 'none';
+        });
+
         if(tab === 'notes') {
             if(mainControls) mainControls.style.display = 'none';
-            document.getElementById("homeSections").style.display = 'none';
-            document.getElementById("homeBottomSections").style.display = 'none';
-            document.getElementById("banner").style.display = 'none';
-            document.getElementById("products").style.display = 'none';
             document.getElementById("notesViewWrapper").style.display = 'block';
-            window.renderNotesGrid();
+            renderNotesGrid();
+        } else if(tab === 'profile') {
+            if(mainControls) mainControls.style.display = 'none';
+            if(!state.currentUser) {
+                document.getElementById('userLoginModal').classList.add('show');
+                state.currentView = 'home'; updateNavHighlight('home');
+                return;
+            }
+            document.getElementById("profileViewWrapper").style.display = 'block';
+            renderProfile();
         } else {
             if(mainControls) mainControls.style.display = 'flex';
-            document.getElementById("notesViewWrapper").style.display = 'none';
             document.getElementById("products").style.display = 'grid';
             renderAllViews(); 
-            renderCategories(); 
         }
         updateNavHighlight(tab); window.scrollTo(0,0);
     };
+
     function updateNavHighlight(tab = state.currentView) { document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); }
 
     window.toggleWishlist = (id, event) => {
@@ -1071,133 +958,93 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             if(cat) panel.innerHTML += `<div class="category-chip ${state.currentCategory===cat?'active':''}" onclick="setCategory('${sanitize(cat)}')">${sanitize(cat)}</div>`;
         });
     }
-    window.setCategory = (c) => { state.currentCategory = c; state.currentView = 'home'; updateNavHighlight(); renderAllViews(); renderCategories(); };
-    window.toggleCategories = () => { const p = document.getElementById("categoriesPanel"); p.style.display = p.style.display === "flex" ? "none" : "flex"; };
-
-    const searchInp = document.getElementById("search"), suggBox = document.getElementById("suggestions");
-    if(searchInp) {
-        searchInp.addEventListener("input", debounce(() => {
-            const q = searchInp.value.trim().toLowerCase();
-            if(q.length > 0) {
-                const matches = getActiveProducts().filter(p => (p.title||'').toLowerCase().includes(q)).slice(0, 8);
-                if(matches.length > 0) {
-                    suggBox.innerHTML = matches.map(p => `<div class="suggestion-item" onclick="selectSearch('${sanitize(p.title.replace(/'/g,"\\'"))}')"><i class="fas fa-search"></i> ${sanitize(p.title)}</div>`).join('');
-                    suggBox.style.display = 'block';
-                } else suggBox.style.display = 'none';
-            } else suggBox.style.display = 'none';
-            renderAllViews();
-        }, 300));
-    }
-    window.selectSearch = (val) => { searchInp.value = val; suggBox.style.display = 'none'; renderAllViews(); };
-    if(document.getElementById("searchBtn")) document.getElementById("searchBtn").onclick = () => { suggBox.style.display='none'; renderAllViews(); };
-    if(document.getElementById("sortProducts")) document.getElementById("sortProducts").onchange = renderAllViews;
-
-    window.nativeShare = (id, title) => {
-        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
-        if (navigator.share) {
-            navigator.share({ title: title, text: 'Check out this awesome product!', url: prodUrl })
-            .then(() => trackEvent('shares', id)).catch(e => console.warn('Share rejected', e));
-        } else { copyShare(id, prodUrl); }
-    };
 
     window.openProduct = (id) => {
         const p = state.products[id]; if(!p || p.inTrash) return;
-        trackEvent('views', id);
         document.body.style.overflow = 'hidden';
-        
         const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
-        const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
-        
-        let cpnHtml = '';
-        if(p.coupon) {
-            cpnHtml = `<div class="coupon-box"><span style="font-size:12px; opacity:0.8;">Use Code:</span>
-                <code id="cpnText">${sanitize(p.coupon)}</code><button class="icon-btn" onclick="copyCoupon('${sanitize(p.coupon)}')"><i class="fas fa-copy"></i></button></div>`;
-        }
-
-        const prodUrl = window.location.origin + window.location.pathname + '?pid=' + id;
-        const shareUrl = encodeURIComponent(prodUrl);
-        const shareText = encodeURIComponent(`Check out ${p.title} on Futuristic Store!`);
-        const safeTitle = sanitize(p.title).replace(/'/g, "\\'").replace(/"/g, "&quot;");
-
         document.getElementById("modalContent").innerHTML = `
             <button class="close-btn" onclick="closeModals()">×</button>
             <div class="modal-image-gallery">${gallery||`<img src="${fallbackImage}" class="modal-gallery-image">`}</div>
             <h2>${sanitize(p.title)}</h2>
-            <div class="tags-container">${tags}</div>
-            <div style="font-size:11px; margin-top:5px; opacity:0.6;"><i class="fas fa-share-alt"></i> ${p.shares||0} shares</div>
             <div class="price-container" style="margin: 15px 0;">
                 <span class="final-price" style="font-size:24px;">₹ ${p.finalPrice?.toFixed(2)}</span>
-                ${p.discount>0 ? `<span class="original-price">₹ ${p.price?.toFixed(2)}</span> <span class="badge discount-badge" style="position:relative; top:0; left:0;">${p.discount}% OFF</span>` : ''}
             </div>
             <p style="opacity:0.9; font-size:14px; line-height:1.6;">${sanitize(p.description)}</p>
-            ${cpnHtml}
             <div style="margin-top: 20px;">
-                <button onclick="buyProduct('${id}', '${p.affiliateLink}')" style="width:100%; padding:15px; border-radius:10px; background:linear-gradient(90deg, #00f5ff, #9b5cff); border:none; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(0,245,255,0.4);"><i class="fas fa-shopping-cart"></i> Get Deal Now</button>
-            </div>
-            <div class="share-links">
-                <button class="share-btn wa" onclick="shareProduct('${id}', 'https://wa.me/?text=${shareText} ${shareUrl}')"><i class="fab fa-whatsapp"></i></button>
-                <button class="share-btn tg" onclick="shareProduct('${id}', 'https://t.me/share/url?url=${shareUrl}&text=${shareText}')"><i class="fab fa-telegram-plane"></i></button>
-                <button class="share-btn cp" onclick="copyShare('${id}', '${prodUrl}')" title="Copy Link"><i class="fas fa-link"></i></button>
-                <button class="share-btn ns" onclick="nativeShare('${id}', '${safeTitle}')" title="More Sharing Options"><i class="fas fa-share-nodes"></i></button>
+                <button onclick="window.open('${p.affiliateLink}', '_blank')" style="width:100%; padding:15px; border-radius:10px; background:linear-gradient(90deg, #00f5ff, #9b5cff); border:none; color:#fff; font-size:16px; font-weight:bold; cursor:pointer;"><i class="fas fa-shopping-cart"></i> Get Deal Now</button>
             </div>
         `;
         document.getElementById("productModal").classList.add('show');
     };
 
-    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); };
-    window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
-    window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
-    window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
+    window.closeModals = () => { document.body.style.overflow = 'auto'; document.querySelectorAll('.modal').forEach(m => m.classList.remove('show')); };
     window.copyUPI = (txt) => { navigator.clipboard.writeText(txt); showToast("UPI ID Copied!"); };
-    window.buyProduct = (id, link) => { trackEvent('clicks', id); trackEvent('sales', id); if(link && link !== 'undefined') window.open(link, '_blank'); };
 
-    let bannerInterval;
-    function renderBanners() {
-        const b = document.getElementById("banner"); if(!b) return;
-        b.innerHTML = ""; clearInterval(bannerInterval);
-        let list = Object.values(state.banners || {}).filter(x => x && (!x.expiryDateTime || x.expiryDateTime > Date.now()));
-        const now = Date.now();
-        Object.entries(state.products || {}).forEach(([id, p]) => {
-            if(!p || p.inTrash) return;
-            if ((p.autoBanner || p.showInBanner) && p.images && p.images[0]) {
-                let isVisible = true;
-                if(p.visibility === 'private' || p.status === 'private' || (p.visibility === 'scheduled' && p.scheduleTime > now) || (!p.visibility && p.hidden)) isVisible = false;
-                if(p.expiryDateTime && p.expiryDateTime < now) isVisible = false;
-                if (isVisible) list.push({ image: p.images[0], link: window.location.origin + window.location.pathname + '?pid=' + id });
-            }
-        });
-        if(!list.length) return;
-        list.forEach((item, i) => {
-            const img = document.createElement("img");
-            img.src = sanitize(item.image) || fallbackImage; img.loading = "lazy";
-            img.onclick = () => window.location.href = item.link;
-            if(i===0) img.classList.add('active');
-            b.appendChild(img);
-        });
-        const slides = b.querySelectorAll("img");
-        if(slides.length > 1) {
-            let idx = 0;
-            bannerInterval = setInterval(() => { slides.forEach(s=>s.classList.remove('active')); idx = (idx+1)%slides.length; slides[idx].classList.add('active'); }, 3000);
+    // ==========================================
+    // USER AUTH LOGIC
+    // ==========================================
+    window.loginUserGoogle = async () => {
+        try { await signInWithPopup(auth, googleProvider); showToast("Logged in with Google!"); closeModals(); switchTab('profile'); } 
+        catch (e) { showToast(e.message, "error"); }
+    };
+    window.loginUserEmail = async () => {
+        const e = document.getElementById('userEmail').value, p = document.getElementById('userPass').value;
+        if(!e || !p) return showToast("Email and password required", "error");
+        try { await signInWithEmailAndPassword(auth, e, p); showToast("Logged in!"); closeModals(); switchTab('profile'); } 
+        catch (err) {
+            try { await createUserWithEmailAndPassword(auth, e, p); showToast("Account created & Logged in!"); closeModals(); switchTab('profile'); }
+            catch(err2) { showToast(err2.message, "error"); }
         }
-    }
+    };
+    window.logoutUser = async () => { confirmAction("Logout of profile?", async () => { await signOut(auth); showToast("Logged out"); switchTab('home'); }); };
 
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            state.isAdmin = true;
-            if(document.getElementById('adminLoginModal').classList.contains('show')) {
-                closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
-            }
-        } else { state.isAdmin = false; }
-    });
-
+    // ==========================================
+    // ADMIN AUTH & 2-STEP PIN SECURE LOGIC
+    // ==========================================
     window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
-    window.loginAdmin = async () => {
+    
+    window.loginAdminEmailStep = async () => {
         const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
         if(!e || !p) return showToast("Email and password required", "error");
-        try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); } 
-        catch (err) { showToast("Authentication failed: " + err.message, "error"); } 
+        try { 
+            await signInWithEmailAndPassword(auth, e, p); 
+            document.getElementById('adminLoginModal').classList.remove('show');
+            const pinSnap = await get(ref(db, 'adminSecurity/pin'));
+            if(!pinSnap.exists()) document.getElementById('setupPinModal').classList.add('show');
+            else document.getElementById('enterPinModal').classList.add('show');
+        } catch (err) { showToast("Auth failed", "error"); }
     };
-    window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
+
+    window.saveAdminPin = async () => {
+        const p1 = document.getElementById('newAdminPin').value, p2 = document.getElementById('confAdminPin').value;
+        if(!p1 || p1 !== p2) return showToast("PINs do not match", "error");
+        try { await set(ref(db, 'adminSecurity/pin'), p1); showToast("PIN Saved!"); document.getElementById('setupPinModal').classList.remove('show'); document.getElementById('adminPanel').style.display = 'block'; state.isAdmin = true; } catch(e){}
+    };
+
+    window.verifyAdminPinStep = async () => {
+        const p = document.getElementById('verifyAdminPin').value;
+        const pinSnap = await get(ref(db, 'adminSecurity/pin'));
+        if(pinSnap.val() === p) {
+            document.getElementById('enterPinModal').classList.remove('show');
+            document.getElementById('verifyAdminPin').value = '';
+            document.getElementById('adminPanel').style.display = 'block';
+            state.isAdmin = true;
+            showToast("Admin access granted");
+        } else { showToast("Incorrect PIN", "error"); }
+    };
+
+    window.changeAdminPin = async () => {
+        const o = document.getElementById('chgOldPin').value, n = document.getElementById('chgNewPin').value, c = document.getElementById('chgConfPin').value;
+        const pinSnap = await get(ref(db, 'adminSecurity/pin'));
+        if(pinSnap.val() !== o) return showToast("Current PIN incorrect", "error");
+        if(!n || n !== c) return showToast("New PINs do not match", "error");
+        await set(ref(db, 'adminSecurity/pin'), n);
+        showToast("PIN Updated Successfully");
+        ['chgOldPin','chgNewPin','chgConfPin'].forEach(i=>document.getElementById(i).value='');
+    };
+
+    window.logoutAdmin = () => { confirmAction("Logout Admin?", async () => { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); }); };
     window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
     window.switchAdminTab = (tabId) => {
         document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
@@ -1205,221 +1052,41 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
     };
 
-    function updateAdminAnalytics() {
-        document.getElementById('statTotalItems').innerText = Object.keys(state.products || {}).filter(k=>!state.products[k]?.inTrash).length;
-        document.getElementById('statViews').innerText = state.analytics.views || 0;
-        document.getElementById('statClicks').innerText = state.analytics.clicks || 0;
-        document.getElementById('statSales').innerText = state.analytics.sales || 0;
-        const views = state.analytics.views || 0, sales = state.analytics.sales || 0;
-        document.getElementById('statConvRate').innerText = views > 0 ? ((sales/views)*100).toFixed(2) + '%' : '0%';
-        
-        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>((b[1].sales||0)+(b[1].views||0)) - ((a[1].sales||0)+(a[1].views||0))).slice(0, 5);
-        const c = document.getElementById("topProductsList"); if(c) {
-            c.innerHTML='';
-            list.forEach(([id, p], i) => { c.innerHTML += `<div class="admin-list-item"><strong>#${i+1}</strong> <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Views: ${p.views||0} | Sales: ${p.sales||0} | Shares: ${p.shares||0}</p></div></div>`; });
-        }
-    }
-
-    if(document.getElementById("pOriginalPrice")) document.getElementById("pOriginalPrice").oninput = calcPrice; 
-    if(document.getElementById("pDiscount")) document.getElementById("pDiscount").oninput = calcPrice;
-    function calcPrice() {
-        const p = parseFloat(document.getElementById("pOriginalPrice").value)||0, d = parseFloat(document.getElementById("pDiscount").value)||0;
-        document.getElementById("finalPricePreview").innerText = `₹ ${(p - p*d/100).toFixed(2)}`;
-    }
-    window.addImageField = (url='') => {
-        const c = document.getElementById("imageFields");
-        const div = document.createElement('div'); div.style = "display:flex; gap:5px; margin-bottom:5px;";
-        div.innerHTML = `<input type="url" class="pImage" placeholder="Image URL" value="${sanitize(url)}" style="margin:0;"><button class="btn-danger" style="width:40px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-        c.appendChild(div);
-    };
-    window.toggleSchedule = () => {
-        const val = document.querySelector('input[name="pVisibility"]:checked')?.value || 'public';
-        document.getElementById("pScheduleTime").style.display = val === 'scheduled' ? 'block' : 'none';
-    };
-
-    window.saveProduct = async () => {
-        try {
-            const id = document.getElementById("pId").value;
-            const title = document.getElementById("pTitle").value.trim();
-            const price = parseFloat(document.getElementById("pOriginalPrice").value)||0;
-            const cat = document.getElementById("pCategory").value;
-            const affLink = document.getElementById("pAffiliateLink").value.trim();
-
-            if(!title || !price || !cat || !affLink) return showToast("Title, Price, Category, and Affiliate Link required!", "error");
-            const visRadio = document.querySelector('input[name="pVisibility"]:checked').value;
-            let scheduleTime = null;
-            if (visRadio === 'scheduled') {
-                const st = document.getElementById("pScheduleTime").value;
-                if (st) scheduleTime = new Date(st).getTime();
-            }
-
-            const data = {
-                title, description: document.getElementById("pDesc").value.trim(),
-                price, discount: parseFloat(document.getElementById("pDiscount").value)||0,
-                finalPrice: price - (price*(parseFloat(document.getElementById("pDiscount").value)||0)/100),
-                category: cat, tags: document.getElementById("pTags").value.trim(),
-                affiliateLink: affLink, coupon: document.getElementById("pCoupon").value.trim(),
-                featured: document.getElementById("pFeatured").checked, visibility: visRadio, scheduleTime: scheduleTime,
-                hidden: (visRadio === 'private' || visRadio === 'scheduled'), autoBanner: document.getElementById("pAutoBanner").checked,
-                showInBanner: document.getElementById("pShowInBanner") ? document.getElementById("pShowInBanner").checked : false,
-                isTrending: document.getElementById("pIsTrending") ? document.getElementById("pIsTrending").checked : false,
-                autoNotify: document.getElementById("pAutoNotify") ? document.getElementById("pAutoNotify").checked : false,
-                status: visRadio, isDraft: false, inTrash: false,
-                images: [...document.querySelectorAll(".pImage")].map(i=>i.value.trim()).filter(Boolean),
-                expiryDateTime: getTimestamp(document.getElementById("pExpiryDate").value, document.getElementById("pExpiryTime").value),
-                stock: isNaN(parseInt(document.getElementById("pStock").value)) ? null : parseInt(document.getElementById("pStock").value),
-                rating: document.getElementById("pRating").value ? parseFloat(document.getElementById("pRating").value) : null,
-                updatedAt: Date.now()
-            };
-
-            const isNewProduct = !id;
-            if(isNewProduct) { data.createdAt = Date.now(); data.views = 0; data.clicks = 0; data.sales = 0; data.shares = 0; }
-            await (id ? update(ref(db, `products/${id}`), data) : set(push(refs.products), data));
-            showToast("Product Saved!"); 
-            clearProductForm(); 
-        } catch (e) { showToast("Save failed", "error"); }
-    };
-
-    window.clearProductForm = () => {
-        ['pId','pTitle','pDesc','pOriginalPrice','pDiscount','pStock','pRating','pTags','pAffiliateLink','pCoupon','pExpiryDate','pExpiryTime','pScheduleTime'].forEach(i=> { if(document.getElementById(i)) document.getElementById(i).value=''; });
-        ['pFeatured','pAutoBanner','pShowInBanner','pIsTrending','pAutoNotify'].forEach(i=>{ if(document.getElementById(i)) document.getElementById(i).checked=false; });
-        if(document.getElementById('imageFields')){ document.getElementById('imageFields').innerHTML=''; addImageField(); }
-        const r = document.querySelector('input[name="pVisibility"][value="public"]'); if(r) r.checked = true;
-        toggleSchedule(); calcPrice();
-    };
-
-    window.quickEdit = (id) => {
-        const p = state.products[id]; if(!p) return;
-        document.getElementById("pId").value = id; document.getElementById("pTitle").value = p.title||'';
-        document.getElementById("pDesc").value = p.description||''; document.getElementById("pOriginalPrice").value = p.price||'';
-        document.getElementById("pDiscount").value = p.discount||''; document.getElementById("pStock").value = p.stock!=null?p.stock:'';
-        document.getElementById("pRating").value = p.rating ? p.rating.toFixed(1) : ''; document.getElementById("pCategory").value = p.category||'';
-        document.getElementById("pTags").value = p.tags||''; document.getElementById("pAffiliateLink").value = p.affiliateLink||'';
-        document.getElementById("pCoupon").value = p.coupon||''; document.getElementById("pFeatured").checked = p.featured||false;
-        document.getElementById("pAutoBanner").checked = p.autoBanner||false;
-        if(document.getElementById("pShowInBanner")) document.getElementById("pShowInBanner").checked = p.showInBanner||false;
-        if(document.getElementById("pIsTrending")) document.getElementById("pIsTrending").checked = p.isTrending||false;
-        if(document.getElementById("pAutoNotify")) document.getElementById("pAutoNotify").checked = p.autoNotify||false;
-        setInputsDate(p.expiryDateTime, document.getElementById("pExpiryDate"), document.getElementById("pExpiryTime"));
-        const vis = p.visibility || (p.hidden ? 'private' : 'public');
-        const rdo = document.querySelector(`input[name="pVisibility"][value="${vis}"]`); if(rdo) rdo.checked = true;
-        if (p.scheduleTime) document.getElementById("pScheduleTime").value = new Date(p.scheduleTime).toISOString().slice(0,16);
-        else document.getElementById("pScheduleTime").value = '';
-        toggleSchedule();
-        document.getElementById("imageFields").innerHTML='';
-        if(p.images && p.images.length) p.images.forEach(u=>addImageField(u)); else addImageField();
-        calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
-    };
-
-    window.duplicateProduct = (id) => { confirmAction("Duplicate this product?", async () => { try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {} }); };
-    window.archiveProduct = (id) => { confirmAction("Archive product? (Moves to expired panel)", async () => { try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {} }); };
-
-    function renderAdminProducts() {
-        const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
-        const list = Object.entries(state.products || {}).filter(x=>x[1] && !x[1].inTrash).sort((a,b)=>b[1].createdAt - a[1].createdAt); 
-        const frag = document.createDocumentFragment();
-        list.slice(0, 100).forEach(([id, p]) => { 
-            let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
-            if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
-            const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
-            const div = document.createElement('div'); div.className = 'admin-list-item';
-            div.innerHTML = `
-                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold; text-transform:uppercase;">${visText}</span></p></div>
-                <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
-                    <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
-                    <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
-                    <button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
-                </div>`;
-            frag.appendChild(div);
-        });
-        c.appendChild(frag);
-    }
-
-    function renderAdminExpired() {
-        const c = document.getElementById("adminExpiredList"); if(!c) return; c.innerHTML = "";
-        const list = Object.entries(state.expired || {}).filter(x=>x[1]);
-        if(!list.length) { c.innerHTML = '<p style="opacity:0.6; text-align:center;">No expired or trashed products.</p>'; return; }
-        const frag = document.createDocumentFragment();
-        list.forEach(([id, p]) => {
-            if(!p) return;
-            const isTrash = p.inTrash;
-            const div = document.createElement('div'); div.className = "admin-list-item";
-            div.style.borderLeft = isTrash ? "3px solid #777" : "3px solid #ff4757";
-            div.innerHTML = `
-                <img src="${sanitize(p.images?.[0]||fallbackImage)}">
-                <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>${isTrash ? 'In Trash' : 'Expired/Archived'}</p></div>
-                <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
-                    ${!isTrash ? `<button class="btn-danger btn-action" onclick="deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
-                </div>`;
-            frag.appendChild(div);
-        });
-        c.appendChild(frag);
-    }
-
-    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
-    window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
-    window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
-
-    window.exportDatabaseJSON = async () => { try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); } };
-    window.importDatabaseJSON = () => { const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error"); confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => { const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file); }); };
-
-    window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
-    window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
-    function renderAdminCategories() {
-        const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList"); if(!sel || !list) return;
-        sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
-        Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
-    }
-
-    window.addBannerField = (id='', img='', link='', exp=null) => {
-        const d = document.createElement('div'); d.className = 'admin-list-item'; d.style.flexDirection = 'column'; d.style.alignItems='stretch';
-        d.innerHTML = `<input type="hidden" class="bId" value="${id}"><input type="url" class="bImg" placeholder="Image URL" value="${sanitize(img)}" style="margin-bottom:5px;"><input type="url" class="bLink" placeholder="Redirect Link" value="${sanitize(link)}" style="margin-bottom:5px;"><div style="display:flex; gap:10px;"><input type="date" class="bDate"><input type="time" class="bTime"><button class="btn-danger" onclick="this.parentElement.parentElement.remove()" style="margin:0;"><i class="fas fa-trash"></i></button></div>`;
-        setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
-    };
-    window.saveBanners = async () => { try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {} };
-    window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
-    function renderAdminBanners() { const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML=''; Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; }); }
-
-    window.sendManualNotification = async () => {
-        const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
-        if(!title || !msg) return showToast("Title and message required", "error");
-        try {
-            const res = await fetch("https://onesignal.com/api/v1/notifications", {
-                method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" },
-                body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url || undefined })
-            });
-            if(!res.ok) throw new Error("Failed to send");
-            showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
-        } catch(e) { showToast(e.message, "error"); }
-    };
-    if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
-
     // ==========================================
-    // ADVANCED NOTES MARKETPLACE ENGINES
+    // NOTES MARKETPLACE (UPLOAD & DYNAMIC URLS)
     // ==========================================
+    window.openNoteUploadModal = () => {
+        if(!state.currentUser) return showToast("Login to upload notes", "error");
+        if(document.getElementById('urlListContainer').children.length===0) addUrlField();
+        document.getElementById('uploadNoteModal').classList.add('show');
+    };
     
-    window.openNoteUploadModal = () => document.getElementById('uploadNoteModal').classList.add('show');
+    window.addUrlField = () => {
+        const c = document.getElementById('urlListContainer');
+        const div = document.createElement('div'); div.className = 'url-list-item';
+        div.innerHTML = `<input type="url" class="note-url-input" placeholder="Page URL" style="padding:10px; border-radius:5px; background:rgba(0,0,0,0.5); border:1px solid #555; color:#fff;" oninput="calcNotePrice()"><button type="button" onclick="this.parentElement.remove(); calcNotePrice();" style="background:#ff4757; color:#fff; border:none; border-radius:5px;"><i class="fas fa-trash"></i></button>`;
+        c.appendChild(div); calcNotePrice();
+    };
+
     window.toggleCustomInput = (selectId, customId) => {
         const s = document.getElementById(selectId);
         document.getElementById(customId).style.display = s.value === 'custom' ? 'block' : 'none';
     };
 
     window.calcNotePrice = () => {
-        let pages = parseInt(document.getElementById('notePages').value) || 0;
-        let duration = document.getElementById('noteDuration').value;
-        let durationPrice = duration === '1month' ? 20 : 0;
-        let total = (pages * 5) + durationPrice;
-        document.getElementById('notePriceBreakdown').innerHTML = `Pages: ₹${pages*5} | Duration: ₹${durationPrice} <br><strong style="font-size:16px;">Total Price: ₹${total}</strong>`;
-        return total;
+        const urls = document.querySelectorAll('.note-url-input').length;
+        const isLife = document.getElementById('noteLifetime').checked;
+        const days = isLife ? 0 : (parseInt(document.getElementById('noteDays').value) || 0);
+        document.getElementById('noteDays').disabled = isLife;
+        
+        const price = (urls * 10) + (isLife ? 100 : days * 1); // Lifetime = +100 Rs extra (manual)
+        document.getElementById('notePriceBreakdown').innerHTML = `Total Price: ₹${price}`;
+        return price;
     };
 
     window.submitNoteUpload = async () => {
         const title = document.getElementById('noteTitle').value.trim();
         const desc = document.getElementById('noteDesc').value.trim();
-        const uploader = document.getElementById('noteUploader').value.trim();
         const keywords = document.getElementById('noteKeywords').value.trim();
         
         let cls = document.getElementById('noteClass').value;
@@ -1427,47 +1094,31 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         let subj = document.getElementById('noteSubject').value;
         if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
 
-        const pages = parseInt(document.getElementById('notePages').value) || 0;
-        const duration = document.getElementById('noteDuration').value;
+        const isLife = document.getElementById('noteLifetime').checked;
+        const days = isLife ? 'Lifetime' : (parseInt(document.getElementById('noteDays').value) || 0);
         const price = calcNotePrice();
-        
         const thumb = document.getElementById('noteThumb').value.trim();
-        const pdfUrl = document.getElementById('notePdfUrl').value.trim();
-        const fileInput = document.getElementById('noteFile');
-        const file = fileInput.files[0];
+        
+        const urls = [...document.querySelectorAll('.note-url-input')].map(i=>i.value.trim()).filter(Boolean);
+        const upiName = document.getElementById('upUpiName').value.trim();
+        const upiId = document.getElementById('upUpiId').value.trim();
 
-        if(!title || !uploader || (!file && !pdfUrl)) return showToast("Title, Name, and File (or PDF URL) required!", "error");
+        if(!title || urls.length===0 || !upiName || !upiId) return showToast("Title, URLs, and Payment Details required!", "error");
 
-        const processUpload = async (finalUrl) => {
-            try {
-                const noteData = {
-                    title, description: desc, uploader, keywords, class: cls, subject: subj,
-                    pages, duration, price,
-                    fileURL: finalUrl, thumbnail: thumb || fallbackImage,
-                    views: 0, downloads: 0, createdAt: Date.now(), status: 'pending'
-                };
-                await set(push(refs.pendingNotes), noteData);
-                showToast("Note submitted successfully for admin approval!");
-                document.getElementById('uploadNoteModal').classList.remove('show');
-                ['noteTitle','noteDesc','noteUploader','noteKeywords','customNoteClass','customNoteSubject','notePages','noteThumb','notePdfUrl'].forEach(i=>document.getElementById(i).value='');
-                fileInput.value=''; document.getElementById('uploadProgress').style.display='none';
-            } catch(e) { showToast("Error submitting note", "error"); }
-        };
-
-        if(file) {
-            if(file.size > 20 * 1024 * 1024) return showToast("File size must be < 20MB", "error");
-            document.getElementById('uploadProgress').style.display = 'block';
-            const pBar = document.getElementById('uploadProgressBar');
-            const fileRef = sRef(storage, `notes_uploads/${Date.now()}_${file.name}`);
-            const uploadTask = uploadBytesResumable(fileRef, file);
-            uploadTask.on('state_changed',
-                (snap) => { pBar.style.width = ((snap.bytesTransferred/snap.totalBytes)*100) + '%'; },
-                (err) => { showToast("Upload failed", "error"); document.getElementById('uploadProgress').style.display = 'none'; },
-                async () => { const url = await getDownloadURL(uploadTask.snapshot.ref); processUpload(url); }
-            );
-        } else {
-            processUpload(pdfUrl);
-        }
+        try {
+            const noteData = {
+                uid: state.currentUser.uid, uploaderEmail: state.currentUser.email,
+                title, description: desc, keywords, class: cls, subject: subj,
+                duration: days, price, urls, pages: urls.length,
+                thumbnail: thumb || fallbackImage, views: 0, downloads: 0, 
+                createdAt: Date.now(), status: 'pending', upiName, upiId
+            };
+            await set(push(refs.pendingUploads), noteData);
+            showToast("Upload Payment Submitted for Approval!");
+            document.getElementById('uploadNoteModal').classList.remove('show');
+            ['noteTitle','noteDesc','noteKeywords','customNoteClass','customNoteSubject','noteDays','noteThumb','upUpiName','upUpiId'].forEach(i=>document.getElementById(i).value='');
+            document.getElementById('urlListContainer').innerHTML='';
+        } catch(e) { showToast("Error submitting note", "error"); }
     };
 
     window.renderNotesGrid = () => {
@@ -1476,11 +1127,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const fClass = document.getElementById("filterClassNote").value;
         const sortQ = document.getElementById("sortNotes").value;
 
-        // Check purchased notes logic
-        const myPayments = Object.values(state.pendingPayments || {}).filter(p => p.deviceId === deviceId && p.status === 'approved');
-        const purchasedIds = myPayments.map(p => p.noteId);
-
-        let list = Object.entries(state.notes || {}).filter(([id, n]) => n && n.status === 'approved').map(([id, n]) => ({id, ...n}));
+        const purchasedIds = Object.keys(state.userLibrary || {});
+        let list = Object.entries(state.notes || {}).map(([id, n]) => ({id, ...n}));
 
         list = list.filter(n => {
             const t = (n.title||'').toLowerCase(), k = (n.keywords||'').toLowerCase(), s = (n.subject||'').toLowerCase(), c = (n.class||'').toLowerCase();
@@ -1504,23 +1152,22 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             const d = new Date(n.createdAt).toLocaleDateString();
             const div = document.createElement("div"); div.className = "note-card";
             const isFree = (n.price || 0) <= 0;
-            const isPurchased = isFree || state.isAdmin || purchasedIds.includes(n.id);
+            const isOwned = isFree || purchasedIds.includes(n.id) || (state.currentUser && state.currentUser.uid === n.uid) || state.isAdmin;
+            const buyerPrice = (n.urls?.length || 0) * 10;
             
             div.innerHTML = `
                 <div style="position:relative;">
                     <img src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'">
                     ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">${sanitize(n.class)}</div>` : ''}
-                    ${n.subject ? `<div class="note-badge" style="position:absolute; top:10px; right:10px; background:#e91e63; color:#fff;">${sanitize(n.subject)}</div>` : ''}
                 </div>
                 <h3 style="font-size:16px; margin-bottom:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${sanitize(n.title)}</h3>
-                <p style="font-size:11px; color:var(--text-light);">By ${sanitize(n.uploader)} • ${d} ${n.pages ? `• ${n.pages} Pages` : ''}</p>
-                <p style="font-size:12px; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
-                
+                <p style="font-size:11px; color:var(--text-light);">Pages: ${n.urls?.length||0} • Dur: ${n.duration}</p>
+                <p style="font-size:12px; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; overflow:hidden;">${sanitize(n.description)}</p>
                 <div class="note-actions">
-                    <div style="font-size:12px; opacity:0.8;"><i class="fas fa-eye"></i> ${n.views||0} &nbsp; <i class="fas fa-download"></i> ${n.downloads||0}</div>
-                    ${isPurchased 
-                        ? `<button class="note-btn" onclick="downloadNote('${n.id}', '${sanitize(n.fileURL)}')"><i class="fas fa-download"></i> Download</button>` 
-                        : `<button class="note-btn note-btn-buy" onclick="openPaymentModal('${n.id}', ${n.price})"><i class="fas fa-lock"></i> Buy - ₹${n.price}</button>`}
+                    <div style="font-size:12px; opacity:0.8;"><i class="fas fa-download"></i> ${n.downloads||0}</div>
+                    ${isOwned 
+                        ? `<button class="note-btn" onclick="openNoteViewer('${n.id}')">Read Pages</button>` 
+                        : `<button class="note-btn note-btn-buy" onclick="openPaymentModal('${n.id}', ${buyerPrice})"><i class="fas fa-lock"></i> Buy ₹${buyerPrice}</button>`}
                 </div>
             `;
             frag.appendChild(div);
@@ -1529,173 +1176,236 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     window.openPaymentModal = (id, price) => {
-        // Prevent duplicate if already pending
-        const existing = Object.values(state.pendingPayments || {}).find(p => p.deviceId === deviceId && p.noteId === id && p.status === 'pending');
-        if(existing) return showToast("Verification already pending for this note!", "error");
-        
+        if(!state.currentUser) return showToast("Login to buy notes", "error");
         document.getElementById('payNoteId').value = id;
         document.getElementById('payPrice').value = price;
         document.getElementById('payAmountDisplay').innerText = `₹${price}`;
         document.getElementById('paymentModal').classList.add('show');
     };
 
-    window.submitPaymentForm = async () => {
+    window.submitBuyForm = async () => {
         const noteId = document.getElementById('payNoteId').value;
         const price = document.getElementById('payPrice').value;
         const upiName = document.getElementById('payUpiName').value.trim();
         const upiId = document.getElementById('payUpiId').value.trim();
-        const txnId = document.getElementById('payTxnId').value.trim();
-        const screenshot = document.getElementById('payScreenshot').value.trim();
 
         if(!upiName || !upiId) return showToast("UPI Name and ID are required!", "error");
         
         try {
-            const payData = { noteId, price, upiName, upiId, txnId, screenshot, deviceId, status: 'pending', timestamp: Date.now() };
-            await set(push(refs.pendingPayments), payData);
-            showToast("Payment submitted! Admin will verify shortly.");
+            const payData = { noteId, price: parseFloat(price), buyerUid: state.currentUser.uid, buyerEmail: state.currentUser.email, upiName, upiId, status: 'pending', timestamp: Date.now() };
+            await set(push(refs.pendingPurchases), payData);
+            showToast("Purchase submitted! Admin will verify shortly.");
             document.getElementById('paymentModal').classList.remove('show');
-            ['payUpiName','payUpiId','payTxnId','payScreenshot'].forEach(i=>document.getElementById(i).value='');
+            ['payUpiName','payUpiId'].forEach(i=>document.getElementById(i).value='');
         } catch(e) { showToast("Submission failed", "error"); }
     };
 
-    window.downloadNote = (id, url) => {
-        window.open(url, '_blank');
-        try { update(ref(db), { [`notes/${id}/downloads`]: increment(1), [`notes/${id}/views`]: increment(1) }).catch(e=>console.warn(e)); } catch(e){}
+    window.openNoteViewer = (noteId) => {
+        const n = state.notes[noteId]; if(!n || !n.urls) return;
+        const c = document.getElementById('noteUrlsList'); c.innerHTML = '';
+        n.urls.forEach((url, i) => {
+            c.innerHTML += `<a href="${sanitize(url)}" target="_blank" style="display:block; padding:12px; background:var(--input-bg); border-radius:8px; color:var(--primary-glow); text-decoration:none;"><i class="fas fa-link"></i> Page ${i+1}</a>`;
+        });
+        document.getElementById('noteViewerModal').classList.add('show');
     };
 
-    // --- ADMIN NOTES ENGINE ---
+    // ==========================================
+    // PROFILE PANELS ENGINE
+    // ==========================================
+    window.switchProfileTab = (tabId) => {
+        document.querySelectorAll('.profile-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
+    };
+
+    function renderProfile() {
+        if(!state.currentUser) return;
+        const uid = state.currentUser.uid;
+        
+        // Purchased
+        const pCont = document.getElementById('profilePurchasedGrid');
+        pCont.innerHTML = '';
+        const myLibrary = Object.keys(state.userLibrary || {});
+        if(myLibrary.length===0) pCont.innerHTML = '<p style="opacity:0.6;">No purchased notes yet.</p>';
+        myLibrary.forEach(noteId => {
+            const n = state.notes[noteId]; if(!n) return;
+            pCont.innerHTML += `<div class="note-card"><img src="${sanitize(n.thumbnail||fallbackImage)}"><h3>${sanitize(n.title)}</h3><button class="note-btn" onclick="openNoteViewer('${noteId}')" style="margin-top:auto;">Read Pages</button></div>`;
+        });
+
+        // Uploaded
+        const uCont = document.getElementById('profileUploadedGrid');
+        uCont.innerHTML = '';
+        const myUploads = Object.entries(state.notes).filter(x=>x[1].uid===uid).map(x=>({id:x[0], ...x[1], s:'Approved'}))
+            .concat(Object.entries(state.pendingUploads).filter(x=>x[1].uid===uid).map(x=>({id:x[0], ...x[1], s:'Pending'})))
+            .concat(Object.entries(state.rejectedUploads).filter(x=>x[1].uid===uid).map(x=>({id:x[0], ...x[1], s:'Rejected'})));
+        
+        if(myUploads.length===0) uCont.innerHTML = '<p style="opacity:0.6;">No uploads yet.</p>';
+        myUploads.forEach(n => {
+            let col = n.s==='Approved' ? '#2ed573' : (n.s==='Rejected' ? '#ff4757' : '#ff9800');
+            uCont.innerHTML += `<div class="note-card" style="border-top: 3px solid ${col};"><h3>${sanitize(n.title)}</h3><p style="font-size:12px;">Status: <span style="color:${col};">${n.s}</span></p><p style="font-size:11px;">Downloads: ${n.downloads||0}</p></div>`;
+        });
+
+        // Earnings
+        document.getElementById('profileBalanceText').innerText = `₹${(state.earnings.balance||0).toFixed(2)}`;
+
+        // History - Purchases
+        const ph = document.getElementById('profilePurchaseHistory'); ph.innerHTML='';
+        const myPurch = Object.values(state.pendingPurchases).filter(p=>p.buyerUid===uid).concat(
+            Object.values(state.userLibrary).filter(l=>l.amount) // Mock structure for approved
+        );
+        if(myPurch.length===0) ph.innerHTML = '<p style="font-size:12px; opacity:0.6;">No purchase history.</p>';
+        myPurch.forEach(p => {
+            ph.innerHTML += `<div style="padding:10px; background:var(--input-bg); margin-bottom:5px; border-radius:8px; font-size:12px;">₹${p.price||p.amount} - Note ID: ${p.noteId} - ${p.status||'Approved'}</div>`;
+        });
+
+        // History - Withdraws
+        const wh = document.getElementById('profileWithdrawHistory'); wh.innerHTML='';
+        const myWd = Object.values(state.pendingWithdrawals).filter(w=>w.uid===uid);
+        if(myWd.length===0) wh.innerHTML = '<p style="font-size:12px; opacity:0.6;">No withdrawal history.</p>';
+        myWd.forEach(w => {
+            wh.innerHTML += `<div style="padding:10px; background:var(--input-bg); margin-bottom:5px; border-radius:8px; font-size:12px;">Requested: ₹${w.reqAmount} (You get ₹${w.recvAmount}) - Status: ${w.status}</div>`;
+        });
+    }
+
+    window.submitWithdraw = async () => {
+        const amt = parseFloat(document.getElementById('wdAmount').value);
+        const name = document.getElementById('wdUpiName').value.trim();
+        const id = document.getElementById('wdUpiId').value.trim();
+        const bal = state.earnings.balance || 0;
+
+        if(!amt || !name || !id) return showToast("All fields required", "error");
+        if(amt < 100) return showToast("Minimum withdraw is ₹100", "error");
+        if(amt > bal) return showToast("Insufficient balance", "error");
+
+        try {
+            const recv = amt * 0.8;
+            await update(ref(db), { 
+                [`earnings/${state.currentUser.uid}/balance`]: increment(-amt),
+                [`pendingWithdrawals/${Date.now()}`]: { uid: state.currentUser.uid, reqAmount: amt, recvAmount: recv, upiName: name, upiId: id, status: 'Pending', timestamp: Date.now() }
+            });
+            showToast("Withdraw requested successfully!");
+            ['wdAmount','wdUpiName','wdUpiId'].forEach(i=>document.getElementById(i).value='');
+        } catch(e) { showToast("Withdraw failed", "error"); }
+    };
+
+    // ==========================================
+    // ADMIN NOTES & WITHDRAWAL APPROVALS
+    // ==========================================
     function renderAdminNotes() {
         // Pending
         const pCont = document.getElementById("adminPendingNotes");
         if(pCont) {
-            pCont.innerHTML = ""; const pendList = Object.entries(state.pendingNotes || {});
+            pCont.innerHTML = ""; const pendList = Object.entries(state.pendingUploads || {});
             if(!pendList.length) pCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No pending notes.</p>";
             pendList.forEach(([id, n]) => {
                 pCont.innerHTML += `
                     <div class="admin-list-item">
-                        <img src="${sanitize(n.thumbnail||fallbackImage)}">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>By: ${sanitize(n.uploader)} | Class: ${sanitize(n.class)} | ₹${n.price||0}</p></div>
+                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>By: ${sanitize(n.uploaderEmail)} | URLs: ${n.urls?.length||0} | Fee Paid: ₹${n.price||0}<br>UPI: ${sanitize(n.upiName)} (${sanitize(n.upiId)})</p></div>
                         <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="window.open('${sanitize(n.fileURL)}','_blank')">View</button>
-                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="rejectNote('${id}')"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approveUpload('${id}')">Approve</button>
+                            <button class="btn-danger btn-action" onclick="rejectUpload('${id}')">Reject</button>
                         </div>
                     </div>`;
             });
         }
-        
         // Approved
         const aCont = document.getElementById("adminApprovedNotes");
         if(aCont) {
-            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved');
+            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {});
             if(!appList.length) aCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No active notes.</p>";
             appList.forEach(([id, n]) => {
-                aCont.innerHTML += `
-                    <div class="admin-list-item">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Price: ₹${n.price||0} | Downloads: ${n.downloads||0}</p></div>
-                        <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="openEditAdminNote('${id}', 'notes')"><i class="fas fa-pen"></i> Edit</button>
-                            <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
-                        </div>
-                    </div>`;
+                aCont.innerHTML += `<div class="admin-list-item"><div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Downloads: ${n.downloads||0}</p></div><div class="admin-item-actions"><button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')">Delete</button></div></div>`;
             });
         }
-
         // Rejected
         const rCont = document.getElementById("adminRejectedNotes");
         if(rCont) {
-            rCont.innerHTML = ""; const rejList = Object.entries(state.rejectedNotes || {});
+            rCont.innerHTML = ""; const rejList = Object.entries(state.rejectedUploads || {});
             if(!rejList.length) rCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No rejected notes.</p>";
             rejList.forEach(([id, n]) => {
-                rCont.innerHTML += `
-                    <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Rejected</p></div>
-                        <div class="admin-item-actions"><button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button></div>
-                    </div>`;
+                rCont.innerHTML += `<div class="admin-list-item" style="border-left: 3px solid #ff4757;"><div class="admin-item-info"><h4>${sanitize(n.title)}</h4></div><button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedUploads')">Delete</button></div>`;
             });
         }
     }
 
-    window.approveNote = async (id) => {
-        const note = state.pendingNotes[id]; if(!note) return;
-        note.status = 'approved'; note.approvedAt = Date.now();
-        if(note.duration === '1month') note.expiryTime = Date.now() + 30*24*60*60*1000;
-        try { await update(ref(db), { [`notes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Approved Successfully!"); } catch(e){}
+    window.approveUpload = async (id) => {
+        const note = state.pendingUploads[id]; if(!note) return;
+        note.status = 'approved';
+        try { await update(ref(db), { [`notes/${id}`]: note, [`pendingUploads/${id}`]: null }); showToast("Upload Approved!"); } catch(e){}
     };
-    window.rejectNote = async (id) => {
-        const note = state.pendingNotes[id]; if(!note) return;
+    window.rejectUpload = async (id) => {
+        const note = state.pendingUploads[id]; if(!note) return;
         note.status = 'rejected';
-        try { await update(ref(db), { [`rejectedNotes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
+        try { await update(ref(db), { [`rejectedUploads/${id}`]: note, [`pendingUploads/${id}`]: null }); showToast("Upload Rejected!", "error"); } catch(e){}
     };
-    window.deleteNote = async (id, listPath) => { confirmAction("Delete Note permanently?", async () => { try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){} }); };
+    window.deleteNote = async (id, path) => confirmAction("Delete Note?", async () => { await remove(ref(db, `${path}/${id}`)); });
 
-    window.openEditAdminNote = (id, path) => {
-        const note = state[path][id]; if(!note) return;
-        document.getElementById('editNoteId').value = id;
-        document.getElementById('editNotePath').value = path;
-        document.getElementById('editNoteKeywords').value = note.keywords || '';
-        document.getElementById('editNotePages').value = note.pages || 0;
-        document.getElementById('editNoteDuration').value = note.duration || 'lifetime';
-        document.getElementById('editNoteModal').classList.add('show');
-    };
-
-    window.saveAdminNoteEdit = async () => {
-        const id = document.getElementById('editNoteId').value;
-        const path = document.getElementById('editNotePath').value;
-        const pages = parseInt(document.getElementById('editNotePages').value) || 0;
-        const duration = document.getElementById('editNoteDuration').value;
-        const keywords = document.getElementById('editNoteKeywords').value.trim();
-        const price = (pages * 5) + (duration === '1month' ? 20 : 0);
-        let expiryTime = state[path][id].expiryTime || null;
-        if(duration === '1month' && state[path][id].duration !== '1month') expiryTime = Date.now() + 30*24*60*60*1000;
-        else if (duration === 'lifetime') expiryTime = null;
-
-        try {
-            await update(ref(db, `${path}/${id}`), { keywords, pages, duration, price, expiryTime });
-            showToast("Note updated successfully");
-            document.getElementById('editNoteModal').classList.remove('show');
-        } catch(e) { showToast("Failed to update", "error"); }
-    };
-
-    // --- ADMIN PAYMENTS ENGINE ---
-    function renderAdminPayments() {
-        const pCont = document.getElementById('adminPendingPayments');
-        const aCont = document.getElementById('adminApprovedPayments');
-        if(!pCont || !aCont) return;
-        pCont.innerHTML = ""; aCont.innerHTML = "";
-        
-        Object.entries(state.pendingPayments || {}).forEach(([id, pay]) => {
-            const note = state.notes[pay.noteId] || { title: "Deleted/Unknown Note" };
-            const div = document.createElement('div'); div.className = 'admin-list-item';
-            div.innerHTML = `
-                <div class="admin-item-info">
-                    <h4>${sanitize(note.title)} - ₹${pay.price}</h4>
-                    <p>Name: ${sanitize(pay.upiName)} | ID: ${sanitize(pay.upiId)}<br>Txn: ${sanitize(pay.txnId || 'N/A')}</p>
-                </div>
-                <div class="admin-item-actions" style="flex-direction:column; gap:5px;">
-                    ${pay.screenshot ? `<button class="btn-secondary btn-action" onclick="window.open('${sanitize(pay.screenshot)}','_blank')">View Proof</button>` : ''}
-                    ${pay.status === 'pending' ? `
-                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handlePayment('${id}', 'approved')">Approve</button>
-                        <button class="btn-danger btn-action" onclick="handlePayment('${id}', 'rejected')">Reject</button>
-                    ` : `<span style="font-size:11px; padding:3px; background:var(--input-bg); border-radius:3px;">${pay.status.toUpperCase()}</span>`}
-                </div>
-            `;
-            if(pay.status === 'pending') pCont.appendChild(div);
-            else aCont.appendChild(div);
+    function renderAdminPurchases() {
+        const pCont = document.getElementById('adminPendingPurchases'); if(!pCont) return;
+        pCont.innerHTML = "";
+        const pList = Object.entries(state.pendingPurchases || {}).filter(x=>x[1].status==='pending');
+        if(!pList.length) pCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No pending purchases.</p>";
+        pList.forEach(([id, p]) => {
+            const noteTitle = state.notes[p.noteId]?.title || 'Unknown Note';
+            pCont.innerHTML += `
+                <div class="admin-list-item">
+                    <div class="admin-item-info"><h4>Note: ${sanitize(noteTitle)} (₹${p.price})</h4><p>Buyer: ${sanitize(p.buyerEmail)}<br>UPI: ${sanitize(p.upiName)} (${sanitize(p.upiId)})</p></div>
+                    <div class="admin-item-actions">
+                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approvePurchase('${id}')">Approve & Send</button>
+                        <button class="btn-danger btn-action" onclick="rejectPurchase('${id}')">Reject</button>
+                    </div>
+                </div>`;
         });
     }
 
-    window.handlePayment = async (id, status) => {
-        try { await update(ref(db, `pendingPayments/${id}`), { status }); showToast(`Payment ${status}`); } catch(e){}
+    window.approvePurchase = async (id) => {
+        const p = state.pendingPurchases[id]; if(!p) return;
+        const note = state.notes[p.noteId];
+        try {
+            const updates = {};
+            updates[`pendingPurchases/${id}/status`] = 'approved';
+            updates[`userLibrary/${p.buyerUid}/${p.noteId}`] = { purchasedAt: Date.now(), amount: p.price };
+            if(note) {
+                updates[`notes/${p.noteId}/downloads`] = increment(1);
+                updates[`earnings/${note.uid}/balance`] = increment(p.price * 0.5); // 50% Earnings to uploader
+            }
+            await update(ref(db), updates);
+            showToast("Purchase Approved! Downloads updated.");
+        } catch(e) { showToast("Error approving purchase", "error"); }
+    };
+    window.rejectPurchase = async (id) => { await update(ref(db, `pendingPurchases/${id}`), {status: 'rejected'}); showToast("Purchase rejected", "error"); };
+
+    function renderAdminWithdrawals() {
+        const wCont = document.getElementById('adminPendingWithdrawals'); if(!wCont) return;
+        wCont.innerHTML = "";
+        const wList = Object.entries(state.pendingWithdrawals || {}).filter(x=>x[1].status==='Pending');
+        if(!wList.length) wCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No pending withdrawals.</p>";
+        wList.forEach(([id, w]) => {
+            wCont.innerHTML += `
+                <div class="admin-list-item">
+                    <div class="admin-item-info"><h4>Request: ₹${w.reqAmount} (Pay: ₹${w.recvAmount})</h4><p>UPI: ${sanitize(w.upiName)} (${sanitize(w.upiId)})</p></div>
+                    <div class="admin-item-actions">
+                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="markWithdrawPaid('${id}')">Mark Paid</button>
+                        <button class="btn-danger btn-action" onclick="rejectWithdraw('${id}', ${w.reqAmount}, '${w.uid}')">Reject & Refund</button>
+                    </div>
+                </div>`;
+        });
+    }
+    window.markWithdrawPaid = async (id) => { await update(ref(db, `pendingWithdrawals/${id}`), {status: 'Paid'}); showToast("Marked as Paid"); };
+    window.rejectWithdraw = async (id, amt, uid) => { 
+        await update(ref(db), { [`pendingWithdrawals/${id}/status`]: 'Rejected', [`earnings/${uid}/balance`]: increment(amt) }); 
+        showToast("Rejected & Refunded"); 
     };
 
-    // --- ADMIN HELP VIDEOS ENGINE ---
+    // ==========================================
+    // HELP VIDEOS
+    // ==========================================
     window.addHelpLink = async () => {
         const title = document.getElementById('helpTitle').value.trim();
         const url = document.getElementById('helpUrl').value.trim();
         const desc = document.getElementById('helpDesc').value.trim();
         if(!title || !url) return showToast("Title and URL required", "error");
-        try { await set(push(refs.helpLinks), { title, url, desc, createdAt: Date.now() }); showToast("Help Link Added!"); ['helpTitle','helpUrl','helpDesc'].forEach(i=>document.getElementById(i).value=''); } catch(e){}
+        try { await set(push(refs.helpLinks), { title, url, desc, createdAt: Date.now() }); showToast("Help Video Added!"); ['helpTitle','helpUrl','helpDesc'].forEach(i=>document.getElementById(i).value=''); } catch(e){}
     };
     window.deleteHelpLink = id => confirmAction("Delete Help Link?", () => remove(ref(db, `helpLinks/${id}`)));
     
@@ -1707,53 +1417,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     }
     function renderUserHelpLinks() {
         const c1 = document.getElementById('helpLinksThumbContainer');
-        const c2 = document.getElementById('helpLinksPdfContainer');
-        if(!c1 || !c2) return; c1.innerHTML = ""; c2.innerHTML = "";
+        if(!c1) return; c1.innerHTML = "";
         const linksHtml = Object.values(state.helpLinks || {}).map(h => `<a href="${sanitize(h.url)}" target="_blank" class="help-badge" title="${sanitize(h.desc)}"><i class="fab fa-youtube"></i> ${sanitize(h.title)}</a>`).join(' ');
-        c1.innerHTML = linksHtml; c2.innerHTML = linksHtml;
+        c1.innerHTML = linksHtml;
     }
-
-
-    // ==========================================
-    // BACKGROUND STABILITY ENGINES
-    // ==========================================
-    window.triggerAutoNotification = async (product, customMsg) => {
-        if(!product || !product.title) return;
-        const title = "New Update: " + product.title;
-        const msg = customMsg || "Check out our latest deal now!";
-        const url = product.affiliateLink || window.location.origin;
-        try { fetch("https://onesignal.com/api/v1/notifications", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Basic os_v2_app_sqdeowuz7nfiri6ulyvegtmmka4lu7zmkvcu7l4uhebtui24kyvn7jzn2jw3ebkkzbt6ckvehovya3cyh4t5slvkwiekkekxhynftky" }, body: JSON.stringify({ app_id: "9406475a-99fb-4a88-a3d4-5e2a434d8c50", included_segments: ["All"], headings: {"en": title}, contents: {"en": msg}, url: url }) }); } catch(e) {}
-    };
-
-    // Auto Expiry Background Controller (Runs every 30s safely)
-    setInterval(() => {
-        try {
-            const now = Date.now();
-            const updates = {};
-            let changed = false;
-            
-            // Products Check
-            Object.entries(state.products || {}).forEach(([id, p]) => {
-                if(!p || p.inTrash) return;
-                if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') { updates[`expiredProducts/${id}`] = { ...p, status: 'expired', inTrash: false }; updates[`products/${id}`] = null; changed = true; }
-                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
-                    updates[`products/${id}/visibility`] = 'public'; updates[`products/${id}/hidden`] = false; updates[`products/${id}/status`] = 'public'; changed = true;
-                    if (p.autoNotify && typeof window.triggerAutoNotification === 'function') window.triggerAutoNotification(p, "Scheduled product is now live!");
-                }
-            });
-            
-            // Banners Check
-            Object.entries(state.banners || {}).forEach(([id, b]) => { if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; } });
-            
-            // Notes Marketplace Expiry Check
-            Object.entries(state.notes || {}).forEach(([id, n]) => {
-                if(n && n.status === 'approved' && n.expiryTime && n.expiryTime < now) { updates[`notes/${id}/status`] = 'expired'; changed = true; }
-            });
-
-            if(changed && Object.keys(updates).length > 0) update(ref(db), updates).catch(e=>console.warn(e));
-        } catch(e) {}
-    }, 30000);
 
 </script>
 </body>
-</html>
+          </html>
