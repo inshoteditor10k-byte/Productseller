@@ -118,6 +118,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .modal-content { background: var(--modal-content-bg); width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; overflow-y: auto; max-height: 90vh; position: relative; transform: scale(0.9); transition: transform 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .modal.show .modal-content { transform: scale(1); }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; background: none; border: none; color: var(--text-color); cursor: pointer; z-index: 10; }
+.back-btn { position: absolute; top: 15px; left: 20px; font-size: 20px; background: none; border: none; color: var(--text-color); cursor: pointer; z-index: 10; }
 .modal-image-gallery { display: flex; overflow-x: auto; gap: 10px; scroll-snap-type: x mandatory; border-radius: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
 .modal-gallery-image { width: 100%; height: 250px; scroll-snap-align: start; object-fit: cover; flex-shrink: 0; border-radius: 10px; }
 .tags-container { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
@@ -177,7 +178,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 .note-card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 15px; padding: 15px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; }
 .note-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px var(--secondary-glow); }
-.note-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; background: #000; }
+.note-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; background: #000; cursor: pointer; }
 .note-badge { font-size: 10px; padding: 3px 8px; border-radius: 5px; background: var(--primary-glow); color: #000; font-weight: bold; width: fit-content; text-transform: uppercase; }
 .note-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
 .note-btn { background: linear-gradient(90deg, #00f5ff, #9b5cff); color: #fff; padding: 8px 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; display: flex; gap: 5px; align-items: center; }
@@ -205,6 +206,18 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .comment-item h4 { font-size: 13px; color: var(--primary-glow); margin-bottom: 3px; }
 .comment-item p { font-size: 12px; color: var(--text-color); margin-bottom: 5px; }
 .comment-item small { font-size: 10px; color: var(--text-light); }
+
+#fullImageViewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+#fullImageViewer.show { display: flex; animation: fadeIn 0.3s; }
+#fvImage { max-width: 95%; max-height: 80vh; object-fit: contain; transition: transform 0.3s; cursor: grab; }
+.fv-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #ff4757; background: none; border: none; cursor: pointer; z-index: 5001; }
+.fv-counter { position: absolute; top: 20px; left: 20px; font-size: 16px; color: #fff; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; z-index: 5001; }
+.fv-controls { position: absolute; bottom: 30px; display: flex; gap: 15px; z-index: 5001; }
+.fv-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--primary-glow); color: var(--primary-glow); padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: bold; backdrop-filter: blur(5px); }
+.fv-btn:hover { background: var(--primary-glow); color: #000; }
+.fv-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 40px; color: #fff; background: none; border: none; cursor: pointer; z-index: 5001; opacity: 0.5; padding: 20px; }
+.fv-nav:hover { opacity: 1; }
+.fv-prev { left: 10px; } .fv-next { right: 10px; }
 </style>
 </head>
 <body>
@@ -313,22 +326,22 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <div class="modal" id="userProfileModal">
     <div class="modal-content" style="max-width: 600px; text-align: left; padding:0;">
-        <button class="close-btn" onclick="document.getElementById('userProfileModal').classList.remove('show')" style="z-index: 20;">×</button>
-        <div id="userProfileContent" style="padding:20px; max-height: 85vh; overflow-y: auto;"></div>
+        <button class="back-btn" onclick="document.getElementById('userProfileModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <div id="userProfileContent" style="padding:20px; padding-top:50px; max-height: 85vh; overflow-y: auto;"></div>
     </div>
 </div>
 
 <div class="modal" id="noteDetailModal">
     <div class="modal-content" style="max-width: 600px; text-align: left;">
-        <button class="close-btn" onclick="document.getElementById('noteDetailModal').classList.remove('show')">×</button>
-        <div id="noteDetailContent"></div>
+        <button class="back-btn" onclick="document.getElementById('noteDetailModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <div id="noteDetailContent" style="margin-top: 30px;"></div>
     </div>
 </div>
 
 <div class="modal" id="uploadNoteModal">
     <div class="modal-content" style="max-width: 500px;">
-        <button class="close-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;"><i class="fas fa-upload" style="color: var(--primary-glow);"></i> Upload Study Notes</h3>
+        <button class="back-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <h3 style="margin-bottom:15px; margin-top:20px; text-align:center;"><i class="fas fa-upload" style="color: var(--primary-glow);"></i> Upload Study Notes</h3>
         
         <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <textarea id="noteDesc" placeholder="Description / Details" rows="2" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
@@ -401,8 +414,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <div class="modal" id="noteUploadPaymentModal" style="z-index: 2500;">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
-        <button class="close-btn" onclick="document.getElementById('noteUploadPaymentModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:10px; color:var(--primary-glow);">Complete Submission Payment</h3>
+        <button class="back-btn" onclick="document.getElementById('noteUploadPaymentModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Complete Submission Payment</h3>
         <p style="font-size:13px; color:var(--text-light); margin-bottom:15px;">Send <strong style="color:#fff;" id="noteUploadPayAmountDisplay">₹0</strong> to the UPI ID below to submit your notes for approval.</p>
         
         <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
@@ -423,8 +436,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 <div class="modal" id="noteBookingModal" style="z-index: 2500;">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
-        <button class="close-btn" onclick="document.getElementById('noteBookingModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:10px; color:var(--primary-glow);">Book Notes</h3>
+        <button class="back-btn" onclick="document.getElementById('noteBookingModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Book Notes</h3>
         <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:left;">
             <h4 id="bookingNoteTitle" style="margin-bottom:5px;">Note Title</h4>
             <p style="font-size:12px; color:var(--text-light);">Total Notes: <span id="bookingNotesCount">0</span> URLs</p>
@@ -480,6 +493,18 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="password" id="adminSecPass" placeholder="Security Password" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
+    </div>
+</div>
+
+<div id="fullImageViewer">
+    <button class="fv-close" onclick="closeImageViewer()">×</button>
+    <div class="fv-counter" id="fvCounter">1/1</div>
+    <button class="fv-nav fv-prev" onclick="navImageViewer(-1)">❮</button>
+    <img id="fvImage" src="" alt="Note Image">
+    <button class="fv-nav fv-next" onclick="navImageViewer(1)">❯</button>
+    <div class="fv-controls">
+        <button class="fv-btn" id="fvShareBtn"><i class="fas fa-share-alt"></i> Share</button>
+        <button class="fv-btn" id="fvDownloadBtn"><i class="fas fa-download"></i> Download</button>
     </div>
 </div>
 
@@ -731,7 +756,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
-        isAdmin: false, currentUser: null
+        isAdmin: false, currentUser: null,
+        fvUrls: [], fvIndex: 0
     };
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
@@ -1282,7 +1308,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(!u) return;
 
         let bookingsHtml = '<h4 style="margin-bottom:10px;">My Bookings</h4>';
-        const userBookings = Object.entries(state.pendingBookings || {}).filter(([id, b]) => b.uid === u.uid).sort((a,b)=>b[1].timestamp - a[1].timestamp);
+        const userBookings = Object.entries(state.pendingBookings || {}).filter(([id, b]) => b.uid === u.uid && !b.userDeleted).sort((a,b)=>b[1].timestamp - a[1].timestamp);
         if(userBookings.length === 0) bookingsHtml += '<p style="font-size:12px; opacity:0.6;">No bookings yet.</p>';
         userBookings.forEach(([id, b]) => {
             const isApproved = b.status === 'booking_approved';
@@ -1290,22 +1316,19 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             const note = state.notes[b.noteId] || null;
             
             bookingsHtml += `
-                <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid ${statusColor};">
-                    <div style="display:flex; justify-content:space-between;">
+                <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid ${statusColor}; position:relative;">
+                    <button class="icon-btn" style="position:absolute; top:5px; right:5px; padding:5px; font-size:12px; background:none; color:#ff4757;" onclick="deleteUserBooking('${id}')"><i class="fas fa-trash"></i></button>
+                    <div style="display:flex; justify-content:space-between; margin-right:20px;">
                         <strong style="font-size:14px;">${sanitize(b.noteTitle)}</strong>
-                        <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${b.status.replace('booking_','').toUpperCase()}</span>
                     </div>
+                    <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor}; display:inline-block; margin-top:5px;">${b.status.replace('booking_','').toUpperCase()}</span>
                     <p style="font-size:11px; opacity:0.7; margin-top:5px;">Amount: ₹${b.amount} | Date: ${new Date(b.timestamp).toLocaleDateString()}</p>
             `;
             if(isApproved && note && note.noteUrls) {
                 const urlsStr = note.noteUrls.join(',');
                 bookingsHtml += `
                     <div style="margin-top:10px; display:flex; gap:10px; overflow-x:auto;">
-                        ${note.noteUrls.map(url => `<img src="${sanitize(url)}" style="height:60px; min-width:60px; object-fit:cover; border-radius:5px;">`).join('')}
-                    </div>
-                    <div style="margin-top:10px; display:flex; gap:10px;">
-                        <button onclick="shareApprovedNotes('${urlsStr}')" style="flex:1; padding:8px; font-size:12px; background:var(--card-bg); color:var(--primary-glow); border:1px solid var(--primary-glow); border-radius:5px; cursor:pointer;"><i class="fas fa-share-alt"></i> Send</button>
-                        <button onclick="downloadApprovedNotes('${urlsStr}')" style="flex:1; padding:8px; font-size:12px; background:linear-gradient(90deg, #00f5ff, #9b5cff); color:#000; border:none; border-radius:5px; cursor:pointer; font-weight:bold;"><i class="fas fa-download"></i> Download</button>
+                        ${note.noteUrls.map((url, i) => `<img src="${sanitize(url)}" style="height:60px; min-width:60px; object-fit:cover; border-radius:5px; cursor:pointer;" onclick="openImageViewer('${id}', ${i})">`).join('')}
                     </div>
                 `;
             }
@@ -1344,30 +1367,80 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         `;
     };
 
-    window.shareApprovedNotes = (urlsStr) => {
-        const urls = urlsStr.split(',');
-        if (navigator.share) {
-            navigator.share({ title: 'My Booked Notes', text: 'Here are the note links:', url: urls.join('\n') }).catch(e=>console.log(e));
-        } else {
-            navigator.clipboard.writeText(urls.join('\n')); showToast("Links copied to clipboard!");
-        }
-    };
-
-    window.downloadApprovedNotes = async (urlsStr) => {
-        const urls = urlsStr.split(',');
-        showToast("Starting downloads...");
-        urls.forEach((url, i) => {
-            setTimeout(() => {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Note_Part_${i+1}`;
-                a.target = '_blank';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            }, i * 500);
+    window.deleteUserBooking = async (id) => {
+        confirmAction("Remove booking from your dashboard?", async () => {
+            try { await update(ref(db, `pendingBookings/${id}`), { userDeleted: true }); showToast("Removed from dashboard"); } catch(e){}
         });
     };
+
+    window.openImageViewer = (bookingId, startIndex) => {
+        const b = state.pendingBookings[bookingId];
+        if(!b) return;
+        const note = state.notes[b.noteId];
+        if(!note || !note.noteUrls || note.noteUrls.length === 0) return;
+        
+        state.fvUrls = note.noteUrls;
+        state.fvIndex = startIndex;
+        
+        updateImageViewer();
+        document.getElementById('fullImageViewer').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeImageViewer = () => {
+        document.getElementById('fullImageViewer').classList.remove('show');
+        document.body.style.overflow = 'auto';
+        state.fvUrls = [];
+    };
+
+    window.navImageViewer = (dir) => {
+        state.fvIndex += dir;
+        if(state.fvIndex < 0) state.fvIndex = state.fvUrls.length - 1;
+        if(state.fvIndex >= state.fvUrls.length) state.fvIndex = 0;
+        updateImageViewer();
+    };
+
+    function updateImageViewer() {
+        const url = state.fvUrls[state.fvIndex];
+        document.getElementById('fvImage').src = sanitize(url);
+        document.getElementById('fvCounter').innerText = `${state.fvIndex + 1} / ${state.fvUrls.length}`;
+        
+        document.getElementById('fvDownloadBtn').onclick = () => {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Note_Image_${state.fvIndex + 1}`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+        
+        document.getElementById('fvShareBtn').onclick = () => {
+            if (navigator.share) {
+                navigator.share({ title: 'Booked Note', text: 'Check out this note image:', url: url }).catch(e=>console.log(e));
+            } else {
+                navigator.clipboard.writeText(url); showToast("Link copied to clipboard!");
+            }
+        };
+    }
+
+    document.getElementById('fullImageViewer').addEventListener('click', (e) => {
+        if(e.target.id === 'fullImageViewer') closeImageViewer();
+    });
+    
+    let touchstartY = 0;
+    document.getElementById('fullImageViewer').addEventListener('touchstart', e => { touchstartY = e.changedTouches[0].screenY; }, {passive:true});
+    document.getElementById('fullImageViewer').addEventListener('touchend', e => { 
+        if(e.changedTouches[0].screenY - touchstartY > 100) closeImageViewer(); 
+    }, {passive:true});
+    
+    document.addEventListener('keydown', e => {
+        if(document.getElementById('fullImageViewer').classList.contains('show')) {
+            if(e.key === 'Escape') closeImageViewer();
+            if(e.key === 'ArrowRight') navImageViewer(1);
+            if(e.key === 'ArrowLeft') navImageViewer(-1);
+        }
+    });
 
     window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
     window.loginAdmin = async () => {
@@ -1708,7 +1781,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             
             div.innerHTML = `
                 <div style="position:relative;">
-                    <img src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'">
+                    <img src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'" onclick="openNoteDetail('${n.id}')">
                     ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">${sanitize(n.class)}</div>` : ''}
                     ${n.subject ? `<div class="note-badge" style="position:absolute; top:10px; right:10px; background:#e91e63; color:#fff;">${sanitize(n.subject)}</div>` : ''}
                 </div>
@@ -1958,6 +2031,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         pCont.innerHTML = ""; aCont.innerHTML = "";
         
         Object.entries(state.pendingBookings || {}).sort((a,b)=>b[1].timestamp - a[1].timestamp).forEach(([id, b]) => {
+            if(b.adminDeleted && b.status !== 'booking_pending') return;
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
                 <div class="admin-item-info">
@@ -1969,7 +2043,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                     ${b.status === 'booking_pending' ? `
                         <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleBooking('${id}', 'booking_approved')"><i class="fas fa-check"></i> Approve & Send</button>
                         <button class="btn-danger btn-action" onclick="handleBooking('${id}', 'booking_rejected')"><i class="fas fa-times"></i> Reject</button>
-                    ` : `<span style="font-size:11px; padding:5px; background:var(--input-bg); border-radius:5px;">${b.status.toUpperCase()}</span>`}
+                    ` : `
+                        <span style="font-size:11px; padding:5px; background:var(--input-bg); border-radius:5px; margin-right:5px;">${b.status.toUpperCase()}</span>
+                        <button class="btn-danger btn-action" onclick="deleteAdminBooking('${id}')"><i class="fas fa-trash"></i> Delete</button>
+                    `}
                 </div>
             `;
             if(b.status === 'booking_pending') pCont.appendChild(div);
@@ -1980,6 +2057,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     window.handleBooking = async (id, status) => {
         try { await update(ref(db, `pendingBookings/${id}`), { status }); showToast(`Booking ${status.split('_')[1]}`); } catch(e){}
+    };
+    
+    window.deleteAdminBooking = async (id) => {
+        confirmAction("Delete booking entry from admin view? (User will keep access)", async () => {
+            try { await update(ref(db, `pendingBookings/${id}`), { adminDeleted: true }); showToast("Removed from Admin view"); } catch(e){}
+        });
     };
 
     window.addHelpLink = async () => {
