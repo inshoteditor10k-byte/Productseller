@@ -39,6 +39,7 @@ h1, h2, h3 { text-shadow: 0 0 15px var(--primary-glow); }
 h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
 .top-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 15px; z-index: 100; }
+.top-left-actions { position: absolute; top: 15px; left: 15px; display: flex; gap: 15px; z-index: 100; }
 .icon-btn { background: var(--card-bg); border: none; color: var(--text-color); font-size: 18px; padding: 10px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 .icon-btn:hover { color: var(--primary-glow); transform: scale(1.1); }
 .controls-container { padding: 0 20px; max-width: 800px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
@@ -207,6 +208,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 </style>
 </head>
 <body>
+<div class="top-left-actions">
+    <button class="icon-btn" onclick="openProfile()"><i class="fas fa-user-circle"></i></button>
+</div>
 <div class="top-actions">
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
 </div>
@@ -307,6 +311,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="modal-content" id="modalContent"></div>
 </div>
 
+<div class="modal" id="userProfileModal">
+    <div class="modal-content" style="max-width: 600px; text-align: left; padding:0;">
+        <button class="close-btn" onclick="document.getElementById('userProfileModal').classList.remove('show')" style="z-index: 20;">×</button>
+        <div id="userProfileContent" style="padding:20px; max-height: 85vh; overflow-y: auto;"></div>
+    </div>
+</div>
+
 <div class="modal" id="noteDetailModal">
     <div class="modal-content" style="max-width: 600px; text-align: left;">
         <button class="close-btn" onclick="document.getElementById('noteDetailModal').classList.remove('show')">×</button>
@@ -321,7 +332,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         
         <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <textarea id="noteDesc" placeholder="Description / Details" rows="2" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
-        <input type="text" id="noteUploader" placeholder="Your Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="text" id="noteKeywords" placeholder="Keywords (Comma separated)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
 
         <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
@@ -468,6 +478,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
         <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="password" id="adminSecPass" placeholder="Security Password" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <button onclick="loginAdmin()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Login Securely</button>
     </div>
 </div>
@@ -485,6 +496,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <button class="admin-tab active" onclick="switchAdminTab('tab-manage')">Manage</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-notes')">Notes</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-bookings')">Bookings</button>
+        <button class="admin-tab" onclick="switchAdminTab('tab-security')">Security</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-help')">Help Links</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-analytics')">Analytics</button>
         <button class="admin-tab" onclick="switchAdminTab('tab-expired')">Expired</button>
@@ -606,6 +618,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <div id="adminProcessedBookings"></div>
     </div>
 
+    <div id="tab-security" class="admin-tab-content">
+        <h3>Admin Security Settings</h3>
+        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Change mandatory security password for admin login.</p>
+        <input type="password" id="newSecPass" placeholder="New Security Password">
+        <button onclick="updateSecurityPassword()">Update Password</button>
+        <p style="font-size:11px; margin-top:10px;" id="secPassLastUpdated"></p>
+    </div>
+
     <div id="tab-help" class="admin-tab-content">
         <h3>Add Help Video Link</h3>
         <input type="text" id="helpTitle" placeholder="Video Title (e.g. How to get PDF URL)">
@@ -668,7 +688,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -688,6 +708,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         setPersistence(auth, browserLocalPersistence).catch(e => console.warn(e));
     } catch (e) { console.error("Firebase Error:", e); }
 
+    const googleProvider = new GoogleAuthProvider();
+
     const refs = {
         products: ref(db, 'products/'),
         expired: ref(db, 'expiredProducts/'),
@@ -699,16 +721,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         pendingNotes: ref(db, 'pendingNotes/'),
         rejectedNotes: ref(db, 'rejectedNotes/'),
         pendingBookings: ref(db, 'pendingBookings/'),
-        helpLinks: ref(db, 'helpLinks/')
+        helpLinks: ref(db, 'helpLinks/'),
+        adminAuth: ref(db, 'adminAuth/')
     };
 
     let state = {
         products: {}, expired: {}, banners: {}, categories: {}, analytics: {},
-        notes: {}, pendingNotes: {}, rejectedNotes: {}, pendingBookings: {}, helpLinks: {},
+        notes: {}, pendingNotes: {}, rejectedNotes: {}, pendingBookings: {}, helpLinks: {}, adminSecurity: { password: '926257' },
         currentCategory: "ALL", currentView: "home",
         wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
         theme: localStorage.getItem('theme') || 'dark',
-        isAdmin: false
+        isAdmin: false, currentUser: null
     };
 
     const fallbackImage = "https://via.placeholder.com/300x200?text=Image+Not+Found";
@@ -792,11 +815,12 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
     onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
     onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); });
+    onValue(refs.adminAuth, s => { state.adminSecurity = s.val() || { password: '926257' }; if(state.adminSecurity.lastChanged && document.getElementById('secPassLastUpdated')) document.getElementById('secPassLastUpdated').innerText = 'Last updated: ' + new Date(state.adminSecurity.lastChanged).toLocaleString(); });
     
-    onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); });
-    onValue(refs.pendingNotes, s => { state.pendingNotes = s.val() || {}; renderAdminNotes(); });
-    onValue(refs.rejectedNotes, s => { state.rejectedNotes = s.val() || {}; renderAdminNotes(); });
-    onValue(refs.pendingBookings, s => { state.pendingBookings = s.val() || {}; renderAdminBookings(); });
+    onValue(refs.notes, s => { state.notes = s.val() || {}; if(state.currentView === 'notes') renderNotesGrid(); renderAdminNotes(); if(document.getElementById('userProfileModal').classList.contains('show')) renderUserDashboard(); });
+    onValue(refs.pendingNotes, s => { state.pendingNotes = s.val() || {}; renderAdminNotes(); if(document.getElementById('userProfileModal').classList.contains('show')) renderUserDashboard(); });
+    onValue(refs.rejectedNotes, s => { state.rejectedNotes = s.val() || {}; renderAdminNotes(); if(document.getElementById('userProfileModal').classList.contains('show')) renderUserDashboard(); });
+    onValue(refs.pendingBookings, s => { state.pendingBookings = s.val() || {}; renderAdminBookings(); if(document.getElementById('userProfileModal').classList.contains('show')) renderUserDashboard(); });
     onValue(refs.helpLinks, s => { state.helpLinks = s.val() || {}; renderAdminHelpLinks(); renderUserHelpLinks(); });
 
     let initialPidChecked = false;
@@ -1144,7 +1168,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById("productModal").classList.add('show');
     };
 
-    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); document.getElementById("noteDetailModal").classList.remove('show'); };
+    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); document.getElementById("noteDetailModal").classList.remove('show'); document.getElementById("userProfileModal").classList.remove('show'); };
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
     window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
     window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
@@ -1198,19 +1222,161 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
     onAuthStateChanged(auth, user => {
         if (user) {
-            state.isAdmin = true;
-            if(document.getElementById('adminLoginModal').classList.contains('show')) {
-                closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
+            const isPasswordLogin = user.providerData.some(p => p.providerId === 'password');
+            if (isPasswordLogin) {
+                state.isAdmin = true;
+                state.currentUser = null;
+                if(document.getElementById('adminLoginModal').classList.contains('show')) {
+                    closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
+                }
+            } else {
+                state.isAdmin = false;
+                state.currentUser = user;
+                if(document.getElementById('userProfileModal')?.classList.contains('show')) renderUserDashboard();
             }
-        } else { state.isAdmin = false; }
+        } else { 
+            state.isAdmin = false; 
+            state.currentUser = null; 
+            if(document.getElementById('userProfileModal')?.classList.contains('show')) window.openProfile(false);
+        }
     });
+
+    window.openProfile = (forceLogin = false) => {
+        if(!state.currentUser) {
+            if (state.isAdmin) return showToast("Logged in as Admin. Please use normal user to book/upload.", "error");
+            document.getElementById('userProfileContent').innerHTML = `
+                <h2 style="text-align:center; color:var(--primary-glow); margin-bottom:20px;">User Account</h2>
+                ${forceLogin ? '<p style="text-align:center; color:#ff4757; font-size:13px; margin-bottom:15px;">Login required to perform this action.</p>' : ''}
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <button onclick="loginWithGoogle(false)" style="padding:15px; background:var(--input-bg); border:1px solid var(--primary-glow); color:var(--primary-glow); border-radius:10px; font-weight:bold; cursor:pointer;"><i class="fab fa-google"></i> Already Registered (Login)</button>
+                    <button onclick="loginWithGoogle(true)" style="padding:15px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; color:#000; border-radius:10px; font-weight:bold; cursor:pointer;"><i class="fab fa-google"></i> Create Account</button>
+                </div>
+            `;
+        } else {
+            renderUserDashboard();
+        }
+        document.getElementById('userProfileModal').classList.add('show');
+    };
+
+    window.loginWithGoogle = async (isNew) => {
+        try {
+            const res = await signInWithPopup(auth, googleProvider);
+            const user = res.user;
+            const userRef = ref(db, `users/${user.uid}`);
+            const snap = await get(userRef);
+            if (!isNew && !snap.exists()) {
+                await signOut(auth);
+                return showToast("Account not found. Please create an account.", "error");
+            }
+            if (isNew && !snap.exists()) {
+                await set(userRef, { name: user.displayName, email: user.email, photo: user.photoURL, createdAt: Date.now() });
+            }
+            showToast("Logged in successfully!");
+        } catch (e) { showToast("Auth Failed", "error"); }
+    };
+
+    window.logoutUser = async () => { await signOut(auth); showToast("Logged out"); document.getElementById('userProfileModal').classList.remove('show'); };
+
+    window.renderUserDashboard = () => {
+        const u = state.currentUser;
+        if(!u) return;
+
+        let bookingsHtml = '<h4 style="margin-bottom:10px;">My Bookings</h4>';
+        const userBookings = Object.entries(state.pendingBookings || {}).filter(([id, b]) => b.uid === u.uid).sort((a,b)=>b[1].timestamp - a[1].timestamp);
+        if(userBookings.length === 0) bookingsHtml += '<p style="font-size:12px; opacity:0.6;">No bookings yet.</p>';
+        userBookings.forEach(([id, b]) => {
+            const isApproved = b.status === 'booking_approved';
+            const statusColor = isApproved ? '#2ed573' : (b.status === 'booking_rejected' ? '#ff4757' : '#ff9800');
+            const note = state.notes[b.noteId] || null;
+            
+            bookingsHtml += `
+                <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid ${statusColor};">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong style="font-size:14px;">${sanitize(b.noteTitle)}</strong>
+                        <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${b.status.replace('booking_','').toUpperCase()}</span>
+                    </div>
+                    <p style="font-size:11px; opacity:0.7; margin-top:5px;">Amount: ₹${b.amount} | Date: ${new Date(b.timestamp).toLocaleDateString()}</p>
+            `;
+            if(isApproved && note && note.noteUrls) {
+                const urlsStr = note.noteUrls.join(',');
+                bookingsHtml += `
+                    <div style="margin-top:10px; display:flex; gap:10px; overflow-x:auto;">
+                        ${note.noteUrls.map(url => `<img src="${sanitize(url)}" style="height:60px; min-width:60px; object-fit:cover; border-radius:5px;">`).join('')}
+                    </div>
+                    <div style="margin-top:10px; display:flex; gap:10px;">
+                        <button onclick="shareApprovedNotes('${urlsStr}')" style="flex:1; padding:8px; font-size:12px; background:var(--card-bg); color:var(--primary-glow); border:1px solid var(--primary-glow); border-radius:5px; cursor:pointer;"><i class="fas fa-share-alt"></i> Send</button>
+                        <button onclick="downloadApprovedNotes('${urlsStr}')" style="flex:1; padding:8px; font-size:12px; background:linear-gradient(90deg, #00f5ff, #9b5cff); color:#000; border:none; border-radius:5px; cursor:pointer; font-weight:bold;"><i class="fas fa-download"></i> Download</button>
+                    </div>
+                `;
+            }
+            bookingsHtml += `</div>`;
+        });
+
+        let uploadsHtml = '<h4 style="margin-bottom:10px;">Your Uploads</h4>';
+        const allNotes = [...Object.entries(state.pendingNotes||{}), ...Object.entries(state.notes||{}), ...Object.entries(state.rejectedNotes||{})];
+        const userUploads = allNotes.filter(([id, n]) => n.uid === u.uid).sort((a,b)=>b[1].createdAt - a[1].createdAt);
+        if(userUploads.length === 0) uploadsHtml += '<p style="font-size:12px; opacity:0.6;">No uploads yet.</p>';
+        userUploads.forEach(([id, n]) => {
+            const statusColor = n.status === 'approved' ? '#2ed573' : (n.status === 'rejected' ? '#ff4757' : '#ff9800');
+            uploadsHtml += `
+                <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid ${statusColor};">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong style="font-size:14px;">${sanitize(n.title)}</strong>
+                        <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${n.status.replace('upload_','').toUpperCase()}</span>
+                    </div>
+                    <p style="font-size:11px; opacity:0.7; margin-top:5px;">Date: ${new Date(n.createdAt).toLocaleDateString()}</p>
+                </div>
+            `;
+        });
+
+        document.getElementById('userProfileContent').innerHTML = `
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="${u.photoURL || fallbackImage}" style="width:70px; height:70px; border-radius:50%; border:2px solid var(--primary-glow); margin-bottom:10px; object-fit:cover;">
+                <h3>${sanitize(u.displayName || 'User')}</h3>
+                <p style="font-size:12px; color:var(--text-light);">${sanitize(u.email)}</p>
+                <button onclick="logoutUser()" style="margin-top:10px; padding:5px 15px; font-size:12px; background:#ff4757; color:#fff; border:none; border-radius:15px; cursor:pointer;">Logout</button>
+            </div>
+            <hr style="border-color:rgba(255,255,255,0.1); margin:15px 0;">
+            <div style="display:flex; flex-direction:column; gap:20px;">
+                <div>${bookingsHtml}</div>
+                <div>${uploadsHtml}</div>
+            </div>
+        `;
+    };
+
+    window.shareApprovedNotes = (urlsStr) => {
+        const urls = urlsStr.split(',');
+        if (navigator.share) {
+            navigator.share({ title: 'My Booked Notes', text: 'Here are the note links:', url: urls.join('\n') }).catch(e=>console.log(e));
+        } else {
+            navigator.clipboard.writeText(urls.join('\n')); showToast("Links copied to clipboard!");
+        }
+    };
+
+    window.downloadApprovedNotes = async (urlsStr) => {
+        const urls = urlsStr.split(',');
+        showToast("Starting downloads...");
+        urls.forEach((url, i) => {
+            setTimeout(() => {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Note_Part_${i+1}`;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }, i * 500);
+        });
+    };
 
     window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
     window.loginAdmin = async () => {
-        const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value;
-        if(!e || !p) return showToast("Email and password required", "error");
+        const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value, sp = document.getElementById('adminSecPass').value;
+        if(!e || !p || !sp) return showToast("All fields required", "error");
+        const realSp = state.adminSecurity?.password || '926257';
+        if(sp !== realSp) return showToast("Invalid Security Password", "error");
         try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); } 
-        catch (err) { showToast("Authentication failed: " + err.message, "error"); } 
+        catch (err) { showToast("Authentication failed", "error"); } 
     };
     window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
     window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
@@ -1218,6 +1384,16 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
         document.getElementById(tabId).classList.add('active'); event.currentTarget.classList.add('active');
+    };
+
+    window.updateSecurityPassword = async () => {
+        const sp = document.getElementById('newSecPass').value;
+        if(!sp) return showToast("Enter new password", "error");
+        try {
+            await update(ref(db, 'adminAuth'), { password: sp, lastChanged: Date.now() });
+            showToast("Security Password Updated");
+            document.getElementById('newSecPass').value = '';
+        } catch(e) { showToast("Failed to update", "error"); }
     };
 
     function updateAdminAnalytics() {
@@ -1413,7 +1589,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 
 
-    window.openNoteUploadModal = () => document.getElementById('uploadNoteModal').classList.add('show');
+    window.openNoteUploadModal = () => {
+        if(!state.currentUser) return window.openProfile(true);
+        document.getElementById('uploadNoteModal').classList.add('show');
+    };
+
     window.toggleCustomInput = (selectId, customId) => {
         const s = document.getElementById(selectId);
         document.getElementById(customId).style.display = s.value === 'custom' ? 'block' : 'none';
@@ -1441,6 +1621,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     let tempNoteData = null;
 
     window.submitNoteUpload = () => {
+        if(!state.currentUser) return showToast("Please login first", "error");
+        
         const title = document.getElementById('noteTitle').value.trim();
         const desc = document.getElementById('noteDesc').value.trim();
         const uploader = document.getElementById('noteUploader').value.trim();
@@ -1463,6 +1645,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         tempNoteData = {
             title, description: desc, uploader, keywords, class: cls, subject: subj,
             durationDays: days, price, noteUrls: urls, thumbnail: thumb,
+            uid: state.currentUser.uid, userPhoto: state.currentUser.photoURL,
             views: 0, downloads: 0, createdAt: Date.now(), status: 'upload_pending'
         };
 
@@ -1586,7 +1769,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
             <div class="comment-section">
                 <h3 style="margin-bottom:10px; font-size:16px;">Comments</h3>
-                <input type="text" id="commentName" placeholder="Your Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); border:none; color:#fff;">
+                <input type="text" id="commentName" placeholder="Your Name" value="${state.currentUser ? state.currentUser.displayName || '' : ''}" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); border:none; color:#fff;">
                 <textarea id="commentText" placeholder="Write a comment..." rows="3" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); border:none; color:#fff;"></textarea>
                 <button onclick="submitNoteComment('${id}')" style="width:100%; padding:10px; background:var(--primary-glow); border:none; border-radius:8px; color:#000; font-weight:bold; cursor:pointer; margin-bottom:20px;">Post Comment</button>
                 
@@ -1624,6 +1807,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     window.openNoteBookingModal = (id) => {
+        if(!state.currentUser) {
+            closeModals();
+            return window.openProfile(true);
+        }
+        
         const note = state.notes[id];
         if (!note) return;
         const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
@@ -1654,7 +1842,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         const bookingData = {
             noteId: noteId, noteTitle: note.title, buyerName: upiName, buyerUpiId: upiId,
-            amount: total, notesCount: urlsCount, timestamp: Date.now(), status: 'booking_pending'
+            amount: total, notesCount: urlsCount, timestamp: Date.now(), status: 'booking_pending',
+            uid: state.currentUser.uid, userPhoto: state.currentUser.photoURL
         };
 
         try {
@@ -1679,7 +1868,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                         <img src="${sanitize(n.thumbnail||fallbackImage)}">
                         <div class="admin-item-info">
                             <h4>${sanitize(n.title)}</h4>
-                            <p>By: ${sanitize(n.uploader)} | Class: ${sanitize(n.class)} | URLs: ${n.noteUrls ? n.noteUrls.length : 0} | Days: ${n.durationDays||0} | <strong style="color:var(--primary-glow);">₹${n.price||0}</strong></p>
+                            <p>By: ${sanitize(n.uploader)} ${n.uid ? `<br><small style="color:var(--primary-glow);">Auth: ${sanitize(n.uid)}</small>` : ''} | URLs: ${n.noteUrls ? n.noteUrls.length : 0} | Days: ${n.durationDays||0} | <strong style="color:var(--primary-glow);">₹${n.price||0}</strong></p>
                             <p style="font-size:11px; margin-top:4px; background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
                                 <strong>Payer Name:</strong> ${sanitize(n.upiName||'N/A')} <br>
                                 <strong>UPI ID:</strong> ${sanitize(n.upiId||'N/A')}
@@ -1773,7 +1962,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             div.innerHTML = `
                 <div class="admin-item-info">
                     <h4>${sanitize(b.noteTitle)}</h4>
-                    <p>Buyer: ${sanitize(b.buyerName)} | UPI: ${sanitize(b.buyerUpiId)}</p>
+                    <p>Buyer: ${sanitize(b.buyerName)} ${b.uid ? `<br><small style="color:var(--primary-glow);">Auth: ${sanitize(b.uid)}</small>` : ''} | UPI: ${sanitize(b.buyerUpiId)}</p>
                     <p>Count: ${b.notesCount} URLs | Amount: <strong style="color:var(--primary-glow);">₹${b.amount}</strong> | Date: ${new Date(b.timestamp).toLocaleDateString()}</p>
                 </div>
                 <div class="admin-item-actions">
