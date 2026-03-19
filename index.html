@@ -457,29 +457,39 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 <div class="modal" id="noteBookingModal" style="z-index: 2500;">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
         <button class="back-btn" onclick="document.getElementById('noteBookingModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
-        <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Book Notes</h3>
-        <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:left;">
-            <h4 id="bookingNoteTitle" style="margin-bottom:5px;">Note Title</h4>
-            <p style="font-size:12px; color:var(--text-light);">Total Notes: <span id="bookingNotesCount">0</span> URLs</p>
-            <p style="font-size:12px; color:var(--text-light);">Price per Note: ₹5</p>
-            <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
-            <p style="font-size:16px; font-weight:bold; color:var(--primary-glow);">Total Amount: ₹<span id="bookingTotalAmount">0</span></p>
-        </div>
         
-        <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
-            <p style="font-size:12px; opacity:0.8; margin-bottom:5px;">Official UPI ID</p>
-            <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
-                <button id="bookingPayNowBtn" class="icon-btn" style="padding:5px 10px; font-size:12px; border-radius:5px; background:linear-gradient(90deg, #2ed573, #1e90ff); color:#fff; font-weight:bold;"><i class="fas fa-paper-plane"></i> Pay Now</button>
+        <div id="bookingFormPage">
+            <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Book Notes</h3>
+            <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:left;">
+                <h4 id="bookingNoteTitle" style="margin-bottom:5px;">Note Title</h4>
+                <p style="font-size:12px; color:var(--text-light);">Total Notes: <span id="bookingNotesCount">0</span> URLs</p>
+                <p style="font-size:12px; color:var(--text-light);">Price per Note: ₹5</p>
+                <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
+                <p style="font-size:16px; font-weight:bold; color:var(--primary-glow);">Total Amount: ₹<span id="bookingTotalAmount">0</span></p>
             </div>
+            
+            <input type="hidden" id="bookingNoteId">
+            <button type="button" id="submitBookingBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(0,245,255,0.4);">Proceed to Payment</button>
         </div>
 
-        <input type="hidden" id="bookingNoteId">
-        <input type="text" id="bookingUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="text" id="bookingUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        
-        <button onclick="finalizeNoteBooking()" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(0,245,255,0.4);">Submit Booking Request</button>
+        <div id="bookingPaymentPage" style="display:none;">
+            <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Complete Payment</h3>
+            <p style="font-size:13px; color:var(--text-light); margin-bottom:15px;">Send <strong style="color:#fff;" id="bookingAmountText">₹0</strong> to the UPI ID below.</p>
+            
+            <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
+                <p style="font-size:12px; opacity:0.8; margin-bottom:5px;">Official UPI ID</p>
+                <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
+                    <button id="bookingPayNowBtn" class="icon-btn" style="padding:5px 10px; font-size:12px; border-radius:5px; background:linear-gradient(90deg, #2ed573, #1e90ff); color:#fff; font-weight:bold;"><i class="fas fa-paper-plane"></i> Pay Now</button>
+                </div>
+            </div>
+
+            <input type="text" id="bookingUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="bookingUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            
+            <button type="button" id="finalizeBookingBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit Booking Request</button>
+        </div>
     </div>
 </div>
 
@@ -2093,11 +2103,95 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         document.getElementById('bookingTotalAmount').innerText = total;
         document.getElementById('bookingNoteId').value = id;
         
-        const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Booking&am=${total}`;
-        document.getElementById('bookingPayNowBtn').onclick = () => window.open(payLink, '_blank');
+        if(document.getElementById('bookingFormPage')) document.getElementById('bookingFormPage').style.display = 'block';
+        if(document.getElementById('bookingPaymentPage')) document.getElementById('bookingPaymentPage').style.display = 'none';
         
         document.getElementById('noteBookingModal').classList.add('show');
     };
+
+    window.openBookingPaymentPage = function(price) {
+        document.getElementById("bookingFormPage").style.display = "none";
+        document.getElementById("bookingPaymentPage").style.display = "block";
+        document.getElementById("bookingAmountText").innerText = "₹" + price;
+        
+        const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Booking&am=${price}`;
+        document.getElementById('bookingPayNowBtn').onclick = () => window.open(payLink, '_blank');
+    };
+
+    const submitBookingBtn = document.getElementById("submitBookingBtn");
+    if (submitBookingBtn) {
+        submitBookingBtn.onclick = function(e) {
+            e.preventDefault();
+            if (!state.currentUser) {
+                showToast("Login required", "error");
+                return;
+            }
+            const noteId = document.getElementById('bookingNoteId').value;
+            const note = state.notes[noteId];
+            if (!note) {
+                showToast("Select note first", "error");
+                return;
+            }
+            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+            if (!urlsCount || urlsCount <= 0) {
+                showToast("Invalid page count", "error");
+                return;
+            }
+            let totalPrice = urlsCount * 5;
+
+            localStorage.setItem("bookingData", JSON.stringify({
+                noteId: note.id,
+                noteTitle: note.title,
+                pages: urlsCount,
+                price: totalPrice,
+                userEmail: state.currentUser.email,
+                userName: state.currentUser.displayName || "User",
+                status: "payment-pending",
+                time: Date.now()
+            }));
+
+            window.openBookingPaymentPage(totalPrice);
+        };
+    }
+
+    const finalizeBookingBtn = document.getElementById('finalizeBookingBtn');
+    if (finalizeBookingBtn) {
+        finalizeBookingBtn.onclick = async function(e) {
+            e.preventDefault();
+            const noteId = document.getElementById('bookingNoteId').value;
+            const upiName = document.getElementById('bookingUpiName').value.trim();
+            const upiId = document.getElementById('bookingUpiId').value.trim();
+            
+            if(!upiName || !upiId) return showToast("UPI Name and ID are strictly required!", "error");
+            
+            const note = state.notes[noteId];
+            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+            const total = urlsCount * 5;
+
+            const bookingData = {
+                noteId: noteId, noteTitle: note.title, buyerName: upiName, buyerUpiId: upiId,
+                amount: total, notesCount: urlsCount, timestamp: Date.now(), status: 'booking_pending',
+                uid: state.currentUser.uid, userPhoto: state.currentUser.photoURL,
+                noteUploaderUid: note.uid
+            };
+
+            try {
+                const btn = document.getElementById('finalizeBookingBtn');
+                btn.disabled = true; btn.innerHTML = 'Submitting...';
+                await set(push(ref(db, 'pendingBookings/')), bookingData);
+                showToast("Waiting for approval (48 hours)", "success");
+                document.getElementById('noteBookingModal').classList.remove('show');
+                document.getElementById('noteDetailModal').classList.remove('show');
+                document.getElementById('bookingUpiName').value = '';
+                document.getElementById('bookingUpiId').value = '';
+                btn.disabled = false; btn.innerHTML = 'Submit Booking Request';
+            } catch(err) { 
+                showToast("Booking failed", "error"); 
+                document.getElementById('finalizeBookingBtn').disabled = false;
+                document.getElementById('finalizeBookingBtn').innerHTML = 'Submit Booking Request';
+            }
+        };
+    }
 
     window.renderAdminWithdrawals = () => {
         const stats = state.analytics || {};
