@@ -403,13 +403,13 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             <div id="noteUrlsContainer">
                 <div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group">
                     <input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()">
-                    <button class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>
+                    <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
             <button onclick="addNoteUrlField()" style="width:100%; padding:10px; margin-top:5px; background:rgba(0, 245, 255, 0.2); border:1px dashed var(--primary-glow); color:var(--primary-glow); border-radius:8px; cursor:pointer;"><i class="fas fa-plus"></i> Add Another URL</button>
         </div>
 
-        <button id="submitUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
+        <button type="button" id="submitUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
     </div>
 </div>
 
@@ -431,7 +431,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         <input type="text" id="noteUploadUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="text" id="noteUploadUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         
-        <button id="finalizeUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(0,245,255,0.4);">Successfully Paid & Submit for Approval</button>
+        <button type="button" id="finalizeUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(0,245,255,0.4);">Successfully Paid & Submit for Approval</button>
     </div>
 </div>
 
@@ -715,6 +715,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    let tempNoteData = null;
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -1582,7 +1584,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const frag = document.createDocumentFragment();
         list.slice(0, 100).forEach(([id, p]) => { 
             let visText = p.status || (p.visibility === 'private' ? 'Private Link' : (p.visibility === 'scheduled' ? 'Scheduled' : 'Public'));
-            if(!p.visibility && !p.status) visText = p.hidden ? 'Hidden' : 'Public';
+            if(!p.visibility && !p.status) visText = p.hidden ? 'Public' : 'Public'; // Adjusted based on logic, defaults
+            if(!p.visibility && p.hidden) visText = 'Hidden';
             const shareUrl = `${window.location.origin}${window.location.pathname}?pid=${id}`;
             const div = document.createElement('div'); div.className = 'admin-list-item';
             div.innerHTML = `
@@ -1659,83 +1662,74 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
     if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
 
-    document.getElementById('submitUploadBtn').addEventListener('click', () => {
+    document.getElementById('submitUploadBtn').setAttribute('type', 'button');
+    document.getElementById('submitUploadBtn').addEventListener('click', function handleSubmitForApproval(e) {
+        if(e) e.preventDefault();
+        
+        if(document.getElementById('noteUploadPaymentModal').classList.contains('show')) return;
+
         if(!state.currentUser) return showToast("Please login first", "error");
         
-        const btn = document.getElementById('submitUploadBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        btn.classList.add('btn-disabled');
+        const title = document.getElementById('noteTitle').value.trim();
+        const uploader = document.getElementById('noteUploader') ? document.getElementById('noteUploader').value.trim() : (state.currentUser.displayName || 'Unknown');
+        const days = parseInt(document.getElementById('noteDurationDays').value) || 0;
+        const urls = Array.from(document.querySelectorAll('.note-url-input')).map(i => i.value.trim()).filter(Boolean);
+        const price = calcNotePrice();
+        
+        if(!title) return showToast("Note Title is required!", "error");
+        if(urls.length === 0) return showToast("At least one valid Note URL is required!", "error");
+        if(days <= 0) return showToast("Duration must be greater than 0 days!", "error");
+        if(!price || price <= 0) return showToast("Invalid price!", "error");
 
-        setTimeout(() => {
-            const title = document.getElementById('noteTitle').value.trim();
-            const uploader = document.getElementById('noteUploader') ? document.getElementById('noteUploader').value.trim() : (state.currentUser.displayName || 'Unknown');
-            const days = parseInt(document.getElementById('noteDurationDays').value) || 0;
-            const urls = Array.from(document.querySelectorAll('.note-url-input')).map(i => i.value.trim()).filter(Boolean);
-            const price = calcNotePrice();
-            
-            if(!title) { resetUploadBtn(btn); return showToast("Note Title is required!", "error"); }
-            if(urls.length === 0) { resetUploadBtn(btn); return showToast("At least one valid Note URL is required!", "error"); }
-            if(days <= 0) { resetUploadBtn(btn); return showToast("Duration must be greater than 0 days!", "error"); }
+        let cls = document.getElementById('noteClass').value;
+        if(cls === 'custom') cls = document.getElementById('customNoteClass').value.trim();
+        let subj = document.getElementById('noteSubject').value;
+        if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
 
-            let cls = document.getElementById('noteClass').value;
-            if(cls === 'custom') cls = document.getElementById('customNoteClass').value.trim();
-            let subj = document.getElementById('noteSubject').value;
-            if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
+        tempNoteData = {
+            title, 
+            description: document.getElementById('noteDesc').value.trim(), 
+            uploader, 
+            keywords: document.getElementById('noteKeywords').value.trim(), 
+            class: cls, 
+            subject: subj,
+            durationDays: days, 
+            price, 
+            noteUrls: urls, 
+            thumbnail: document.getElementById('noteThumb').value.trim() || fallbackImage,
+            uid: state.currentUser.uid, 
+            userPhoto: state.currentUser.photoURL,
+            views: 0, 
+            downloads: 0, 
+            createdAt: Date.now(), 
+            status: 'upload_pending'
+        };
 
-            tempNoteData = {
-                title, 
-                description: document.getElementById('noteDesc').value.trim(), 
-                uploader, 
-                keywords: document.getElementById('noteKeywords').value.trim(), 
-                class: cls, 
-                subject: subj,
-                durationDays: days, 
-                price, 
-                noteUrls: urls, 
-                thumbnail: document.getElementById('noteThumb').value.trim() || fallbackImage,
-                uid: state.currentUser.uid, 
-                userPhoto: state.currentUser.photoURL,
-                views: 0, 
-                downloads: 0, 
-                createdAt: Date.now(), 
-                status: 'upload_pending'
-            };
-
-            document.getElementById('uploadNoteModal').classList.remove('show');
-            document.getElementById('noteUploadPayAmountDisplay').innerText = `₹${price}`;
-            const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Marketplace&am=${price}`;
-            document.getElementById('noteUploadPayNowBtn').onclick = () => window.open(payLink, '_blank');
-            document.getElementById('noteUploadPaymentModal').classList.add('show');
-            
-            resetUploadBtn(btn);
-        }, 300);
+        document.getElementById('uploadNoteModal').classList.remove('show');
+        document.getElementById('noteUploadPayAmountDisplay').innerText = `₹${price}`;
+        const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Marketplace&am=${price}`;
+        document.getElementById('noteUploadPayNowBtn').onclick = () => window.open(payLink, '_blank');
+        document.getElementById('noteUploadPaymentModal').classList.add('show');
     });
 
-    function resetUploadBtn(btn) {
-        btn.disabled = false;
-        btn.innerHTML = 'Submit for Approval';
-        btn.classList.remove('btn-disabled');
-    }
+    document.getElementById('finalizeUploadBtn').setAttribute('type', 'button');
+    document.getElementById('finalizeUploadBtn').addEventListener('click', async function confirmPaymentSubmit(e) {
+        if(e) e.preventDefault();
 
-    document.getElementById('finalizeUploadBtn').addEventListener('click', async () => {
         if(!tempNoteData) return showToast("Session expired, please try again", "error");
+        
+        const upiName = document.getElementById('noteUploadUpiName').value.trim();
+        const upiId = document.getElementById('noteUploadUpiId').value.trim();
+        
+        if(!upiName || !upiId) {
+            return showToast("UPI Name and ID are strictly required!", "error");
+        }
         
         const btn = document.getElementById('finalizeUploadBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
         btn.classList.add('btn-disabled');
 
-        const upiName = document.getElementById('noteUploadUpiName').value.trim();
-        const upiId = document.getElementById('noteUploadUpiId').value.trim();
-        
-        if(!upiName || !upiId) {
-            btn.disabled = false;
-            btn.innerHTML = 'Successfully Paid & Submit for Approval';
-            btn.classList.remove('btn-disabled');
-            return showToast("UPI Name and ID are strictly required!", "error");
-        }
-        
         tempNoteData.upiName = upiName;
         tempNoteData.upiId = upiId;
 
@@ -1746,10 +1740,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             tempNoteData = null;
             
             ['noteTitle','noteDesc','noteKeywords','customNoteClass','customNoteSubject','noteDurationDays','noteThumb','noteUploadUpiName','noteUploadUpiId'].forEach(i => { if(document.getElementById(i)) document.getElementById(i).value=''; });
-            document.getElementById('noteUrlsContainer').innerHTML = `<div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group"><input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()"><button class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button></div>`;
+            document.getElementById('noteUrlsContainer').innerHTML = `<div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group"><input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()"><button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button></div>`;
             calcNotePrice();
-        } catch(e) { 
-            console.error("Firebase write error:", e);
+        } catch(err) { 
+            console.error("Firebase write error:", err);
             showToast("Submission failed. Try again.", "error"); 
         } finally {
             btn.disabled = false;
@@ -1774,7 +1768,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         div.className = 'note-url-group';
         div.style = 'display:flex; gap:5px; margin-bottom:5px;';
         div.innerHTML = `<input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()">
-                         <button class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>`;
+                         <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>`;
         container.appendChild(div);
         calcNotePrice();
     };
