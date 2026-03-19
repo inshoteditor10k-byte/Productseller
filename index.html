@@ -753,6 +753,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     let tempNoteData = null;
+    const bookingLocks = {}; // Ensure safe double click locks
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -2185,6 +2186,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 document.getElementById('bookingUpiName').value = '';
                 document.getElementById('bookingUpiId').value = '';
                 btn.disabled = false; btn.innerHTML = 'Submit Booking Request';
+                localStorage.removeItem("bookingData");
             } catch(err) { 
                 showToast("Booking failed", "error"); 
                 document.getElementById('finalizeBookingBtn').disabled = false;
@@ -2351,6 +2353,46 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             showToast("Note updated successfully");
             document.getElementById('editNoteModal').classList.remove('show');
         } catch(e) { showToast("Failed to update", "error"); }
+    };
+
+    window.handleBooking = async (id, status) => {
+        if(bookingLocks[id]) return;
+        bookingLocks[id] = true;
+        try { 
+            const b = state.pendingBookings[id];
+            if (!b || b.status !== 'booking_pending') return;
+
+            const updates = {};
+            updates[`pendingBookings/${id}/status`] = status;
+            updates[`pendingBookings/${id}/${status === 'booking_approved' ? 'approvedAt' : 'rejectedAt'}`] = Date.now();
+            
+            if (status === 'booking_approved') {
+                const price = Number(b.amount) || 0;
+                const earnings = price * 0.5;
+                
+                if (b.noteId) {
+                    updates[`notes/${b.noteId}/bookingCount`] = increment(1);
+                    updates[`notes/${b.noteId}/successfulBookings`] = increment(1);
+                    updates[`notes/${b.noteId}/downloadCount`] = increment(1);
+                    updates[`notes/${b.noteId}/downloads`] = increment(1);
+                    updates[`notes/${b.noteId}/uploaderEarnings`] = increment(earnings);
+                    updates[`notes/${b.noteId}/totalSales`] = increment(price);
+                }
+                
+                updates[`analytics/totals/adminTotalRevenue`] = increment(price);
+                updates[`analytics/totals/adminEarnings`] = increment(price);
+                updates[`analytics/totals/adminTotalBookings`] = increment(1);
+
+                if(b.noteUploaderUid) updates[`users/${b.noteUploaderUid}/earnings`] = increment(earnings);
+            }
+            await update(ref(db), updates); 
+            showToast(`Booking ${status.split('_')[1]}`); 
+            renderAdminBookings();
+        } catch(e) { 
+            showToast("Error processing booking", "error"); 
+        } finally {
+            bookingLocks[id] = false;
+        }
     };
 
     function renderAdminBookings() {
