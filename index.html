@@ -71,15 +71,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .scroll-card .image-container img.loaded { opacity: 1; }
 .scroll-card-title { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 15px 15px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); color: #fff; font-weight: bold; font-size: 15px; }
 
-@media(max-width: 768px) { 
-    .products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
-    .card .image-container { height: 130px !important; }
-    .card h3 { font-size: 13px !important; }
-    .price-container { flex-direction: column; align-items: flex-start; gap: 2px !important; }
-    .final-price { font-size: 16px !important; }
-    .original-price { font-size: 11px !important; }
-}
-
 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 .skeleton { background: linear-gradient(90deg, var(--input-bg) 25%, rgba(255,255,255,0.2) 50%, var(--input-bg) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 15px; height: 280px; }
 .empty-state { grid-column: 1/-1; text-align: center; padding: 50px 20px; opacity: 0.7; font-size: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -224,80 +215,28 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .profile-tab-content.active { display: block; animation: fadeIn 0.3s; }
 .stats-badge { font-size: 10px; padding: 3px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
 
-#notesViewWrapper {
-    width: 100%;
-    overflow-x: hidden;
-    box-sizing: border-box;
-}
-
-#notesGrid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px !important;
-    padding: 10px !important;
-    align-items: start;
-}
-
-.note-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    max-width: 260px;
-    margin: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,.15);
-    padding: 10px !important;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.note-thumb {
-    width: 100% !important;
-    aspect-ratio: 210/297 !important;
-    height: auto !important;
-    object-fit: cover !important;
-    background: #111;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.note-content {
-    padding: 8px 0 0 0;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-.note-title {
-    font-size: 14px !important;
-    font-weight: 600;
-    line-height: 1.3;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    white-space: normal !important;
-    margin-bottom: 5px;
-}
+#notesViewWrapper { width: 100%; overflow-x: hidden; box-sizing: border-box; }
+#notesGrid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px !important; padding: 10px !important; align-items: start; }
+.note-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; max-width: 260px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,.15); padding: 10px !important; width: 100%; box-sizing: border-box; }
+.note-thumb { width: 100% !important; aspect-ratio: 210/297 !important; height: auto !important; object-fit: cover !important; background: #111; border-radius: 8px; cursor: pointer; }
+.note-content { padding: 8px 0 0 0; display: flex; flex-direction: column; flex-grow: 1; }
+.note-title { font-size: 14px !important; font-weight: 600; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; white-space: normal !important; margin-bottom: 5px; }
 
 @media(max-width: 600px) {
-    #notesGrid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-        padding: 8px !important;
-    }
-    .note-card {
-        width: 100%;
-        max-width: 100%;
-    }
+    .products { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; padding: 15px !important; }
+    .card .image-container { height: 130px !important; }
+    .card h3 { font-size: 13px !important; }
+    .price-container { flex-direction: column; align-items: flex-start; gap: 2px !important; }
+    .final-price { font-size: 16px !important; }
+    .original-price { font-size: 11px !important; }
+    
+    #notesGrid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; padding: 8px !important; }
+    .note-card { width: 100%; max-width: 100%; }
+    .note-btn { padding: 6px 10px !important; font-size: 11px !important; }
 }
 
 @media(min-width: 601px) {
-    #notesGrid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-    }
+    #notesGrid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important; }
 }
 </style>
 </head>
@@ -1423,9 +1362,9 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
         const userData = state.users[u.uid] || {};
         const totalEarnings = userData.earnings || 0;
+        const pendingWithdraw = userData.pendingWithdraw || 0;
+        const availableBalance = totalEarnings - pendingWithdraw;
         const totalWithdrawn = userData.withdrawn || 0;
-        const pendingWithdrawalsAmt = Object.values(state.withdrawals || {}).filter(w => w.uid === u.uid && w.status === 'pending').reduce((sum, w) => sum + w.amount, 0);
-        const availableBalance = totalEarnings - totalWithdrawn - pendingWithdrawalsAmt;
 
         let bookingsHtml = '<h4 style="margin-bottom:10px;">My Bookings</h4>';
         const userBookings = Object.entries(state.pendingBookings || {}).filter(([id, b]) => b.uid === u.uid && !b.userDeleted).sort((a,b)=>b[1].timestamp - a[1].timestamp);
@@ -1459,8 +1398,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const userUploads = allNotes.filter(([id, n]) => n.uid === u.uid).sort((a,b)=>b[1].createdAt - a[1].createdAt);
         if(userUploads.length === 0) uploadsHtml += '<p style="font-size:12px; opacity:0.6;">No uploads yet.</p>';
         userUploads.forEach(([id, n]) => {
-            const statusColor = n.status === 'approved' ? '#2ed573' : (n.status === 'rejected' ? '#ff4757' : '#ff9800');
-            const approvedBookings = n.successfulBookings || 0;
+            const statusColor = n.status === 'approved' ? '#2ed573' : (n.status === 'rejected' ? '#ff4757' : (n.status === 'expired' ? '#777' : '#ff9800'));
+            const approvedBookings = n.bookingCount || n.successfulBookings || 0;
             const totalSales = n.totalSales || 0;
             const earned = n.uploaderEarnings || 0;
 
@@ -1471,7 +1410,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                         <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${n.status.replace('upload_','').toUpperCase()}</span>
                     </div>
                     <p style="font-size:11px; opacity:0.7; margin-top:5px;">Date: ${new Date(n.createdAt).toLocaleDateString()}</p>
-                    ${n.status === 'approved' ? `
+                    ${n.status === 'approved' || n.status === 'expired' ? `
                     <div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap;">
                         <span class="stats-badge"><i class="fas fa-shopping-cart"></i> ${approvedBookings} Sales</span>
                         <span class="stats-badge"><i class="fas fa-rupee-sign"></i> ₹${totalSales} Total Sales</span>
@@ -1485,7 +1424,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:center;">
                 <p style="font-size:12px; color:var(--text-light);">Available Balance</p>
                 <h2 style="color:#2ed573; font-size:28px;">₹${availableBalance.toFixed(2)}</h2>
-                <p style="font-size:11px; opacity:0.7; margin-top:5px;">Total Earned: ₹${totalEarnings.toFixed(2)} | Withdrawn: ₹${totalWithdrawn.toFixed(2)}</p>
+                <p style="font-size:11px; opacity:0.7; margin-top:5px;">Total Earned: ₹${totalEarnings.toFixed(2)} | Pending: ₹${pendingWithdraw.toFixed(2)} | Withdrawn: ₹${totalWithdrawn.toFixed(2)}</p>
             </div>
             <div style="background:var(--input-bg); padding:15px; border-radius:10px;">
                 <h4 style="margin-bottom:10px;">Request Withdrawal</h4>
@@ -1493,7 +1432,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                 <input type="text" id="wdUpiId" placeholder="UPI ID" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Withdraw Funds</button>
-                <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks.</p>
+                <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks. (3% GST applies)</p>
             </div>
         `;
 
@@ -1502,8 +1441,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             withdrawHtml += `<h4 style="margin-top:20px; margin-bottom:10px;">Withdrawal History</h4>`;
             myWds.forEach(([id, w]) => {
                 const statusColor = w.status === 'approved' ? '#2ed573' : (w.status === 'rejected' ? '#ff4757' : '#ff9800');
+                const gst = w.gst || (w.amount * 0.03);
+                const payAmt = w.payAmount || (w.amount - gst);
                 withdrawHtml += `<div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong style="font-size:14px;">₹${w.amount}</strong><br><small style="opacity:0.6;">${new Date(w.timestamp).toLocaleDateString()}</small></div>
+                    <div><strong style="font-size:14px;">Requested: ₹${w.amount}</strong><br><small style="opacity:0.8; color:var(--primary-glow);">Received: ₹${payAmt.toFixed(2)}</small> <br><small style="opacity:0.5;">${new Date(w.timestamp).toLocaleDateString()}</small></div>
                     <span style="font-size:10px; padding:3px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${w.status.toUpperCase()}</span>
                 </div>`;
             });
@@ -1537,15 +1478,23 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(!amount || amount < 50) return showToast("Minimum withdrawal is ₹50", "error");
         if(amount > maxAllowed) return showToast("Insufficient balance", "error");
 
+        const gst = amount * 0.03;
+        const payAmount = amount - gst;
+
         try {
-            await set(push(refs.withdrawals), {
+            const updates = {};
+            const newWdRef = push(refs.withdrawals);
+            updates[`withdrawals/${newWdRef.key}`] = {
                 uid: state.currentUser.uid,
                 userName: state.currentUser.displayName || 'User',
                 userEmail: state.currentUser.email || '',
-                upiName, upiId, amount,
+                upiName, upiId, amount, gst, payAmount,
                 status: 'pending',
                 timestamp: Date.now()
-            });
+            };
+            updates[`users/${state.currentUser.uid}/pendingWithdraw`] = increment(amount);
+
+            await update(ref(db), updates);
             showToast("Withdrawal request submitted!");
             document.getElementById('wdUpiName').value = '';
             document.getElementById('wdUpiId').value = '';
@@ -1888,6 +1837,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             views: 0, 
             downloads: 0, 
             shares: 0,
+            bookingCount: 0,
             successfulBookings: 0,
             totalSales: 0,
             uploaderEarnings: 0,
@@ -1977,7 +1927,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const fClass = document.getElementById("filterClassNote").value;
         const sortQ = document.getElementById("sortNotes").value;
 
-        let list = Object.entries(state.notes || {}).filter(([id, n]) => n && n.status === 'approved').map(([id, n]) => ({id, ...n}));
+        let list = Object.entries(state.notes || {}).filter(([id, n]) => n && n.status === 'approved' && !n.hidden).map(([id, n]) => ({id, ...n}));
 
         list = list.filter(n => {
             const t = (n.title||'').toLowerCase(), k = (n.keywords||'').toLowerCase(), s = (n.subject||'').toLowerCase(), c = (n.class||'').toLowerCase();
@@ -2044,7 +1994,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const views = note.views || 0;
         const shares = note.shares || 0;
         const downloads = note.downloads || 0;
-        const successfulBookings = note.successfulBookings || 0;
+        const successfulBookings = note.successfulBookings || note.bookingCount || 0;
 
         let starsHtml = '';
         const filled = Math.round(avg);
@@ -2150,8 +2100,17 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     };
 
     window.renderAdminWithdrawals = () => {
+        const stats = state.analytics || {};
         if(document.getElementById('adminPlatformEarnings')) {
-            document.getElementById('adminPlatformEarnings').innerText = `Platform Earnings: ₹${(state.analytics.platformEarnings || 0).toFixed(2)}`;
+            document.getElementById('adminPlatformEarnings').innerHTML = `
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <span class="stats-badge">Revenue: ₹${(stats.adminTotalRevenue||0).toFixed(2)}</span>
+                    <span class="stats-badge">Earnings: ₹${(stats.adminEarnings||0).toFixed(2)}</span>
+                    <span class="stats-badge">Paid Out: ₹${(stats.adminTotalWithdrawPaid||0).toFixed(2)}</span>
+                    <span class="stats-badge">GST Collected: ₹${(stats.adminTotalGSTCollected||0).toFixed(2)}</span>
+                    <span class="stats-badge">Bookings: ${stats.adminTotalBookings||0}</span>
+                </div>
+            `;
         }
         const c = document.getElementById('adminWithdrawalsList');
         if(!c) return;
@@ -2160,34 +2119,46 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(wds.length === 0) { c.innerHTML = "<p style='font-size:12px; opacity:0.6;'>No withdrawal requests.</p>"; return; }
         
         wds.forEach(([id, w]) => {
+            const gst = w.gst || (w.amount * 0.03);
+            const payAmt = w.payAmount || (w.amount - gst);
             c.innerHTML += `
                 <div class="admin-list-item" style="border-left:3px solid ${w.status === 'pending' ? '#ff9800' : (w.status === 'approved' ? '#2ed573' : '#ff4757')}">
                     <div class="admin-item-info">
                         <h4>${sanitize(w.userName)} <span style="font-size:10px; opacity:0.7;">(${sanitize(w.userEmail)})</span></h4>
-                        <p>Amount: <strong style="color:var(--primary-glow);">₹${w.amount}</strong> | Status: ${w.status.toUpperCase()}</p>
+                        <p>Req: ₹${w.amount} | GST(3%): ₹${gst.toFixed(2)} | <strong style="color:var(--primary-glow);">Pay: ₹${payAmt.toFixed(2)}</strong></p>
                         <p style="font-size:11px; margin-top:4px; background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
                             Name: ${sanitize(w.upiName)} <br> UPI: ${sanitize(w.upiId)}
                         </p>
                     </div>
                     <div class="admin-item-actions">
                         ${w.status === 'pending' ? `
-                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="window.open('upi://pay?pa=${encodeURIComponent(w.upiId)}&pn=${encodeURIComponent(w.upiName)}&am=${w.amount}', '_blank')"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
-                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount})"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount})"><i class="fas fa-times"></i> Reject</button>
-                        ` : `<span style="font-size:10px; opacity:0.6;">Processed on ${new Date(w.timestamp).toLocaleDateString()}</span>`}
+                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="window.open('upi://pay?pa=${encodeURIComponent(w.upiId)}&pn=${encodeURIComponent(w.upiName)}&am=${payAmt.toFixed(2)}', '_blank')"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
+                        ` : `<span style="font-size:10px; opacity:0.6;">${w.status.toUpperCase()}</span>`}
                     </div>
                 </div>
             `;
         });
     };
 
-    window.handleWithdrawal = async (id, status, uid, amount) => {
+    window.handleWithdrawal = async (id, status, uid, amount, payAmount, gst) => {
         try {
             const updates = {};
             updates[`withdrawals/${id}/status`] = status;
+            
             if(status === 'approved') {
+                updates[`users/${uid}/earnings`] = increment(-amount);
+                updates[`users/${uid}/pendingWithdraw`] = increment(-amount);
                 updates[`users/${uid}/withdrawn`] = increment(amount);
+                
+                updates[`analytics/totals/adminEarnings`] = increment(-payAmount);
+                updates[`analytics/totals/adminTotalWithdrawPaid`] = increment(payAmount);
+                updates[`analytics/totals/adminTotalGSTCollected`] = increment(gst);
+            } else if (status === 'rejected') {
+                updates[`users/${uid}/pendingWithdraw`] = increment(-amount);
             }
+            
             await update(ref(db), updates);
             showToast(`Withdrawal ${status}!`);
         } catch(e) { showToast("Error processing", "error"); }
@@ -2253,6 +2224,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         const note = state.pendingNotes[id]; if(!note) return;
         note.status = 'approved'; note.approvedAt = Date.now();
         if(note.durationDays) note.expiryTime = Date.now() + (note.durationDays * 24 * 60 * 60 * 1000); 
+        note.hidden = false;
         try { await update(ref(db), { [`notes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Payment Verified & Note Approved!"); } catch(e){}
     };
     window.rejectNote = async (id) => {
@@ -2318,25 +2290,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         if(pCont.innerHTML === "") pCont.innerHTML = "<p style='font-size:12px; opacity:0.6;'>No pending bookings.</p>";
     }
 
-    window.handleBooking = async (id, status) => {
-        try { 
-            const b = state.pendingBookings[id];
-            const updates = {};
-            updates[`pendingBookings/${id}/status`] = status;
-            
-            if (status === 'booking_approved' && b.status !== 'booking_approved') {
-                const earnings = b.amount * 0.5;
-                updates[`notes/${b.noteId}/successfulBookings`] = increment(1);
-                updates[`notes/${b.noteId}/uploaderEarnings`] = increment(earnings);
-                updates[`notes/${b.noteId}/totalSales`] = increment(b.amount);
-                updates[`analytics/totals/platformEarnings`] = increment(b.amount - earnings);
-                if(b.noteUploaderUid) updates[`users/${b.noteUploaderUid}/earnings`] = increment(earnings);
-            }
-            await update(ref(db), updates); 
-            showToast(`Booking ${status.split('_')[1]}`); 
-        } catch(e) { showToast("Error processing booking", "error"); }
-    };
-
     window.deleteAdminBooking = async (id) => {
         confirmAction("Delete booking entry from admin view? (User will keep access)", async () => {
             try { await update(ref(db, `pendingBookings/${id}`), { adminDeleted: true }); showToast("Removed from Admin view"); } catch(e){}
@@ -2391,7 +2344,11 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
             Object.entries(state.banners || {}).forEach(([id, b]) => { if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; } });
             
             Object.entries(state.notes || {}).forEach(([id, n]) => {
-                if(n && n.status === 'approved' && n.expiryTime && n.expiryTime < now) { updates[`notes/${id}/status`] = 'expired'; changed = true; }
+                if(n && n.status === 'approved' && n.expiryTime && n.expiryTime < now && !n.hidden) { 
+                    updates[`notes/${id}/status`] = 'expired'; 
+                    updates[`notes/${id}/hidden`] = true;
+                    changed = true; 
+                }
             });
 
             if(changed && Object.keys(updates).length > 0) update(ref(db), updates).catch(e=>console.warn(e));
@@ -2400,4 +2357,4 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 </script>
 </body>
-</html> 
+</html>
