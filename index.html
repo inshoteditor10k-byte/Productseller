@@ -215,6 +215,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .profile-tab-content.active { display: block; animation: fadeIn 0.3s; }
 .stats-badge { font-size: 10px; padding: 3px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
 
+body { overflow-x: hidden; }
 #notesViewWrapper { width: 100%; overflow-x: hidden; box-sizing: border-box; }
 #notesGrid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px !important; padding: 10px !important; align-items: start; }
 .note-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; max-width: 260px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,.15); padding: 10px !important; width: 100%; box-sizing: border-box; }
@@ -299,7 +300,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
 </div>
 
-<div id="notesViewWrapper" style="display:none; padding: 0 10px; margin-top: 15px;">
+<div id="notesViewWrapper" style="display:none; margin-top: 15px; padding: 0 10px;">
     <button class="btn-upload-note" onclick="openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload & Sell Notes</button>
     <div class="notes-controls">
         <input type="text" id="searchNotes" placeholder="Search by Title, Keywords, Subject, Class..." oninput="renderNotesGrid()">
@@ -753,7 +754,8 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     let tempNoteData = null;
-    const bookingLocks = {}; // Ensure safe double click locks
+    window.bookingLocks = {};
+    window.withdrawPayLocks = {};
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -2195,6 +2197,43 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         };
     }
 
+    window.withdrawPayLocks = {};
+    window.payWithdrawalUPI = (id, upiId, upiName, amount) => {
+        if (window.withdrawPayLocks[id]) return;
+        window.withdrawPayLocks[id] = true;
+
+        const cleanUpiId = String(upiId).trim();
+        const cleanName = String(upiName).trim();
+        const cleanAmount = parseFloat(amount);
+
+        if (!cleanUpiId || cleanUpiId.includes(' ') || !cleanUpiId.includes('@') || cleanUpiId.length < 6) {
+            showToast("Invalid UPI details", "error");
+            window.withdrawPayLocks[id] = false;
+            return;
+        }
+
+        if (!cleanName) {
+            showToast("Invalid UPI Name", "error");
+            window.withdrawPayLocks[id] = false;
+            return;
+        }
+
+        if (isNaN(cleanAmount) || cleanAmount <= 0) {
+            showToast("Invalid Payment Amount", "error");
+            window.withdrawPayLocks[id] = false;
+            return;
+        }
+
+        const formattedAmount = cleanAmount.toFixed(2);
+        const upiURL = `upi://pay?pa=${encodeURIComponent(cleanUpiId)}&pn=${encodeURIComponent(cleanName)}&am=${formattedAmount}&cu=INR`;
+
+        window.location.href = upiURL;
+
+        setTimeout(() => {
+            window.withdrawPayLocks[id] = false;
+        }, 1500);
+    };
+
     window.renderAdminWithdrawals = () => {
         const stats = state.analytics || {};
         if(document.getElementById('adminPlatformEarnings')) {
@@ -2217,6 +2256,10 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
         wds.forEach(([id, w]) => {
             const gst = w.gst || (w.amount * 0.03);
             const payAmt = w.payAmount || (w.amount - gst);
+            
+            const safeUpiId = sanitize(w.upiId).replace(/'/g, "\\'");
+            const safeUpiName = sanitize(w.upiName).replace(/'/g, "\\'");
+
             c.innerHTML += `
                 <div class="admin-list-item" style="border-left:3px solid ${w.status === 'pending' ? '#ff9800' : (w.status === 'approved' ? '#2ed573' : '#ff4757')}">
                     <div class="admin-item-info">
@@ -2228,7 +2271,7 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
                     </div>
                     <div class="admin-item-actions">
                         ${w.status === 'pending' ? `
-                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="window.open('upi://pay?pa=${encodeURIComponent(w.upiId)}&pn=${encodeURIComponent(w.upiName)}&am=${payAmt.toFixed(2)}', '_blank')"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
+                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
                             <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
                             <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
                         ` : `<span style="font-size:10px; opacity:0.6;">${w.status.toUpperCase()}</span>`}
