@@ -177,6 +177,14 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 
 .help-badge { font-size: 11px; padding: 5px 10px; border-radius: 15px; background: rgba(0, 245, 255, 0.2); color: var(--primary-glow); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; border: 1px solid var(--primary-glow); margin-top: 5px;}
 .help-badge:hover { background: var(--primary-glow); color: #000; }
+
+.priceBox { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 10px; width: 100%; }
+.priceBox-prices { display: flex; gap: 8px; align-items: baseline; }
+.oldPrice { text-decoration: line-through; color: gray; font-size: 12px; }
+.newPrice { color: #2ed573; font-weight: bold; font-size: 16px; }
+.buyBtn { width: 100%; background: linear-gradient(90deg, #ff4757, #ff9800); color: #fff; padding: 10px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); transition: 0.3s; }
+.buyBtn:hover { transform: scale(1.02); }
+
 .price-breakdown { font-size: 12px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; margin-bottom: 10px; color: var(--text-light); }
 .price-breakdown strong { color: var(--primary-glow); font-size: 14px; }
 .note-url-group { animation: slideDown 0.3s ease forwards; }
@@ -215,7 +223,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .profile-tab-content.active { display: block; animation: fadeIn 0.3s; }
 .stats-badge { font-size: 10px; padding: 3px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
 
-/* Withdraw Form Mobile Card Style */
 .withdrawCard {
     max-width: 480px;
     margin: auto;
@@ -239,7 +246,6 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
     height: 50px;
 }
 
-/* User History Feature Styles */
 .historyCard {
     background: var(--input-bg);
     padding: 12px;
@@ -519,7 +525,7 @@ body { overflow-x: hidden; }
             <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:left;">
                 <h4 id="bookingNoteTitle" style="margin-bottom:5px;">Note Title</h4>
                 <p style="font-size:12px; color:var(--text-light);">Total Notes: <span id="bookingNotesCount">0</span> URLs</p>
-                <p style="font-size:12px; color:var(--text-light);">Price per Note: <span id="bookingPricePerPageDisplay">₹5</span></p>
+                <p style="font-size:12px; color:var(--text-light);">Price per Note Page: ₹<span id="bookingPppDisplay">5</span></p>
                 <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
                 <p style="font-size:16px; font-weight:bold; color:var(--primary-glow);">Total Amount: ₹<span id="bookingTotalAmount">0</span></p>
             </div>
@@ -549,38 +555,56 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div class="modal" id="editNoteModal">
+<div class="modal" id="noteEditPage">
     <div class="modal-content" style="max-width: 400px;">
-        <button class="close-btn" onclick="document.getElementById('editNoteModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note Pricing</h3>
+        <button class="close-btn" onclick="document.getElementById('noteEditPage').style.display='none'">×</button>
+        <h3 style="margin-bottom:15px; text-align:center;">Note Pricing Editor</h3>
         <input type="hidden" id="editNoteId">
         <input type="hidden" id="editNotePath">
         
-        <p style="margin-bottom:10px; font-size:12px; color:var(--text-light);">Total Pages (URLs)</p>
-        <input type="number" id="editNotePagesAdmin" readonly style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:rgba(0,0,0,0.3); color:var(--text-light); border:none; cursor:not-allowed;">
-
-        <p style="margin-bottom:10px; font-size:12px; color:var(--text-light);">Selling Price Per Page (₹)</p>
-        <input type="number" id="editNoteSellingPriceAdmin" placeholder="Price Per Page (₹)" oninput="calcEditNotePrice()" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        
-        <div style="background:rgba(0,245,255,0.1); padding:12px; border-radius:8px; border:1px dashed var(--primary-glow); text-align:center; margin-bottom:15px;">
-            <span style="font-size:12px; color:var(--text-light);">Final Total Price:</span><br>
-            <strong id="editNoteFinalPriceDisplay" style="color:var(--primary-glow); font-size:20px;">₹0</strong>
+        <div style="background:var(--input-bg); padding:15px; border-radius:8px; margin-bottom:15px;">
+            <p style="font-size:13px; color:var(--text-light); margin-bottom:5px;">Pages: <strong id="editNotePagesDisplay" style="color:#fff;">0</strong></p>
+            <p style="font-size:13px; color:var(--text-light); margin-bottom:0;">Original Price: <strong id="editNoteOriginalDisplay" style="color:#fff;">₹0</strong></p>
         </div>
 
-        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Update Price</button>
+        <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Price per page (₹)</label>
+        <input type="number" id="editNotePricePerPage" placeholder="Enter price per page" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="flex:1;">
+                <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Discount %</label>
+                <input type="number" id="editNoteDiscountPercent" placeholder="%" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            </div>
+            <div style="flex:1;">
+                <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Discount Days</label>
+                <input type="number" id="editNoteDiscountDays" placeholder="Days" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            </div>
+        </div>
+
+        <p style="margin-bottom:15px; font-size:14px; text-align:center;">Final Price: <strong id="editNoteFinalPriceDisplay" style="color:var(--primary-glow); font-size:20px;">₹0</strong></p>
+        
+        <button onclick="window.updateNotePricing()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Update Pricing</button>
     </div>
 </div>
 
-<div class="modal" id="rejectReasonModal" style="z-index: 4000;">
-    <div class="modal-content" style="max-width: 400px; text-align: left;">
-        <button class="close-btn" onclick="document.getElementById('rejectReasonModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:15px; color:var(--primary-glow);">Select Reject Reason</h3>
+<div class="modal" id="rejectModal" style="z-index: 4500;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <h3 style="margin-bottom: 15px; color:var(--primary-glow);">Select Reject Reason</h3>
+        <input type="hidden" id="rejectType">
+        <input type="hidden" id="rejectId">
+        <input type="hidden" id="rejectArg1">
+        <input type="hidden" id="rejectArg2">
+        <input type="hidden" id="rejectArg3">
+        <input type="hidden" id="rejectArg4">
+        
         <select id="rejectReasonSelect" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         </select>
-        <textarea id="rejectRemarkInput" placeholder="Admin remark (optional)" rows="3" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
+        
+        <textarea id="rejectRemark" placeholder="Admin remark (optional)" rows="2" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
+        
         <div style="display:flex; gap:10px;">
-            <button class="btn-danger" onclick="confirmReject()" style="width:100%; padding:12px; border-radius:8px; border:none; cursor:pointer; color:#fff; font-weight:bold;">Confirm Reject</button>
-            <button class="btn-secondary" onclick="document.getElementById('rejectReasonModal').classList.remove('show')" style="width:100%; padding:12px; border-radius:8px; border:none; cursor:pointer;">Cancel</button>
+            <button class="btn-danger" onclick="confirmReject()" style="width: 100%; padding: 12px; border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Confirm Reject</button>
+            <button onclick="document.getElementById('rejectModal').classList.remove('show')" style="width: 100%; padding: 12px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); font-weight:bold; cursor:pointer;">Cancel</button>
         </div>
     </div>
 </div>
@@ -842,7 +866,47 @@ body { overflow-x: hidden; }
     let tempNoteData = null;
     window.bookingLocks = {};
     window.withdrawPayLocks = {};
-    window.currentRejectData = {};
+
+    window.rejectReasons = {
+        booking: ["Payment not verified", "Fake payment screenshot", "Duplicate booking", "User cancelled request", "Invalid booking"],
+        upload: ["Low quality notes", "Blur images", "Incomplete notes", "Wrong subject", "Duplicate upload", "Copyright issue"],
+        withdrawal: ["Invalid UPI ID", "UPI name mismatch", "Insufficient balance", "Suspicious withdraw", "KYC required"]
+    };
+
+    window.openRejectModal = (type, id, arg1, arg2, arg3, arg4) => {
+        document.getElementById('rejectType').value = type;
+        document.getElementById('rejectId').value = id;
+        document.getElementById('rejectArg1').value = arg1 || '';
+        document.getElementById('rejectArg2').value = arg2 || '';
+        document.getElementById('rejectArg3').value = arg3 || '';
+        document.getElementById('rejectArg4').value = arg4 || '';
+        
+        const sel = document.getElementById('rejectReasonSelect');
+        sel.innerHTML = window.rejectReasons[type].map(r => `<option value="${r}">${r}</option>`).join('');
+        document.getElementById('rejectRemark').value = '';
+        
+        document.getElementById('rejectModal').classList.add('show');
+    };
+
+    window.confirmReject = () => {
+        const type = document.getElementById('rejectType').value;
+        const id = document.getElementById('rejectId').value;
+        const sel = document.getElementById('rejectReasonSelect').value;
+        const rem = document.getElementById('rejectRemark').value.trim();
+        const fullReason = rem ? `${sel} - ${rem}` : sel;
+
+        document.getElementById('rejectModal').classList.remove('show');
+
+        if (type === 'upload') window.executeRejectNote(id, fullReason);
+        if (type === 'booking') window.executeHandleBooking(id, 'booking_rejected', fullReason);
+        if (type === 'withdrawal') {
+            const uid = document.getElementById('rejectArg1').value;
+            const amt = parseFloat(document.getElementById('rejectArg2').value);
+            const pay = parseFloat(document.getElementById('rejectArg3').value);
+            const gst = parseFloat(document.getElementById('rejectArg4').value);
+            window.executeHandleWithdrawal(id, 'rejected', uid, amt, pay, gst, fullReason);
+        }
+    };
 
     window.bankSuffixMap = {
         "State Bank of India": ["@sbi", "@oksbi"],
@@ -941,67 +1005,28 @@ body { overflow-x: hidden; }
         document.getElementById('wdUpiPreview').dataset.suffixUsed = suffixUsed;
     };
 
-    window.openRejectModal = (type, id, uid, amount, payAmount, gst) => {
-        window.currentRejectData = { type, id, uid, amount, payAmount, gst };
-        const select = document.getElementById('rejectReasonSelect');
-        select.innerHTML = '<option value="">Select a reason...</option>';
-
-        const reasons = {
-            'booking': ['Payment not verified', 'Fake payment screenshot', 'Duplicate booking', 'User cancelled request', 'Invalid booking'],
-            'upload': ['Low quality notes', 'Blur images', 'Incomplete notes', 'Wrong subject', 'Duplicate upload', 'Copyright issue'],
-            'withdraw': ['Invalid UPI ID', 'UPI name mismatch', 'Insufficient balance', 'Suspicious withdraw', 'KYC required']
-        };
-
-        (reasons[type] || []).forEach(r => {
-            select.innerHTML += `<option value="${r}">${r}</option>`;
-        });
-
-        document.getElementById('rejectRemarkInput').value = '';
-        document.getElementById('rejectReasonModal').classList.add('show');
-    };
-
-    window.confirmReject = async () => {
-        const reason = document.getElementById('rejectReasonSelect').value;
-        const remark = document.getElementById('rejectRemarkInput').value.trim();
-        if (!reason) return showToast("Please select a reject reason!", "error");
-
-        let finalReason = reason;
-        if (remark) finalReason += ` - ${remark}`;
-
-        const data = window.currentRejectData;
-        document.getElementById('rejectReasonModal').classList.remove('show');
-
-        if (data.type === 'upload') {
-            const note = state.pendingNotes[data.id];
-            if(note) {
-                note.status = 'rejected';
-                note.rejectReason = finalReason;
-                note.rejectedAt = Date.now();
-                try { await update(ref(db), { [`rejectedNotes/${data.id}`]: note, [`pendingNotes/${data.id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
-            }
-        } else if (data.type === 'booking') {
-            if(bookingLocks[data.id]) return;
-            bookingLocks[data.id] = true;
-            try {
-                const updates = {};
-                updates[`pendingBookings/${data.id}/status`] = 'booking_rejected';
-                updates[`pendingBookings/${data.id}/rejectReason`] = finalReason;
-                updates[`pendingBookings/${data.id}/rejectedAt`] = Date.now();
-                await update(ref(db), updates);
-                showToast("Booking rejected", "error");
-            } catch(e) { showToast("Error", "error"); }
-            bookingLocks[data.id] = false;
-        } else if (data.type === 'withdraw') {
-            try {
-                const updates = {};
-                updates[`withdrawals/${data.id}/status`] = 'rejected';
-                updates[`withdrawals/${data.id}/rejectReason`] = finalReason;
-                updates[`withdrawals/${data.id}/rejectedAt`] = Date.now();
-                updates[`users/${data.uid}/pendingWithdraw`] = increment(-data.amount);
-                await update(ref(db), updates);
-                showToast("Withdrawal rejected!", "error");
-            } catch(e) { showToast("Error processing", "error"); }
+    window.getNotePriceInfo = (note) => {
+        const pages = note.noteUrls ? note.noteUrls.length : 1;
+        const spp = note.sellingPricePerPage || (note.price ? (note.price / pages) : 5);
+        const originalPrice = pages * spp;
+        
+        let discountPercent = note.discountPercent || 0;
+        const discountEndDate = note.discountEndDate || 0;
+        
+        if (discountEndDate > 0 && Date.now() > discountEndDate) {
+            discountPercent = 0;
         }
+        
+        const finalPrice = discountPercent > 0 ? (originalPrice - (originalPrice * discountPercent / 100)) : originalPrice;
+        
+        return {
+            pages,
+            pricePerPage: spp,
+            originalPrice,
+            finalPrice,
+            discountPercent,
+            hasDiscount: discountPercent > 0
+        };
     };
 
     const firebaseConfig = {
@@ -1112,6 +1137,7 @@ body { overflow-x: hidden; }
         const now = Date.now();
         document.querySelectorAll('.countdown-timer').forEach(el => {
             const exp = parseInt(el.dataset.expiry);
+            if(exp) el.innerText = exp > now ? formatCountdown(exp - exp) : 'Expired'; // Fixed visual bug, should be exp - now
             if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
         });
         requestAnimationFrame(runTimers);
@@ -1684,8 +1710,8 @@ body { overflow-x: hidden; }
                 <h4>${sanitize(b.noteTitle)}</h4>
                 <p>Price: ₹${b.amount}</p>
                 <p>Purchased: ${new Date(b.timestamp).toLocaleDateString()}</p>
-                <p>Status: <span style="color:${b.status==='booking_approved'?'#2ed573':(b.status==='booking_rejected'?'#ff4757':'#ff9800')}">${b.status.replace('booking_','').toUpperCase()}</span></p>
-                ${b.status === 'booking_rejected' && b.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(b.rejectReason)}</p>` : ''}
+                <p>Status: <span style="color:${b.status==='booking_approved'?'#2ed573':(b.status.includes('rejected')?'#ff4757':'#ff9800')}">${b.status.replace('booking_','').toUpperCase()}</span></p>
+                ${b.status.includes('rejected') && b.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:5px;">Reason: ${sanitize(b.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -1712,17 +1738,15 @@ body { overflow-x: hidden; }
             if(state.pendingNotes && state.pendingNotes[id]) col = 'pendingNotes';
             if(state.rejectedNotes && state.rejectedNotes[id]) col = 'rejectedNotes';
             
-            const isRejected = n.status === 'rejected';
-            
             html += `
             <div class="historyCard">
                 <button class="del-btn" onclick="deleteHistoryItem('${col}', '${id}', 'uploaderHistoryHidden')">Delete</button>
                 <h4>${sanitize(n.title)}</h4>
                 <p>Uploaded: ${new Date(n.createdAt).toLocaleDateString()}</p>
-                <p>Status: <span style="color:${n.status==='approved'?'#2ed573':(isRejected?'#ff4757':'#ff9800')}">${n.status.replace('upload_','').toUpperCase()}</span></p>
                 <p>Price: ₹${n.price || 0}</p>
                 <p>Bookings: ${bookings}</p>
-                ${isRejected && n.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(n.rejectReason)}</p>` : ''}
+                <p>Status: <span style="color:${n.status==='approved'?'#2ed573':(n.status==='rejected'?'#ff4757':(n.status==='expired'?'#777':'#ff9800'))}">${n.status.toUpperCase()}</span></p>
+                ${n.status === 'rejected' && n.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:5px;">Reason: ${sanitize(n.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -1770,15 +1794,14 @@ body { overflow-x: hidden; }
         if(list.length === 0) html = '<p style="font-size:12px; opacity:0.6;">No withdraw history found.</p>';
 
         list.forEach(([id, w]) => {
-            const isRejected = w.status === 'rejected';
             html += `
             <div class="historyCard">
                 <button class="del-btn" onclick="deleteHistoryItem('withdrawals', '${id}', 'withdrawHistoryHidden')">Delete</button>
                 <h4>₹${w.amount}</h4>
                 <p>UPI: ${sanitize(w.upiId)}</p>
-                <p>Status: <span style="color:${w.status==='approved'?'#2ed573':(isRejected?'#ff4757':'#ff9800')}">${w.status.toUpperCase()}</span></p>
+                <p>Status: <span style="color:${w.status==='approved'?'#2ed573':(w.status==='rejected'?'#ff4757':'#ff9800')}">${w.status.toUpperCase()}</span></p>
                 <p>Date: ${new Date(w.timestamp).toLocaleDateString()}</p>
-                ${isRejected && w.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(w.rejectReason)}</p>` : ''}
+                ${w.status === 'rejected' && w.rejectReason ? `<p style="color:#ff4757; font-size:12px;">Reason: ${sanitize(w.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -1829,6 +1852,7 @@ body { overflow-x: hidden; }
                     </div>
                     <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor}; display:inline-block; margin-top:5px;">${b.status.replace('booking_','').toUpperCase()}</span>
                     <p style="font-size:11px; opacity:0.7; margin-top:5px;">Amount: ₹${b.amount} | Date: ${new Date(b.timestamp).toLocaleDateString()}</p>
+                    ${b.status === 'booking_rejected' && b.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(b.rejectReason)}</p>` : ''}
             `;
             if(isApproved && note && note.noteUrls) {
                 bookingsHtml += `
@@ -1857,6 +1881,7 @@ body { overflow-x: hidden; }
                         <span style="font-size:11px; padding:2px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${n.status.replace('upload_','').toUpperCase()}</span>
                     </div>
                     <p style="font-size:11px; opacity:0.7; margin-top:5px;">Date: ${new Date(n.createdAt).toLocaleDateString()}</p>
+                    ${n.status === 'rejected' && n.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(n.rejectReason)}</p>` : ''}
                     ${n.status === 'approved' || n.status === 'expired' ? `
                     <div style="margin-top:8px; display:flex; gap:5px; flex-wrap:wrap;">
                         <span class="stats-badge"><i class="fas fa-shopping-cart"></i> ${approvedBookings} Sales</span>
@@ -1930,7 +1955,8 @@ body { overflow-x: hidden; }
                 withdrawHtml += `<div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
                     <div><strong style="font-size:14px;">Requested: ₹${w.amount}</strong><br><small style="opacity:0.8; color:var(--primary-glow);">Received: ₹${payAmt.toFixed(2)}</small> <br><small style="opacity:0.5;">${new Date(w.timestamp).toLocaleDateString()}</small></div>
                     <span style="font-size:10px; padding:3px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${w.status.toUpperCase()}</span>
-                </div>`;
+                </div>
+                ${w.status === 'rejected' && w.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px; margin-bottom:10px;">Reason: ${sanitize(w.rejectReason)}</p>` : ''}`;
             });
         }
 
@@ -2357,8 +2383,6 @@ body { overflow-x: hidden; }
         let subj = document.getElementById('noteSubject').value;
         if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
 
-        const uploadPricePerPage = urls.length > 0 ? (price / urls.length) : 0;
-
         tempNoteData = {
             title, 
             description: document.getElementById('noteDesc').value.trim(), 
@@ -2368,9 +2392,6 @@ body { overflow-x: hidden; }
             subject: subj,
             durationDays: days, 
             price, 
-            pages: urls.length,
-            uploadPricePerPage: uploadPricePerPage,
-            sellingPricePerPage: 5,
             noteUrls: urls, 
             thumbnail: document.getElementById('noteThumb').value.trim() || fallbackImage,
             uid: state.currentUser.uid, 
@@ -2478,6 +2499,14 @@ body { overflow-x: hidden; }
         const now = Date.now();
         let list = Object.entries(state.notes || {}).filter(([id, n]) => {
             if (!n || n.inTrash) return false;
+            
+            if (n.expiryTime && now > n.expiryTime) {
+                if (n.status !== 'expired') {
+                    update(ref(db, `notes/${id}`), { status: 'expired', hidden: true }).catch(e=>{});
+                }
+                if (!state.isAdmin) return false;
+            }
+
             const isScheduled = n.visibility === 'scheduled' || n.status === 'scheduled' || n.isScheduled === true;
             const publishTime = n.scheduleTime || n.publishTime || null;
             
@@ -2497,8 +2526,12 @@ body { overflow-x: hidden; }
         list.sort((a,b) => {
             if(sortQ === 'downloads') return (b.downloads||0) - (a.downloads||0);
             if(sortQ === 'popular') return (b.views||0) - (a.views||0);
-            if(sortQ === 'price-low-high') return (a.price || 0) - (b.price || 0);
-            if(sortQ === 'price-high-low') return (b.price || 0) - (a.price || 0);
+            
+            const pA = window.getNotePriceInfo(a).finalPrice;
+            const pB = window.getNotePriceInfo(b).finalPrice;
+            if(sortQ === 'price-low-high') return pA - pB;
+            if(sortQ === 'price-high-low') return pB - pA;
+            
             return (b.createdAt||0) - (a.createdAt||0);
         });
 
@@ -2511,6 +2544,24 @@ body { overflow-x: hidden; }
             const div = document.createElement("div"); 
             div.className = "note-card";
             
+            const priceInfo = window.getNotePriceInfo(n);
+            let priceHtml = '';
+            if (priceInfo.hasDiscount) {
+                priceHtml = `
+                <div class="priceBox">
+                    <div class="priceBox-prices">
+                        <span class="oldPrice">₹${priceInfo.originalPrice}</span>
+                        <span class="newPrice">₹${priceInfo.finalPrice}</span>
+                    </div>
+                    <button class="buyBtn" onclick="openNoteDetail('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
+                </div>`;
+            } else {
+                priceHtml = `
+                <div class="priceBox">
+                    <button class="buyBtn" onclick="openNoteDetail('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
+                </div>`;
+            }
+
             div.innerHTML = `
                 <div style="position:relative;">
                     <img class="note-thumb" src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'" onclick="openNoteDetail('${n.id}')">
@@ -2523,7 +2574,7 @@ body { overflow-x: hidden; }
                     <p style="font-size:12px; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
                 </div>
                 <div class="note-actions">
-                    <button class="note-btn" onclick="openNoteDetail('${n.id}')" style="width:100%; justify-content:center;"><i class="fas fa-info-circle"></i> View Details</button>
+                    ${priceHtml}
                 </div>
             `;
             frag.appendChild(div);
@@ -2547,7 +2598,7 @@ body { overflow-x: hidden; }
         
         try { update(ref(db), { [`notes/${id}/views`]: increment(1) }).catch(e=>console.warn(e)); } catch(e){}
 
-        const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
+        const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
         const rCount = note.ratingCount || 0;
         const rSum = note.ratingSum || 0;
         const avg = rCount > 0 ? (rSum / rCount).toFixed(1) : "0.0";
@@ -2567,6 +2618,12 @@ body { overflow-x: hidden; }
         comments.forEach(c => {
             commentsHtml += `<div class="comment-item"><h4>${sanitize(c.name)}</h4><p>${sanitize(c.text)}</p><small>${new Date(c.timestamp).toLocaleString()}</small></div>`;
         });
+
+        const priceInfo = window.getNotePriceInfo(note);
+        let priceDisplayHtml = `₹${priceInfo.finalPrice}`;
+        if (priceInfo.hasDiscount) {
+            priceDisplayHtml = `<span class="oldPrice" style="font-size:16px;">₹${priceInfo.originalPrice}</span> <span class="newPrice" style="font-size:20px;">₹${priceInfo.finalPrice}</span>`;
+        }
 
         document.getElementById('noteDetailContent').innerHTML = `
             <img src="${sanitize(note.thumbnail || fallbackImage)}" style="width:100%; height:200px; object-fit:cover; border-radius:10px; margin-bottom:15px;" onerror="this.src='${fallbackImage}'">
@@ -2591,10 +2648,14 @@ body { overflow-x: hidden; }
                 </div>
             </div>
 
+            <div style="margin-bottom:15px; text-align:center;">
+                <p style="font-size:14px;">Total Price: ${priceDisplayHtml}</p>
+            </div>
+
             <p style="font-size:13px; line-height:1.5; margin-bottom:20px;">${sanitize(note.description)}</p>
 
             <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button onclick="openNoteBookingModal('${id}')" style="flex:1; padding:15px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(255,71,87,0.4);"><i class="fas fa-book"></i> Book Notes</button>
+                <button onclick="openNoteBookingModal('${id}')" style="flex:1; padding:15px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(255,71,87,0.4);"><i class="fas fa-book"></i> Buy Now ₹${priceInfo.finalPrice}</button>
                 <button onclick="shareNote('${id}')" style="width:50px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; cursor:pointer; font-size:18px;"><i class="fas fa-share-alt"></i></button>
             </div>
 
@@ -2645,15 +2706,15 @@ body { overflow-x: hidden; }
         
         const note = state.notes[id];
         if (!note) return;
-        const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
+        const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
         if (urlsCount === 0) return showToast("No URLs available in this note.", "error");
         
-        const pricePerPage = note.sellingPricePerPage || 5;
-        const total = urlsCount * pricePerPage;
-        
+        const priceInfo = window.getNotePriceInfo(note);
+        const total = priceInfo.finalPrice;
+
         document.getElementById('bookingNoteTitle').innerText = note.title;
         document.getElementById('bookingNotesCount').innerText = urlsCount;
-        document.getElementById('bookingPricePerPageDisplay').innerText = `₹${pricePerPage}`;
+        document.getElementById('bookingPppDisplay').innerText = priceInfo.pricePerPage;
         document.getElementById('bookingTotalAmount').innerText = total;
         document.getElementById('bookingNoteId').value = id;
         
@@ -2691,14 +2752,14 @@ body { overflow-x: hidden; }
                 showToast("Select note first", "error");
                 return;
             }
-            const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
+            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
             if (!urlsCount || urlsCount <= 0) {
                 showToast("Invalid page count", "error");
                 return;
             }
             
-            const pricePerPage = note.sellingPricePerPage || 5;
-            let totalPrice = urlsCount * pricePerPage;
+            const priceInfo = window.getNotePriceInfo(note);
+            let totalPrice = priceInfo.finalPrice;
 
             localStorage.setItem("bookingData", JSON.stringify({
                 noteId: note.id,
@@ -2726,9 +2787,10 @@ body { overflow-x: hidden; }
             if(!upiName || !upiId) return showToast("UPI Name and ID are strictly required!", "error");
             
             const note = state.notes[noteId];
-            const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
-            const pricePerPage = note.sellingPricePerPage || 5;
-            const total = urlsCount * pricePerPage;
+            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+            
+            const priceInfo = window.getNotePriceInfo(note);
+            const total = priceInfo.finalPrice;
 
             const bookingData = {
                 noteId: noteId, noteTitle: note.title, buyerName: upiName, buyerUpiId: upiId,
@@ -2832,7 +2894,7 @@ body { overflow-x: hidden; }
                         ${w.status === 'pending' ? `
                             <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
                             <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="openRejectModal('withdraw', '${id}', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
                         ` : `
                             <span style="font-size:10px; opacity:0.6; margin-right:5px; padding:5px; background:var(--input-bg); border-radius:5px;">${w.status.toUpperCase()}</span>
                             <button class="btn-danger btn-action" onclick="deleteWithdrawal('${id}')"><i class="fas fa-trash"></i> Delete</button>
@@ -2853,14 +2915,19 @@ body { overflow-x: hidden; }
     };
 
     window.handleWithdrawal = async (id, status, uid, amount, payAmount, gst) => {
-        if(status === 'approved') {
-            const currentAdminBalance = state.analytics.adminEarnings || 0;
-            if(amount > currentAdminBalance) {
-                showToast("Insufficient admin balance.", "error");
-                return;
+        if(status === 'rejected') {
+            return openRejectModal('withdrawal', id, uid, amount, payAmount, gst);
+        }
+        if (status === 'approved') {
+            const adminBalance = state.analytics?.adminEarnings || 0;
+            if (adminBalance < amount) {
+                return showToast("Insufficient admin balance to approve this withdrawal.", "error");
             }
         }
-        
+        window.executeHandleWithdrawal(id, status, uid, amount, payAmount, gst);
+    };
+
+    window.executeHandleWithdrawal = async (id, status, uid, amount, payAmount, gst, reason = '') => {
         try {
             const updates = {};
             updates[`withdrawals/${id}/status`] = status;
@@ -2874,6 +2941,7 @@ body { overflow-x: hidden; }
                 updates[`analytics/totals/adminTotalWithdrawPaid`] = increment(payAmount);
                 updates[`analytics/totals/adminTotalGSTCollected`] = increment(gst);
             } else if (status === 'rejected') {
+                updates[`withdrawals/${id}/rejectReason`] = reason;
                 updates[`users/${uid}/pendingWithdraw`] = increment(-amount);
             }
             
@@ -2917,7 +2985,7 @@ body { overflow-x: hidden; }
                     <div class="admin-list-item">
                         <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Price: ₹${n.price||0} | Bookings: ${n.successfulBookings||0}</p></div>
                         <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="openEditAdminNote('${id}', 'notes')"><i class="fas fa-pen"></i> Edit Pricing</button>
+                            <button class="btn-secondary btn-action" onclick="openNoteEditor('${id}', 'notes')"><i class="fas fa-pen"></i> Edit Pricing</button>
                             <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </div>`;
@@ -2941,58 +3009,99 @@ body { overflow-x: hidden; }
     window.approveNote = async (id) => {
         const note = state.pendingNotes[id]; if(!note) return;
         note.status = 'approved'; note.approvedAt = Date.now();
-        if(note.durationDays) note.expiryTime = Date.now() + (note.durationDays * 24 * 60 * 60 * 1000); 
+        if(note.durationDays) note.expiryTime = Date.now() + (note.durationDays * 86400000); 
         note.hidden = false;
         try { await update(ref(db), { [`notes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Payment Verified & Note Approved!"); } catch(e){}
     };
+
+    window.executeRejectNote = async (id, reason) => {
+        const note = state.pendingNotes[id]; if(!note) return;
+        note.status = 'rejected';
+        note.rejectReason = reason;
+        try { await update(ref(db), { [`rejectedNotes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
+    };
     
+    window.rejectNote = (id) => openRejectModal('upload', id);
+
     window.deleteNote = async (id, listPath) => { confirmAction("Delete Note permanently?", async () => { try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){} }); };
 
-    window.openEditAdminNote = (id, path) => {
+    window.openNoteEditor = (id, path = 'notes') => {
         const note = state[path][id]; if(!note) return;
         document.getElementById('editNoteId').value = id;
         document.getElementById('editNotePath').value = path;
         
-        const pagesCount = note.pages || (note.noteUrls ? note.noteUrls.length : 1);
-        const sellPrice = note.sellingPricePerPage || 5;
-
-        document.getElementById('editNotePagesAdmin').value = pagesCount;
-        document.getElementById('editNoteSellingPriceAdmin').value = sellPrice;
+        const priceInfo = window.getNotePriceInfo(note);
         
-        calcEditNotePrice();
+        document.getElementById('editNotePagesDisplay').innerText = priceInfo.pages;
+        document.getElementById('editNotePricePerPage').value = priceInfo.pricePerPage;
+        document.getElementById('editNoteDiscountPercent').value = note.discountPercent || 0;
         
-        document.getElementById('editNoteModal').classList.add('show');
+        let remDays = '';
+        if (note.discountEndDate && note.discountEndDate > Date.now()) {
+            remDays = Math.ceil((note.discountEndDate - Date.now()) / 86400000);
+        }
+        document.getElementById('editNoteDiscountDays').value = remDays;
+        
+        window.calculateNotePrice();
+        
+        window.location.hash = "noteEdit";
+        document.getElementById('noteEditPage').style.display = 'flex';
     };
 
-    window.calcEditNotePrice = () => {
-        const pages = parseInt(document.getElementById('editNotePagesAdmin').value) || 0;
-        const pricePerPage = parseFloat(document.getElementById('editNoteSellingPriceAdmin').value) || 0;
-        const total = pages * pricePerPage;
-        document.getElementById('editNoteFinalPriceDisplay').innerText = `₹${total}`;
+    window.calculateNotePrice = () => {
+        const pages = parseInt(document.getElementById('editNotePagesDisplay').innerText) || 1;
+        const ppp = parseFloat(document.getElementById('editNotePricePerPage').value) || 0;
+        const discount = parseFloat(document.getElementById('editNoteDiscountPercent').value) || 0;
+        
+        const original = pages * ppp;
+        const discountAmt = (original * discount) / 100;
+        const finalPrice = original - discountAmt;
+        
+        document.getElementById('editNoteOriginalDisplay').innerText = `₹${original}`;
+        document.getElementById('editNoteFinalPriceDisplay').innerText = `₹${finalPrice > 0 ? finalPrice : 0}`;
     };
 
-    window.saveAdminNoteEdit = async () => {
+    window.updateNotePricing = async () => {
         const id = document.getElementById('editNoteId').value;
         const path = document.getElementById('editNotePath').value;
-        const pages = parseInt(document.getElementById('editNotePagesAdmin').value) || 0;
-        const pricePerPage = parseFloat(document.getElementById('editNoteSellingPriceAdmin').value);
         
-        if(isNaN(pricePerPage) || pricePerPage <= 0) return showToast("Invalid Price! Must be > 0", "error");
+        const ppp = parseFloat(document.getElementById('editNotePricePerPage').value) || 0;
+        const discount = parseFloat(document.getElementById('editNoteDiscountPercent').value) || 0;
+        const days = parseFloat(document.getElementById('editNoteDiscountDays').value) || 0;
+        
+        const pages = parseInt(document.getElementById('editNotePagesDisplay').innerText) || 1;
+        
+        if(ppp <= 0) return showToast("Invalid Price per page! Must be > 0", "error");
 
-        const finalPrice = pages * pricePerPage;
+        const original = pages * ppp;
+        const discountAmt = (original * discount) / 100;
+        const finalPrice = original - discountAmt;
+        
+        const expiry = days > 0 ? Date.now() + (days * 86400000) : null;
 
         try {
             await update(ref(db, `${path}/${id}`), { 
-                sellingPricePerPage: pricePerPage,
-                price: finalPrice,
-                pages: pages
+                sellingPricePerPage: ppp,
+                originalPrice: original,
+                discountPercent: discount,
+                discountPrice: finalPrice,
+                discountEndDate: expiry,
+                price: finalPrice
             });
-            showToast("Note price updated successfully");
-            document.getElementById('editNoteModal').classList.remove('show');
+            showToast("Note pricing updated successfully");
+            document.getElementById('noteEditPage').style.display = 'none';
+            window.location.hash = "";
         } catch(e) { showToast("Failed to update", "error"); }
     };
 
     window.handleBooking = async (id, status) => {
+        if(status === 'booking_rejected') {
+            return openRejectModal('booking', id);
+        }
+        window.executeHandleBooking(id, status);
+    };
+
+    window.executeHandleBooking = async (id, status, reason = '') => {
         if(bookingLocks[id]) return;
         bookingLocks[id] = true;
         try { 
@@ -3001,7 +3110,13 @@ body { overflow-x: hidden; }
 
             const updates = {};
             updates[`pendingBookings/${id}/status`] = status;
-            updates[`pendingBookings/${id}/${status === 'booking_approved' ? 'approvedAt' : 'rejectedAt'}`] = Date.now();
+            
+            if(status === 'booking_rejected') {
+                updates[`pendingBookings/${id}/rejectedAt`] = Date.now();
+                updates[`pendingBookings/${id}/rejectReason`] = reason;
+            } else {
+                updates[`pendingBookings/${id}/approvedAt`] = Date.now();
+            }
             
             if (status === 'booking_approved') {
                 const price = Number(b.amount) || 0;
@@ -3050,7 +3165,7 @@ body { overflow-x: hidden; }
                 <div class="admin-item-actions">
                     ${b.status === 'booking_pending' ? `
                         <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleBooking('${id}', 'booking_approved')"><i class="fas fa-check"></i> Approve & Send</button>
-                        <button class="btn-danger btn-action" onclick="openRejectModal('booking', '${id}')"><i class="fas fa-times"></i> Reject</button>
+                        <button class="btn-danger btn-action" onclick="handleBooking('${id}', 'booking_rejected')"><i class="fas fa-times"></i> Reject</button>
                     ` : `
                         <span style="font-size:11px; padding:5px; background:var(--input-bg); border-radius:5px; margin-right:5px;">${b.status.toUpperCase()}</span>
                         <button class="btn-danger btn-action" onclick="deleteAdminBooking('${id}')"><i class="fas fa-trash"></i> Delete</button>
@@ -3128,7 +3243,7 @@ body { overflow-x: hidden; }
             Object.entries(state.notes || {}).forEach(([id, n]) => {
                 if(!n) return;
                 
-                if(n.status === 'approved' && n.expiryTime && n.expiryTime < now && !n.hidden) { 
+                if((n.status === 'approved' || n.status === 'active') && n.expiryTime && n.expiryTime < now && !n.hidden) { 
                     updates[`notes/${id}/status`] = 'expired'; 
                     updates[`notes/${id}/hidden`] = true;
                     changed = true; 
