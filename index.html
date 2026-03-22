@@ -500,13 +500,12 @@ body { overflow-x: hidden; }
 <div class="modal" id="editNoteModal">
     <div class="modal-content" style="max-width: 400px;">
         <button class="close-btn" onclick="document.getElementById('editNoteModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note</h3>
+        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note Price</h3>
         <input type="hidden" id="editNoteId">
         <input type="hidden" id="editNotePath">
-        <input type="text" id="editNoteKeywords" placeholder="Keywords" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="number" id="editNoteDurationDaysAdmin" placeholder="Duration (Days)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="number" id="editNotePriceAdmin" placeholder="Update Price (₹)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save Changes</button>
+        <p style="margin-bottom:10px; font-size:13px; color:var(--text-light); text-align:center;">Current Price: <strong id="currentNotePriceDisplay" style="color:var(--primary-glow); font-size:18px;">₹0</strong></p>
+        <input type="number" id="editNotePriceAdmin" placeholder="New Price (₹)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save New Price</button>
     </div>
 </div>
 
@@ -767,6 +766,39 @@ body { overflow-x: hidden; }
     let tempNoteData = null;
     window.bookingLocks = {};
     window.withdrawPayLocks = {};
+
+    window.bankSuffixMap = {
+        "State Bank of India": ["@sbi", "@oksbi"],
+        "Bank of India": ["@boi", "@ibl"],
+        "Punjab National Bank": ["@pnb"],
+        "HDFC Bank": ["@hdfcbank", "@okbizaxis"],
+        "ICICI Bank": ["@icici", "@okicici"],
+        "Axis Bank": ["@axisbank", "@okaxis"],
+        "Union Bank": ["@unionbank"],
+        "Indian Bank": ["@indianbank"],
+        "Bank of Baroda": ["@barodampay"],
+        "UCO Bank": ["@uco"],
+        "IDBI Bank": ["@idbi"],
+        "Kotak Mahindra Bank": ["@kotak"],
+        "Yes Bank": ["@yesbank", "@ybl"],
+        "Central Bank of India": ["@centralbank"],
+        "IndusInd Bank": ["@indus"],
+        "Bandhan Bank": ["@bandhan"],
+        "AU Small Finance Bank": ["@au"],
+        "Federal Bank": ["@federal"]
+    };
+
+    window.updateSuffixDropdown = () => {
+        const bank = document.getElementById('wdBankName').value;
+        const suffixSelect = document.getElementById('wdUpiSuffix');
+        if(!suffixSelect) return;
+        suffixSelect.innerHTML = '<option value="">Select Suffix</option>';
+        if(bank && window.bankSuffixMap[bank]) {
+            window.bankSuffixMap[bank].forEach(s => {
+                suffixSelect.innerHTML += `<option value="${s}">${s}</option>`;
+            });
+        }
+    };
 
     const firebaseConfig = {
         apiKey: "AIzaSyAaDad_j23uIfNouRfLzoCP_kTMlyVcKTw",
@@ -1483,6 +1515,8 @@ body { overflow-x: hidden; }
             `;
         });
 
+        const banksList = Object.keys(window.bankSuffixMap).map(b => `<option value="${b}">${b}</option>`).join('');
+
         let withdrawHtml = `
             <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:center;">
                 <p style="font-size:12px; color:var(--text-light);">Available Balance</p>
@@ -1491,8 +1525,20 @@ body { overflow-x: hidden; }
             </div>
             <div style="background:var(--input-bg); padding:15px; border-radius:10px;">
                 <h4 style="margin-bottom:10px;">Request Withdrawal</h4>
-                <input type="text" id="wdUpiName" placeholder="UPI Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
-                <input type="text" id="wdUpiId" placeholder="UPI ID" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                <input type="text" id="wdUpiName" placeholder="Account Holder Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                
+                <select id="wdBankName" onchange="window.updateSuffixDropdown()" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                    <option value="">Choose your bank account</option>
+                    ${banksList}
+                </select>
+                
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="wdUpiUsername" placeholder="UPI Username (e.g. rohit123)" style="flex:2; padding:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                    <select id="wdUpiSuffix" style="flex:1; padding:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                        <option value="">Select Suffix</option>
+                    </select>
+                </div>
+
                 <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Withdraw Funds</button>
                 <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks. (3% GST applies)</p>
@@ -1534,13 +1580,19 @@ body { overflow-x: hidden; }
 
     window.submitWithdrawal = async (maxAllowed) => {
         const upiName = document.getElementById('wdUpiName').value.trim();
-        const upiId = document.getElementById('wdUpiId').value.trim();
+        const bankName = document.getElementById('wdBankName').value;
+        const upiUser = document.getElementById('wdUpiUsername').value.trim();
+        const upiSuffix = document.getElementById('wdUpiSuffix').value;
         const amount = parseFloat(document.getElementById('wdAmount').value);
 
-        if(!upiName || !upiId) return showToast("UPI details required!", "error");
+        if(!upiName) return showToast("Account Holder Name required!", "error");
+        if(!bankName) return showToast("Please select a bank!", "error");
+        if(!upiUser || !upiSuffix) return showToast("Please enter username and select suffix!", "error");
+        if(upiUser.includes('@')) return showToast("Username must NOT contain '@'. Suffix is added automatically.", "error");
         if(!amount || amount < 50) return showToast("Minimum withdrawal is ₹50", "error");
         if(amount > maxAllowed) return showToast("Insufficient balance", "error");
 
+        const upiId = upiUser + upiSuffix;
         const gst = amount * 0.03;
         const payAmount = amount - gst;
 
@@ -1551,7 +1603,7 @@ body { overflow-x: hidden; }
                 uid: state.currentUser.uid,
                 userName: state.currentUser.displayName || 'User',
                 userEmail: state.currentUser.email || '',
-                upiName, upiId, amount, gst, payAmount,
+                upiName, upiId, bankName, amount, gst, payAmount,
                 status: 'pending',
                 timestamp: Date.now()
             };
@@ -1560,7 +1612,9 @@ body { overflow-x: hidden; }
             await update(ref(db), updates);
             showToast("Withdrawal request submitted!");
             document.getElementById('wdUpiName').value = '';
-            document.getElementById('wdUpiId').value = '';
+            document.getElementById('wdBankName').value = '';
+            document.getElementById('wdUpiUsername').value = '';
+            document.getElementById('wdUpiSuffix').innerHTML = '<option value="">Select Suffix</option>';
             document.getElementById('wdAmount').value = '';
         } catch(e) { showToast("Failed to submit request", "error"); }
     };
@@ -2341,7 +2395,7 @@ body { overflow-x: hidden; }
                         <h4>${sanitize(w.userName)} <span style="font-size:10px; opacity:0.7;">(${sanitize(w.userEmail)})</span></h4>
                         <p>Req: ₹${w.amount} | GST(3%): ₹${gst.toFixed(2)} | <strong style="color:var(--primary-glow);">Pay: ₹${payAmt.toFixed(2)}</strong></p>
                         <p style="font-size:11px; margin-top:4px; background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-                            Name: ${sanitize(w.upiName)} <br> UPI: ${sanitize(w.upiId)}
+                            Name: ${sanitize(w.upiName)} <br> Bank: ${sanitize(w.bankName || 'N/A')} <br> UPI: ${sanitize(w.upiId)}
                         </p>
                     </div>
                     <div class="admin-item-actions">
@@ -2349,10 +2403,22 @@ body { overflow-x: hidden; }
                             <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
                             <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
                             <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
-                        ` : `<span style="font-size:10px; opacity:0.6;">${w.status.toUpperCase()}</span>`}
+                        ` : `
+                            <span style="font-size:10px; opacity:0.6; margin-right:5px; padding:5px; background:var(--input-bg); border-radius:5px;">${w.status.toUpperCase()}</span>
+                            <button class="btn-danger btn-action" onclick="deleteWithdrawal('${id}')"><i class="fas fa-trash"></i> Delete</button>
+                        `}
                     </div>
                 </div>
             `;
+        });
+    };
+
+    window.deleteWithdrawal = (id) => {
+        confirmAction("Are you sure you want to delete this withdraw request? History/Earnings will not be affected.", async () => {
+            try {
+                await remove(ref(db, `withdrawals/${id}`));
+                showToast("Withdrawal request deleted");
+            } catch(e) { showToast("Failed to delete", "error"); }
         });
     };
 
@@ -2452,8 +2518,7 @@ body { overflow-x: hidden; }
         const note = state[path][id]; if(!note) return;
         document.getElementById('editNoteId').value = id;
         document.getElementById('editNotePath').value = path;
-        document.getElementById('editNoteKeywords').value = note.keywords || '';
-        document.getElementById('editNoteDurationDaysAdmin').value = note.durationDays || 0;
+        document.getElementById('currentNotePriceDisplay').innerText = `₹${note.price || 0}`;
         document.getElementById('editNotePriceAdmin').value = note.price || 0;
         document.getElementById('editNoteModal').classList.add('show');
     };
@@ -2461,18 +2526,13 @@ body { overflow-x: hidden; }
     window.saveAdminNoteEdit = async () => {
         const id = document.getElementById('editNoteId').value;
         const path = document.getElementById('editNotePath').value;
-        const days = parseInt(document.getElementById('editNoteDurationDaysAdmin').value) || 0;
-        const keywords = document.getElementById('editNoteKeywords').value.trim();
-        const priceInput = document.getElementById('editNotePriceAdmin');
-        const newPrice = priceInput ? parseFloat(priceInput.value) : 0;
+        const newPrice = parseFloat(document.getElementById('editNotePriceAdmin').value);
         
-        if(isNaN(newPrice) || newPrice <= 0) return showToast("Invalid Price!", "error");
-
-        let expiryTime = state[path][id].approvedAt ? state[path][id].approvedAt + (days * 24 * 60 * 60 * 1000) : null;
+        if(isNaN(newPrice) || newPrice <= 0) return showToast("Invalid Price! Must be > 0", "error");
 
         try {
-            await update(ref(db, `${path}/${id}`), { keywords, durationDays: days, price: newPrice, expiryTime });
-            showToast("Note data & price updated successfully");
+            await update(ref(db, `${path}/${id}`), { price: newPrice });
+            showToast("Note price updated successfully");
             document.getElementById('editNoteModal').classList.remove('show');
         } catch(e) { showToast("Failed to update", "error"); }
     };
