@@ -519,7 +519,7 @@ body { overflow-x: hidden; }
             <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; text-align:left;">
                 <h4 id="bookingNoteTitle" style="margin-bottom:5px;">Note Title</h4>
                 <p style="font-size:12px; color:var(--text-light);">Total Notes: <span id="bookingNotesCount">0</span> URLs</p>
-                <p style="font-size:12px; color:var(--text-light);">Price per Note: ₹5</p>
+                <p style="font-size:12px; color:var(--text-light);">Price per Note: <span id="bookingPricePerPageDisplay">₹5</span></p>
                 <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
                 <p style="font-size:16px; font-weight:bold; color:var(--primary-glow);">Total Amount: ₹<span id="bookingTotalAmount">0</span></p>
             </div>
@@ -552,12 +552,36 @@ body { overflow-x: hidden; }
 <div class="modal" id="editNoteModal">
     <div class="modal-content" style="max-width: 400px;">
         <button class="close-btn" onclick="document.getElementById('editNoteModal').classList.remove('show')">×</button>
-        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note Price</h3>
+        <h3 style="margin-bottom:15px; text-align:center;">Admin Edit Note Pricing</h3>
         <input type="hidden" id="editNoteId">
         <input type="hidden" id="editNotePath">
-        <p style="margin-bottom:10px; font-size:13px; color:var(--text-light); text-align:center;">Current Price: <strong id="currentNotePriceDisplay" style="color:var(--primary-glow); font-size:18px;">₹0</strong></p>
-        <input type="number" id="editNotePriceAdmin" placeholder="New Price (₹)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save New Price</button>
+        
+        <p style="margin-bottom:10px; font-size:12px; color:var(--text-light);">Total Pages (URLs)</p>
+        <input type="number" id="editNotePagesAdmin" readonly style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:rgba(0,0,0,0.3); color:var(--text-light); border:none; cursor:not-allowed;">
+
+        <p style="margin-bottom:10px; font-size:12px; color:var(--text-light);">Selling Price Per Page (₹)</p>
+        <input type="number" id="editNoteSellingPriceAdmin" placeholder="Price Per Page (₹)" oninput="calcEditNotePrice()" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        
+        <div style="background:rgba(0,245,255,0.1); padding:12px; border-radius:8px; border:1px dashed var(--primary-glow); text-align:center; margin-bottom:15px;">
+            <span style="font-size:12px; color:var(--text-light);">Final Total Price:</span><br>
+            <strong id="editNoteFinalPriceDisplay" style="color:var(--primary-glow); font-size:20px;">₹0</strong>
+        </div>
+
+        <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Update Price</button>
+    </div>
+</div>
+
+<div class="modal" id="rejectReasonModal" style="z-index: 4000;">
+    <div class="modal-content" style="max-width: 400px; text-align: left;">
+        <button class="close-btn" onclick="document.getElementById('rejectReasonModal').classList.remove('show')">×</button>
+        <h3 style="margin-bottom:15px; color:var(--primary-glow);">Select Reject Reason</h3>
+        <select id="rejectReasonSelect" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        </select>
+        <textarea id="rejectRemarkInput" placeholder="Admin remark (optional)" rows="3" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-danger" onclick="confirmReject()" style="width:100%; padding:12px; border-radius:8px; border:none; cursor:pointer; color:#fff; font-weight:bold;">Confirm Reject</button>
+            <button class="btn-secondary" onclick="document.getElementById('rejectReasonModal').classList.remove('show')" style="width:100%; padding:12px; border-radius:8px; border:none; cursor:pointer;">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -818,6 +842,7 @@ body { overflow-x: hidden; }
     let tempNoteData = null;
     window.bookingLocks = {};
     window.withdrawPayLocks = {};
+    window.currentRejectData = {};
 
     window.bankSuffixMap = {
         "State Bank of India": ["@sbi", "@oksbi"],
@@ -914,6 +939,69 @@ body { overflow-x: hidden; }
         document.getElementById('wdUpiPreview').innerText = finalUpi || '-';
         document.getElementById('wdUpiPreview').dataset.finalUpi = finalUpi;
         document.getElementById('wdUpiPreview').dataset.suffixUsed = suffixUsed;
+    };
+
+    window.openRejectModal = (type, id, uid, amount, payAmount, gst) => {
+        window.currentRejectData = { type, id, uid, amount, payAmount, gst };
+        const select = document.getElementById('rejectReasonSelect');
+        select.innerHTML = '<option value="">Select a reason...</option>';
+
+        const reasons = {
+            'booking': ['Payment not verified', 'Fake payment screenshot', 'Duplicate booking', 'User cancelled request', 'Invalid booking'],
+            'upload': ['Low quality notes', 'Blur images', 'Incomplete notes', 'Wrong subject', 'Duplicate upload', 'Copyright issue'],
+            'withdraw': ['Invalid UPI ID', 'UPI name mismatch', 'Insufficient balance', 'Suspicious withdraw', 'KYC required']
+        };
+
+        (reasons[type] || []).forEach(r => {
+            select.innerHTML += `<option value="${r}">${r}</option>`;
+        });
+
+        document.getElementById('rejectRemarkInput').value = '';
+        document.getElementById('rejectReasonModal').classList.add('show');
+    };
+
+    window.confirmReject = async () => {
+        const reason = document.getElementById('rejectReasonSelect').value;
+        const remark = document.getElementById('rejectRemarkInput').value.trim();
+        if (!reason) return showToast("Please select a reject reason!", "error");
+
+        let finalReason = reason;
+        if (remark) finalReason += ` - ${remark}`;
+
+        const data = window.currentRejectData;
+        document.getElementById('rejectReasonModal').classList.remove('show');
+
+        if (data.type === 'upload') {
+            const note = state.pendingNotes[data.id];
+            if(note) {
+                note.status = 'rejected';
+                note.rejectReason = finalReason;
+                note.rejectedAt = Date.now();
+                try { await update(ref(db), { [`rejectedNotes/${data.id}`]: note, [`pendingNotes/${data.id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
+            }
+        } else if (data.type === 'booking') {
+            if(bookingLocks[data.id]) return;
+            bookingLocks[data.id] = true;
+            try {
+                const updates = {};
+                updates[`pendingBookings/${data.id}/status`] = 'booking_rejected';
+                updates[`pendingBookings/${data.id}/rejectReason`] = finalReason;
+                updates[`pendingBookings/${data.id}/rejectedAt`] = Date.now();
+                await update(ref(db), updates);
+                showToast("Booking rejected", "error");
+            } catch(e) { showToast("Error", "error"); }
+            bookingLocks[data.id] = false;
+        } else if (data.type === 'withdraw') {
+            try {
+                const updates = {};
+                updates[`withdrawals/${data.id}/status`] = 'rejected';
+                updates[`withdrawals/${data.id}/rejectReason`] = finalReason;
+                updates[`withdrawals/${data.id}/rejectedAt`] = Date.now();
+                updates[`users/${data.uid}/pendingWithdraw`] = increment(-data.amount);
+                await update(ref(db), updates);
+                showToast("Withdrawal rejected!", "error");
+            } catch(e) { showToast("Error processing", "error"); }
+        }
     };
 
     const firebaseConfig = {
@@ -1596,7 +1684,8 @@ body { overflow-x: hidden; }
                 <h4>${sanitize(b.noteTitle)}</h4>
                 <p>Price: ₹${b.amount}</p>
                 <p>Purchased: ${new Date(b.timestamp).toLocaleDateString()}</p>
-                <p>Status: <span style="color:${b.status==='booking_approved'?'#2ed573':'#ff9800'}">${b.status.replace('booking_','').toUpperCase()}</span></p>
+                <p>Status: <span style="color:${b.status==='booking_approved'?'#2ed573':(b.status==='booking_rejected'?'#ff4757':'#ff9800')}">${b.status.replace('booking_','').toUpperCase()}</span></p>
+                ${b.status === 'booking_rejected' && b.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(b.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -1623,13 +1712,17 @@ body { overflow-x: hidden; }
             if(state.pendingNotes && state.pendingNotes[id]) col = 'pendingNotes';
             if(state.rejectedNotes && state.rejectedNotes[id]) col = 'rejectedNotes';
             
+            const isRejected = n.status === 'rejected';
+            
             html += `
             <div class="historyCard">
                 <button class="del-btn" onclick="deleteHistoryItem('${col}', '${id}', 'uploaderHistoryHidden')">Delete</button>
                 <h4>${sanitize(n.title)}</h4>
                 <p>Uploaded: ${new Date(n.createdAt).toLocaleDateString()}</p>
+                <p>Status: <span style="color:${n.status==='approved'?'#2ed573':(isRejected?'#ff4757':'#ff9800')}">${n.status.replace('upload_','').toUpperCase()}</span></p>
                 <p>Price: ₹${n.price || 0}</p>
                 <p>Bookings: ${bookings}</p>
+                ${isRejected && n.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(n.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -1677,13 +1770,15 @@ body { overflow-x: hidden; }
         if(list.length === 0) html = '<p style="font-size:12px; opacity:0.6;">No withdraw history found.</p>';
 
         list.forEach(([id, w]) => {
+            const isRejected = w.status === 'rejected';
             html += `
             <div class="historyCard">
                 <button class="del-btn" onclick="deleteHistoryItem('withdrawals', '${id}', 'withdrawHistoryHidden')">Delete</button>
                 <h4>₹${w.amount}</h4>
                 <p>UPI: ${sanitize(w.upiId)}</p>
-                <p>Status: <span style="color:${w.status==='approved'?'#2ed573':(w.status==='rejected'?'#ff4757':'#ff9800')}">${w.status.toUpperCase()}</span></p>
+                <p>Status: <span style="color:${w.status==='approved'?'#2ed573':(isRejected?'#ff4757':'#ff9800')}">${w.status.toUpperCase()}</span></p>
                 <p>Date: ${new Date(w.timestamp).toLocaleDateString()}</p>
+                ${isRejected && w.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px;">Reason: ${sanitize(w.rejectReason)}</p>` : ''}
             </div>`;
         });
         container.innerHTML = html;
@@ -2262,6 +2357,8 @@ body { overflow-x: hidden; }
         let subj = document.getElementById('noteSubject').value;
         if(subj === 'custom') subj = document.getElementById('customNoteSubject').value.trim();
 
+        const uploadPricePerPage = urls.length > 0 ? (price / urls.length) : 0;
+
         tempNoteData = {
             title, 
             description: document.getElementById('noteDesc').value.trim(), 
@@ -2271,6 +2368,9 @@ body { overflow-x: hidden; }
             subject: subj,
             durationDays: days, 
             price, 
+            pages: urls.length,
+            uploadPricePerPage: uploadPricePerPage,
+            sellingPricePerPage: 5,
             noteUrls: urls, 
             thumbnail: document.getElementById('noteThumb').value.trim() || fallbackImage,
             uid: state.currentUser.uid, 
@@ -2447,7 +2547,7 @@ body { overflow-x: hidden; }
         
         try { update(ref(db), { [`notes/${id}/views`]: increment(1) }).catch(e=>console.warn(e)); } catch(e){}
 
-        const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+        const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
         const rCount = note.ratingCount || 0;
         const rSum = note.ratingSum || 0;
         const avg = rCount > 0 ? (rSum / rCount).toFixed(1) : "0.0";
@@ -2545,12 +2645,15 @@ body { overflow-x: hidden; }
         
         const note = state.notes[id];
         if (!note) return;
-        const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+        const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
         if (urlsCount === 0) return showToast("No URLs available in this note.", "error");
         
-        const total = urlsCount * 5;
+        const pricePerPage = note.sellingPricePerPage || 5;
+        const total = urlsCount * pricePerPage;
+        
         document.getElementById('bookingNoteTitle').innerText = note.title;
         document.getElementById('bookingNotesCount').innerText = urlsCount;
+        document.getElementById('bookingPricePerPageDisplay').innerText = `₹${pricePerPage}`;
         document.getElementById('bookingTotalAmount').innerText = total;
         document.getElementById('bookingNoteId').value = id;
         
@@ -2588,12 +2691,14 @@ body { overflow-x: hidden; }
                 showToast("Select note first", "error");
                 return;
             }
-            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
+            const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
             if (!urlsCount || urlsCount <= 0) {
                 showToast("Invalid page count", "error");
                 return;
             }
-            let totalPrice = urlsCount * 5;
+            
+            const pricePerPage = note.sellingPricePerPage || 5;
+            let totalPrice = urlsCount * pricePerPage;
 
             localStorage.setItem("bookingData", JSON.stringify({
                 noteId: note.id,
@@ -2621,8 +2726,9 @@ body { overflow-x: hidden; }
             if(!upiName || !upiId) return showToast("UPI Name and ID are strictly required!", "error");
             
             const note = state.notes[noteId];
-            const urlsCount = note.noteUrls ? note.noteUrls.length : 0;
-            const total = urlsCount * 5;
+            const urlsCount = note.noteUrls ? note.noteUrls.length : (note.pages || 0);
+            const pricePerPage = note.sellingPricePerPage || 5;
+            const total = urlsCount * pricePerPage;
 
             const bookingData = {
                 noteId: noteId, noteTitle: note.title, buyerName: upiName, buyerUpiId: upiId,
@@ -2726,7 +2832,7 @@ body { overflow-x: hidden; }
                         ${w.status === 'pending' ? `
                             <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
                             <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-danger btn-action" onclick="openRejectModal('withdraw', '${id}', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
                         ` : `
                             <span style="font-size:10px; opacity:0.6; margin-right:5px; padding:5px; background:var(--input-bg); border-radius:5px;">${w.status.toUpperCase()}</span>
                             <button class="btn-danger btn-action" onclick="deleteWithdrawal('${id}')"><i class="fas fa-trash"></i> Delete</button>
@@ -2747,6 +2853,14 @@ body { overflow-x: hidden; }
     };
 
     window.handleWithdrawal = async (id, status, uid, amount, payAmount, gst) => {
+        if(status === 'approved') {
+            const currentAdminBalance = state.analytics.adminEarnings || 0;
+            if(amount > currentAdminBalance) {
+                showToast("Insufficient admin balance.", "error");
+                return;
+            }
+        }
+        
         try {
             const updates = {};
             updates[`withdrawals/${id}/status`] = status;
@@ -2788,7 +2902,7 @@ body { overflow-x: hidden; }
                         <div class="admin-item-actions">
                             <button class="btn-secondary btn-action" onclick="window.open('${n.noteUrls && n.noteUrls[0] ? sanitize(n.noteUrls[0]) : ''}','_blank')">View URL 1</button>
                             <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="rejectNote('${id}')"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-danger btn-action" onclick="openRejectModal('upload', '${id}')"><i class="fas fa-times"></i> Reject</button>
                         </div>
                     </div>`;
             });
@@ -2803,7 +2917,7 @@ body { overflow-x: hidden; }
                     <div class="admin-list-item">
                         <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Price: ₹${n.price||0} | Bookings: ${n.successfulBookings||0}</p></div>
                         <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="openEditAdminNote('${id}', 'notes')"><i class="fas fa-pen"></i> Edit</button>
+                            <button class="btn-secondary btn-action" onclick="openEditAdminNote('${id}', 'notes')"><i class="fas fa-pen"></i> Edit Pricing</button>
                             <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </div>`;
@@ -2831,31 +2945,48 @@ body { overflow-x: hidden; }
         note.hidden = false;
         try { await update(ref(db), { [`notes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Payment Verified & Note Approved!"); } catch(e){}
     };
-    window.rejectNote = async (id) => {
-        const note = state.pendingNotes[id]; if(!note) return;
-        note.status = 'rejected';
-        try { await update(ref(db), { [`rejectedNotes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
-    };
+    
     window.deleteNote = async (id, listPath) => { confirmAction("Delete Note permanently?", async () => { try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){} }); };
 
     window.openEditAdminNote = (id, path) => {
         const note = state[path][id]; if(!note) return;
         document.getElementById('editNoteId').value = id;
         document.getElementById('editNotePath').value = path;
-        document.getElementById('currentNotePriceDisplay').innerText = `₹${note.price || 0}`;
-        document.getElementById('editNotePriceAdmin').value = note.price || 0;
+        
+        const pagesCount = note.pages || (note.noteUrls ? note.noteUrls.length : 1);
+        const sellPrice = note.sellingPricePerPage || 5;
+
+        document.getElementById('editNotePagesAdmin').value = pagesCount;
+        document.getElementById('editNoteSellingPriceAdmin').value = sellPrice;
+        
+        calcEditNotePrice();
+        
         document.getElementById('editNoteModal').classList.add('show');
+    };
+
+    window.calcEditNotePrice = () => {
+        const pages = parseInt(document.getElementById('editNotePagesAdmin').value) || 0;
+        const pricePerPage = parseFloat(document.getElementById('editNoteSellingPriceAdmin').value) || 0;
+        const total = pages * pricePerPage;
+        document.getElementById('editNoteFinalPriceDisplay').innerText = `₹${total}`;
     };
 
     window.saveAdminNoteEdit = async () => {
         const id = document.getElementById('editNoteId').value;
         const path = document.getElementById('editNotePath').value;
-        const newPrice = parseFloat(document.getElementById('editNotePriceAdmin').value);
+        const pages = parseInt(document.getElementById('editNotePagesAdmin').value) || 0;
+        const pricePerPage = parseFloat(document.getElementById('editNoteSellingPriceAdmin').value);
         
-        if(isNaN(newPrice) || newPrice <= 0) return showToast("Invalid Price! Must be > 0", "error");
+        if(isNaN(pricePerPage) || pricePerPage <= 0) return showToast("Invalid Price! Must be > 0", "error");
+
+        const finalPrice = pages * pricePerPage;
 
         try {
-            await update(ref(db, `${path}/${id}`), { price: newPrice });
+            await update(ref(db, `${path}/${id}`), { 
+                sellingPricePerPage: pricePerPage,
+                price: finalPrice,
+                pages: pages
+            });
             showToast("Note price updated successfully");
             document.getElementById('editNoteModal').classList.remove('show');
         } catch(e) { showToast("Failed to update", "error"); }
@@ -2919,7 +3050,7 @@ body { overflow-x: hidden; }
                 <div class="admin-item-actions">
                     ${b.status === 'booking_pending' ? `
                         <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleBooking('${id}', 'booking_approved')"><i class="fas fa-check"></i> Approve & Send</button>
-                        <button class="btn-danger btn-action" onclick="handleBooking('${id}', 'booking_rejected')"><i class="fas fa-times"></i> Reject</button>
+                        <button class="btn-danger btn-action" onclick="openRejectModal('booking', '${id}')"><i class="fas fa-times"></i> Reject</button>
                     ` : `
                         <span style="font-size:11px; padding:5px; background:var(--input-bg); border-radius:5px; margin-right:5px;">${b.status.toUpperCase()}</span>
                         <button class="btn-danger btn-action" onclick="deleteAdminBooking('${id}')"><i class="fas fa-trash"></i> Delete</button>
