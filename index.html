@@ -324,8 +324,11 @@ body { overflow-x: hidden; }
             <option value="All competitive exams">All competitive exams</option>
         </select>
         <select id="sortNotes" onchange="renderNotesGrid()">
-            <option value="newest">Sort: Newest First</option>
+            <option value="latest">Sort: Newest First</option>
+            <option value="popular">Most Viewed</option>
             <option value="downloads">Sort: Most Booked</option>
+            <option value="price-low-high">Price: Low to High</option>
+            <option value="price-high-low">Price: High to Low</option>
         </select>
     </div>
     <div id="notesGrid"></div>
@@ -441,9 +444,9 @@ body { overflow-x: hidden; }
         
         <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
             <p style="font-size:12px; opacity:0.8; margin-bottom:5px;">Official Admin UPI ID</p>
-            <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
+            <h2 id="officialUpiDisplayUpload" style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
             <div style="display:flex; gap:10px; justify-content:center;">
-                <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
+                <button class="icon-btn" id="copyUpiUploadBtn" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
                 <button id="noteUploadPayNowBtn" class="icon-btn" style="padding:5px 10px; font-size:12px; border-radius:5px; background:linear-gradient(90deg, #2ed573, #1e90ff); color:#fff; font-weight:bold;"><i class="fas fa-paper-plane"></i> Pay Now</button>
             </div>
         </div>
@@ -479,9 +482,9 @@ body { overflow-x: hidden; }
             
             <div style="background:var(--input-bg); padding:15px; border-radius:10px; margin-bottom:15px; border:1px dashed var(--primary-glow);">
                 <p style="font-size:12px; opacity:0.8; margin-bottom:5px;">Official UPI ID</p>
-                <h2 style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
+                <h2 id="officialUpiDisplayBooking" style="letter-spacing:1px; margin-bottom:5px;">6206319727@fam</h2>
                 <div style="display:flex; gap:10px; justify-content:center;">
-                    <button class="icon-btn" onclick="copyUPI('6206319727@fam')" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
+                    <button class="icon-btn" id="copyUpiBookingBtn" style="padding:5px 10px; font-size:12px; border-radius:5px;"><i class="fas fa-copy"></i> Copy UPI</button>
                     <button id="bookingPayNowBtn" class="icon-btn" style="padding:5px 10px; font-size:12px; border-radius:5px; background:linear-gradient(90deg, #2ed573, #1e90ff); color:#fff; font-weight:bold;"><i class="fas fa-paper-plane"></i> Pay Now</button>
                 </div>
             </div>
@@ -502,6 +505,7 @@ body { overflow-x: hidden; }
         <input type="hidden" id="editNotePath">
         <input type="text" id="editNoteKeywords" placeholder="Keywords" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="number" id="editNoteDurationDaysAdmin" placeholder="Duration (Days)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="number" id="editNotePriceAdmin" placeholder="Update Price (₹)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <button onclick="saveAdminNoteEdit()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Save Changes</button>
     </div>
 </div>
@@ -687,6 +691,13 @@ body { overflow-x: hidden; }
         <input type="password" id="newSecPass" placeholder="New Security Password">
         <button onclick="updateSecurityPassword()">Update Password</button>
         <p style="font-size:11px; margin-top:10px;" id="secPassLastUpdated"></p>
+
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <h3>Update Official UPI ID</h3>
+        <p style="font-size:12px; color:var(--text-light); margin-bottom:15px;">Change the UPI ID used for receiving payments (Uploads & Bookings).</p>
+        <input type="text" id="newAdminUpiId" placeholder="New Official UPI ID (e.g., name@bank)">
+        <button onclick="updateAdminUPI()">Update UPI ID</button>
+        <p style="font-size:11px; margin-top:10px; color:var(--primary-glow);" id="currentAdminUpiDisplay"></p>
     </div>
 
     <div id="tab-help" class="admin-tab-content">
@@ -886,7 +897,15 @@ body { overflow-x: hidden; }
     onValue(refs.banners, s => { state.banners = s.val() || {}; renderBanners(); renderAdminBanners(); });
     onValue(refs.expired, s => { state.expired = s.val() || {}; renderAdminExpired(); });
     onValue(refs.analytics, s => { state.analytics = s.val() || { views:0, clicks:0, sales:0 }; updateAdminAnalytics(); if(window.renderAdminWithdrawals) renderAdminWithdrawals(); });
-    onValue(refs.adminAuth, s => { state.adminSecurity = s.val() || { password: '926257' }; if(state.adminSecurity.lastChanged && document.getElementById('secPassLastUpdated')) document.getElementById('secPassLastUpdated').innerText = 'Last updated: ' + new Date(state.adminSecurity.lastChanged).toLocaleString(); });
+    
+    onValue(refs.adminAuth, s => { 
+        state.adminSecurity = s.val() || { password: '926257' }; 
+        if(state.adminSecurity.lastChanged && document.getElementById('secPassLastUpdated')) 
+            document.getElementById('secPassLastUpdated').innerText = 'Last updated: ' + new Date(state.adminSecurity.lastChanged).toLocaleString(); 
+        if(state.adminSecurity.upiId && document.getElementById('currentAdminUpiDisplay')) {
+            document.getElementById('currentAdminUpiDisplay').innerText = 'Current Official UPI: ' + state.adminSecurity.upiId;
+        }
+    });
     
     onValue(refs.notes, s => { 
         state.notes = s.val() || {}; 
@@ -927,17 +946,38 @@ body { overflow-x: hidden; }
         } catch(e) { console.error("Render Data Error:", e); }
     });
 
+    window.getGlobalAdminUPI = () => {
+        return state.adminSecurity?.upiId || '6206319727@fam';
+    };
+
+    window.updateAdminUPI = async () => {
+        const newUpiId = document.getElementById('newAdminUpiId').value.trim();
+        if(!newUpiId || !newUpiId.includes('@') || newUpiId.includes(' ') || newUpiId.length < 6) {
+            return showToast("Invalid UPI ID! Must contain '@', no spaces, min 6 chars.", "error");
+        }
+        try {
+            await update(ref(db, 'adminAuth'), { upiId: newUpiId, lastUpiUpdate: Date.now() });
+            showToast("Admin Global UPI Updated Successfully!");
+            document.getElementById('newAdminUpiId').value = '';
+        } catch(e) { showToast("Failed to update Admin UPI", "error"); }
+    };
+
     function getActiveProducts() {
         const now = Date.now();
         return Object.entries(state.products || {})
             .filter(([id, p]) => {
                 if(!p || p.inTrash) return false;
+                
+                const isScheduled = p.visibility === 'scheduled' || p.status === 'scheduled' || p.isScheduled === true;
+                const publishTime = p.scheduleTime || p.publishTime || null;
+
+                if(isScheduled && publishTime && now < publishTime) return state.isAdmin;
+                
                 if(p.expiryDateTime && p.expiryDateTime < now) return false;
-                let isVisible = true;
-                if(p.visibility === 'private' || p.status === 'private') isVisible = false;
-                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime > now) isVisible = false;
-                if(!p.visibility && p.hidden) isVisible = false;
-                return isVisible || state.isAdmin;
+                if(p.visibility === 'private' || p.status === 'private') return false;
+                if(!p.visibility && p.hidden) return false;
+                
+                return true;
             }).map(([id, p]) => ({ id, ...p }));
     }
 
@@ -970,10 +1010,15 @@ body { overflow-x: hidden; }
             if (state.currentView === 'home' && !query && state.currentCategory === 'ALL') {
                 renderScrollingProducts(activeList);
                 renderCarousel("featuredProducts", activeList.filter(p => p.featured), "featuredWrapper");
-                renderCarousel("trendingCarousel", [...activeList].sort((a,b)=> {
+                
+                const trendingList = [...activeList].sort((a, b) => {
                     if (a.isTrending !== b.isTrending) return a.isTrending ? -1 : 1;
-                    return ((b.clicks||0)+(b.views||0)) - ((a.clicks||0)+(a.views||0));
-                }).slice(0, 10), "trendingWrapper");
+                    return (b.views || 0) - (a.views || 0) || 
+                           (b.bookingCount || b.sales || 0) - (a.bookingCount || a.sales || 0) || 
+                           (b.downloadCount || b.clicks || 0) - (a.downloadCount || a.clicks || 0);
+                }).slice(0, 10);
+                
+                renderCarousel("trendingCarousel", trendingList, "trendingWrapper");
                 document.getElementById("mainGridTitle").innerText = "Just Arrived";
                 renderCategorySections(activeList);
                 renderRecommendations(activeList);
@@ -986,6 +1031,17 @@ body { overflow-x: hidden; }
             renderMainGrid(activeList, query);
         } catch(e) {}
     }
+
+    window.applySort = function(type, items) {
+        const list = [...items];
+        return list.sort((a, b) => {
+            if (type === 'popular') return (b.views || 0) - (a.views || 0);
+            if (type === 'discount') return (b.discount || 0) - (a.discount || 0);
+            if (type === 'price-low-high') return (a.finalPrice || a.price || 0) - (b.finalPrice || b.price || 0);
+            if (type === 'price-high-low') return (b.finalPrice || b.price || 0) - (a.finalPrice || a.price || 0);
+            return (b.createdAt || 0) - (a.createdAt || 0); 
+        });
+    };
 
     function renderMainGrid(list, query) {
         const container = document.getElementById("products"); if(!container) return;
@@ -1006,13 +1062,7 @@ body { overflow-x: hidden; }
         }
 
         const sortBy = document.getElementById("sortProducts").value;
-        list.sort((a, b) => {
-            if (sortBy === 'popular') return ((b.views||0)+(b.clicks||0)) - ((a.views||0)+(a.clicks||0));
-            if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0);
-            if (sortBy === 'price-low-high') return (a.finalPrice || 0) - (b.finalPrice || 0);
-            if (sortBy === 'price-high-low') return (b.finalPrice || 0) - (a.finalPrice || 0);
-            return (b.createdAt || 0) - (a.createdAt || 0);
-        });
+        list = applySort(sortBy, list);
 
         if (list.length === 0) {
             container.innerHTML = headerHtml + `<div class="empty-state"><i class="fas fa-box-open"></i><p>No products found here.</p></div>`; return;
@@ -1860,8 +1910,15 @@ body { overflow-x: hidden; }
 
         document.getElementById('uploadNoteModal').classList.remove('show');
         document.getElementById('noteUploadPayAmountDisplay').innerText = `₹${price}`;
-        const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Marketplace&am=${price}`;
+        
+        const adminUPI = getGlobalAdminUPI();
+        const upiDisplay = document.getElementById('officialUpiDisplayUpload');
+        if(upiDisplay) upiDisplay.innerText = adminUPI;
+        
+        const payLink = `upi://pay?pa=${adminUPI}&pn=Notes%20Marketplace&am=${price}`;
         document.getElementById('noteUploadPayNowBtn').onclick = () => window.open(payLink, '_blank');
+        document.getElementById('copyUpiUploadBtn').onclick = () => copyUPI(adminUPI);
+
         document.getElementById('noteUploadPaymentModal').classList.add('show');
     });
 
@@ -1940,7 +1997,17 @@ body { overflow-x: hidden; }
         const fClass = document.getElementById("filterClassNote").value;
         const sortQ = document.getElementById("sortNotes").value;
 
-        let list = Object.entries(state.notes || {}).filter(([id, n]) => n && n.status === 'approved' && !n.hidden).map(([id, n]) => ({id, ...n}));
+        const now = Date.now();
+        let list = Object.entries(state.notes || {}).filter(([id, n]) => {
+            if (!n || n.inTrash) return false;
+            const isScheduled = n.visibility === 'scheduled' || n.status === 'scheduled' || n.isScheduled === true;
+            const publishTime = n.scheduleTime || n.publishTime || null;
+            
+            if (isScheduled && publishTime && now < publishTime) return state.isAdmin;
+            if (n.status !== 'approved' && n.status !== 'active') return false;
+            if (n.hidden && !state.isAdmin) return false;
+            return true;
+        }).map(([id, n]) => ({id, ...n}));
 
         list = list.filter(n => {
             const t = (n.title||'').toLowerCase(), k = (n.keywords||'').toLowerCase(), s = (n.subject||'').toLowerCase(), c = (n.class||'').toLowerCase();
@@ -1951,6 +2018,9 @@ body { overflow-x: hidden; }
 
         list.sort((a,b) => {
             if(sortQ === 'downloads') return (b.downloads||0) - (a.downloads||0);
+            if(sortQ === 'popular') return (b.views||0) - (a.views||0);
+            if(sortQ === 'price-low-high') return (a.price || 0) - (b.price || 0);
+            if(sortQ === 'price-high-low') return (b.price || 0) - (a.price || 0);
             return (b.createdAt||0) - (a.createdAt||0);
         });
 
@@ -2117,8 +2187,13 @@ body { overflow-x: hidden; }
         document.getElementById("bookingPaymentPage").style.display = "block";
         document.getElementById("bookingAmountText").innerText = "₹" + price;
         
-        const payLink = `upi://pay?pa=6206319727@fam&pn=Notes%20Booking&am=${price}`;
+        const adminUPI = getGlobalAdminUPI();
+        const upiDisplay = document.getElementById('officialUpiDisplayBooking');
+        if(upiDisplay) upiDisplay.innerText = adminUPI;
+        
+        const payLink = `upi://pay?pa=${adminUPI}&pn=Notes%20Booking&am=${price}`;
         document.getElementById('bookingPayNowBtn').onclick = () => window.open(payLink, '_blank');
+        document.getElementById('copyUpiBookingBtn').onclick = () => copyUPI(adminUPI);
     };
 
     const submitBookingBtn = document.getElementById("submitBookingBtn");
@@ -2331,7 +2406,7 @@ body { overflow-x: hidden; }
         
         const aCont = document.getElementById("adminApprovedNotes");
         if(aCont) {
-            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved');
+            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved' || x[1].status==='active');
             if(!appList.length) aCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No active notes.</p>";
             appList.forEach(([id, n]) => {
                 aCont.innerHTML += `
@@ -2379,6 +2454,7 @@ body { overflow-x: hidden; }
         document.getElementById('editNotePath').value = path;
         document.getElementById('editNoteKeywords').value = note.keywords || '';
         document.getElementById('editNoteDurationDaysAdmin').value = note.durationDays || 0;
+        document.getElementById('editNotePriceAdmin').value = note.price || 0;
         document.getElementById('editNoteModal').classList.add('show');
     };
 
@@ -2387,13 +2463,16 @@ body { overflow-x: hidden; }
         const path = document.getElementById('editNotePath').value;
         const days = parseInt(document.getElementById('editNoteDurationDaysAdmin').value) || 0;
         const keywords = document.getElementById('editNoteKeywords').value.trim();
-        const urlsLength = state[path][id].noteUrls ? state[path][id].noteUrls.length : 1;
-        const price = urlsLength * days * 2;
+        const priceInput = document.getElementById('editNotePriceAdmin');
+        const newPrice = priceInput ? parseFloat(priceInput.value) : 0;
+        
+        if(isNaN(newPrice) || newPrice <= 0) return showToast("Invalid Price!", "error");
+
         let expiryTime = state[path][id].approvedAt ? state[path][id].approvedAt + (days * 24 * 60 * 60 * 1000) : null;
 
         try {
-            await update(ref(db, `${path}/${id}`), { keywords, durationDays: days, price, expiryTime });
-            showToast("Note updated successfully");
+            await update(ref(db, `${path}/${id}`), { keywords, durationDays: days, price: newPrice, expiryTime });
+            showToast("Note data & price updated successfully");
             document.getElementById('editNoteModal').classList.remove('show');
         } catch(e) { showToast("Failed to update", "error"); }
     };
@@ -2513,9 +2592,18 @@ body { overflow-x: hidden; }
             
             Object.entries(state.products || {}).forEach(([id, p]) => {
                 if(!p || p.inTrash) return;
+                
                 if(p.expiryDateTime && p.expiryDateTime < now && p.status !== 'expired') { updates[`expiredProducts/${id}`] = { ...p, status: 'expired', inTrash: false }; updates[`products/${id}`] = null; changed = true; }
-                if((p.visibility === 'scheduled' || p.status === 'scheduled') && p.scheduleTime && p.scheduleTime <= now && p.hidden) {
-                    updates[`products/${id}/visibility`] = 'public'; updates[`products/${id}/hidden`] = false; updates[`products/${id}/status`] = 'public'; changed = true;
+                
+                const isScheduled = p.visibility === 'scheduled' || p.status === 'scheduled' || p.isScheduled === true;
+                const publishTime = p.scheduleTime || p.publishTime || null;
+                
+                if(isScheduled && publishTime && publishTime <= now && p.hidden) {
+                    updates[`products/${id}/visibility`] = 'public'; 
+                    updates[`products/${id}/hidden`] = false; 
+                    updates[`products/${id}/status`] = 'active'; 
+                    updates[`products/${id}/isScheduled`] = false;
+                    changed = true;
                     if (p.autoNotify && typeof window.triggerAutoNotification === 'function') window.triggerAutoNotification(p, "Scheduled product is now live!");
                 }
             });
@@ -2523,10 +2611,23 @@ body { overflow-x: hidden; }
             Object.entries(state.banners || {}).forEach(([id, b]) => { if(b && b.expiryDateTime && b.expiryDateTime < now) { updates[`banners/${id}`] = null; changed = true; } });
             
             Object.entries(state.notes || {}).forEach(([id, n]) => {
-                if(n && n.status === 'approved' && n.expiryTime && n.expiryTime < now && !n.hidden) { 
+                if(!n) return;
+                
+                if(n.status === 'approved' && n.expiryTime && n.expiryTime < now && !n.hidden) { 
                     updates[`notes/${id}/status`] = 'expired'; 
                     updates[`notes/${id}/hidden`] = true;
                     changed = true; 
+                }
+
+                const isScheduled = n.visibility === 'scheduled' || n.status === 'scheduled' || n.isScheduled === true;
+                const publishTime = n.scheduleTime || n.publishTime || null;
+
+                if (isScheduled && publishTime && now >= publishTime && n.hidden) {
+                    updates[`notes/${id}/visibility`] = 'public';
+                    updates[`notes/${id}/status`] = 'active';
+                    updates[`notes/${id}/isScheduled`] = false;
+                    updates[`notes/${id}/hidden`] = false;
+                    changed = true;
                 }
             });
 
@@ -2536,4 +2637,4 @@ body { overflow-x: hidden; }
 
 </script>
 </body>
-  </html>
+</html>
