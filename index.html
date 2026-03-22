@@ -451,8 +451,8 @@ body { overflow-x: hidden; }
             </div>
         </div>
 
-        <input type="text" id="noteUploadUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-        <input type="text" id="noteUploadUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="noteUploadUpiName" placeholder="Your Name (e.g. Shailesh)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <input type="text" id="noteUploadUpiId" placeholder="Your UPI ID (e.g. Shailesh@fam)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         
         <button type="button" id="finalizeUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff; box-shadow:0 4px 15px rgba(0,245,255,0.4);">Successfully Paid & Submit for Approval</button>
     </div>
@@ -489,8 +489,8 @@ body { overflow-x: hidden; }
                 </div>
             </div>
 
-            <input type="text" id="bookingUpiName" placeholder="Your UPI Name (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
-            <input type="text" id="bookingUpiId" placeholder="Your UPI ID (Required)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="bookingUpiName" placeholder="Your Name (e.g. Shailesh)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="text" id="bookingUpiId" placeholder="Your UPI ID (e.g. Shailesh@fam)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
             
             <button type="button" id="finalizeBookingBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit Booking Request</button>
         </div>
@@ -771,6 +771,7 @@ body { overflow-x: hidden; }
         "State Bank of India": ["@sbi", "@oksbi"],
         "Bank of India": ["@boi", "@ibl"],
         "Punjab National Bank": ["@pnb"],
+        "Canara Bank": ["@cnrb"],
         "HDFC Bank": ["@hdfcbank", "@okbizaxis"],
         "ICICI Bank": ["@icici", "@okicici"],
         "Axis Bank": ["@axisbank", "@okaxis"],
@@ -788,16 +789,58 @@ body { overflow-x: hidden; }
         "Federal Bank": ["@federal"]
     };
 
-    window.updateSuffixDropdown = () => {
-        const bank = document.getElementById('wdBankName').value;
-        const suffixSelect = document.getElementById('wdUpiSuffix');
-        if(!suffixSelect) return;
-        suffixSelect.innerHTML = '<option value="">Select Suffix</option>';
-        if(bank && window.bankSuffixMap[bank]) {
-            window.bankSuffixMap[bank].forEach(s => {
-                suffixSelect.innerHTML += `<option value="${s}">${s}</option>`;
-            });
+    window.lastSelectedBank = '';
+    window.updateWithdrawUI = () => {
+        const mode = document.getElementById('wdEntryMode')?.value;
+        if(!mode) return;
+
+        let finalUpi = '';
+
+        if(mode === 'direct') {
+            document.getElementById('wdDirectMode').style.display = 'flex';
+            document.getElementById('wdBuilderMode').style.display = 'none';
+            finalUpi = document.getElementById('wdFullUpiId').value.trim();
+        } else {
+            document.getElementById('wdDirectMode').style.display = 'none';
+            document.getElementById('wdBuilderMode').style.display = 'flex';
+            
+            const bank = document.getElementById('wdBankName').value;
+            const suffixSelect = document.getElementById('wdUpiSuffix');
+            const customSuffixInput = document.getElementById('wdCustomSuffix');
+            const username = document.getElementById('wdUpiUsername').value.trim();
+
+            if (bank !== window.lastSelectedBank) {
+                suffixSelect.innerHTML = '<option value="">Select Suffix</option>';
+                if(bank && window.bankSuffixMap[bank]) {
+                    window.bankSuffixMap[bank].forEach(s => {
+                        suffixSelect.innerHTML += `<option value="${s}">${s}</option>`;
+                    });
+                }
+                if(bank) {
+                    suffixSelect.innerHTML += `<option value="custom">Custom suffix</option>`;
+                }
+                window.lastSelectedBank = bank;
+            }
+
+            const isCustom = bank === 'No Bank' || suffixSelect.value === 'custom';
+            customSuffixInput.style.display = isCustom ? 'block' : 'none';
+
+            let selectedSuffix = '';
+            if (isCustom) {
+                selectedSuffix = customSuffixInput.value.trim();
+            } else {
+                selectedSuffix = suffixSelect.value;
+            }
+
+            if (username && selectedSuffix) {
+                finalUpi = username + selectedSuffix;
+            } else if (username) {
+                finalUpi = username;
+            }
         }
+
+        document.getElementById('wdUpiPreview').innerText = finalUpi || '-';
+        document.getElementById('wdUpiPreview').dataset.finalUpi = finalUpi;
     };
 
     const firebaseConfig = {
@@ -1523,25 +1566,49 @@ body { overflow-x: hidden; }
                 <h2 style="color:#2ed573; font-size:28px;">₹${availableBalance.toFixed(2)}</h2>
                 <p style="font-size:11px; opacity:0.7; margin-top:5px;">Total Earned: ₹${totalEarnings.toFixed(2)} | Pending: ₹${pendingWithdraw.toFixed(2)} | Withdrawn: ₹${totalWithdrawn.toFixed(2)}</p>
             </div>
-            <div style="background:var(--input-bg); padding:15px; border-radius:10px;">
-                <h4 style="margin-bottom:10px;">Request Withdrawal</h4>
-                <input type="text" id="wdUpiName" placeholder="Account Holder Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
+            
+            <div style="background:var(--input-bg); padding:15px; border-radius:10px; max-width:480px; margin:0 auto; display:flex; flex-direction:column; gap:12px; box-sizing:border-box;">
+                <h4 style="margin-bottom:5px;">Request Withdrawal</h4>
+
+                <input type="text" id="wdUpiName" placeholder="Account Holder Name (e.g. Shailesh)" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
                 
-                <select id="wdBankName" onchange="window.updateSuffixDropdown()" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
-                    <option value="">Choose your bank account</option>
-                    ${banksList}
+                <select id="wdEntryMode" onchange="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                    <option value="builder">Bank Selection / UPI Builder</option>
+                    <option value="direct">Direct Full UPI Entry</option>
                 </select>
-                
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="text" id="wdUpiUsername" placeholder="UPI Username (e.g. rohit123)" style="flex:2; padding:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
-                    <select id="wdUpiSuffix" style="flex:1; padding:10px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
-                        <option value="">Select Suffix</option>
-                    </select>
+
+                <!-- DIRECT MODE -->
+                <div id="wdDirectMode" style="display:none; flex-direction:column; gap:12px;">
+                    <input type="text" id="wdFullUpiId" placeholder="Full UPI ID (e.g. Shailesh@fam)" oninput="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
                 </div>
 
-                <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="width:100%; padding:10px; margin-bottom:15px; border-radius:5px; background:rgba(0,0,0,0.2); border:none; color:#fff;">
-                <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="width:100%; padding:12px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Withdraw Funds</button>
-                <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks. (3% GST applies)</p>
+                <!-- BUILDER MODE -->
+                <div id="wdBuilderMode" style="display:flex; flex-direction:column; gap:12px;">
+                    <select id="wdBankName" onchange="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                        <option value="">Choose your bank account</option>
+                        <option value="No Bank">No Bank</option>
+                        ${banksList}
+                    </select>
+                    
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="wdUpiUsername" placeholder="Username (e.g. Shailesh)" oninput="window.updateWithdrawUI()" style="flex:2; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                        <select id="wdUpiSuffix" onchange="window.updateWithdrawUI()" style="flex:1.5; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                            <option value="">Suffix</option>
+                        </select>
+                    </div>
+
+                    <input type="text" id="wdCustomSuffix" placeholder="Custom Suffix (e.g. @fam)" oninput="window.updateWithdrawUI()" style="display:none; width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                </div>
+
+                <div style="background:rgba(0,245,255,0.1); padding:10px; border-radius:8px; border:1px dashed var(--primary-glow); text-align:center;">
+                    <span style="font-size:12px; color:var(--text-light);">Generated UPI Preview:</span><br>
+                    <strong id="wdUpiPreview" style="color:var(--primary-glow); font-size:16px;">-</strong>
+                </div>
+
+                <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                
+                <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="width:100%; height:50px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:10px; color:#fff; font-weight:bold; cursor:pointer; font-size:15px; margin-top:5px;">Withdraw Funds</button>
+                <p style="font-size:10px; color:var(--text-light); text-align:center;">Processing can take up to 2 weeks. (3% GST applies)</p>
             </div>
         `;
 
@@ -1576,23 +1643,49 @@ body { overflow-x: hidden; }
             <div id="ptab-uploads" class="profile-tab-content">${uploadsHtml}</div>
             <div id="ptab-withdraw" class="profile-tab-content">${withdrawHtml}</div>
         `;
+        
+        setTimeout(() => {
+            window.lastSelectedBank = '';
+            if(document.getElementById('wdEntryMode')) window.updateWithdrawUI();
+        }, 50);
     };
 
     window.submitWithdrawal = async (maxAllowed) => {
         const upiName = document.getElementById('wdUpiName').value.trim();
-        const bankName = document.getElementById('wdBankName').value;
-        const upiUser = document.getElementById('wdUpiUsername').value.trim();
-        const upiSuffix = document.getElementById('wdUpiSuffix').value;
+        const mode = document.getElementById('wdEntryMode').value;
+        const finalUpiPreview = document.getElementById('wdUpiPreview').dataset.finalUpi || '';
         const amount = parseFloat(document.getElementById('wdAmount').value);
+        let bankName = mode === 'builder' ? document.getElementById('wdBankName').value : 'Manual Entry';
 
         if(!upiName) return showToast("Account Holder Name required!", "error");
-        if(!bankName) return showToast("Please select a bank!", "error");
-        if(!upiUser || !upiSuffix) return showToast("Please enter username and select suffix!", "error");
-        if(upiUser.includes('@')) return showToast("Username must NOT contain '@'. Suffix is added automatically.", "error");
+        
+        if (mode === 'builder') {
+            const upiUser = document.getElementById('wdUpiUsername').value.trim();
+            const suffixSelect = document.getElementById('wdUpiSuffix').value;
+            const isCustom = bankName === 'No Bank' || suffixSelect === 'custom';
+            const suffix = isCustom ? document.getElementById('wdCustomSuffix').value.trim() : suffixSelect;
+            
+            if(!bankName) return showToast("Please select a bank!", "error");
+            if(!upiUser) return showToast("Please enter a username!", "error");
+            if(upiUser.includes('@')) return showToast("Username must NOT contain '@'. Suffix is added automatically.", "error");
+            if(!suffix) return showToast("Please select or enter a suffix!", "error");
+            
+            if(isCustom) {
+                if(!suffix.startsWith('@')) return showToast("Custom suffix must start with '@'", "error");
+                if(suffix.length < 4) return showToast("Custom suffix is too short", "error");
+                if(suffix.includes(' ')) return showToast("Custom suffix cannot contain spaces", "error");
+            }
+        } else {
+            if(!finalUpiPreview) return showToast("Please enter Full UPI ID!", "error");
+        }
+
+        if(!finalUpiPreview.includes('@')) return showToast("Final UPI ID must contain '@'", "error");
+        if(finalUpiPreview.includes(' ')) return showToast("UPI ID cannot contain spaces", "error");
+
         if(!amount || amount < 50) return showToast("Minimum withdrawal is ₹50", "error");
         if(amount > maxAllowed) return showToast("Insufficient balance", "error");
 
-        const upiId = upiUser + upiSuffix;
+        const finalUpi = finalUpiPreview;
         const gst = amount * 0.03;
         const payAmount = amount - gst;
 
@@ -1603,7 +1696,7 @@ body { overflow-x: hidden; }
                 uid: state.currentUser.uid,
                 userName: state.currentUser.displayName || 'User',
                 userEmail: state.currentUser.email || '',
-                upiName, upiId, bankName, amount, gst, payAmount,
+                upiName, upiId: finalUpi, bankName, amount, gst, payAmount,
                 status: 'pending',
                 timestamp: Date.now()
             };
@@ -1612,10 +1705,13 @@ body { overflow-x: hidden; }
             await update(ref(db), updates);
             showToast("Withdrawal request submitted!");
             document.getElementById('wdUpiName').value = '';
-            document.getElementById('wdBankName').value = '';
-            document.getElementById('wdUpiUsername').value = '';
-            document.getElementById('wdUpiSuffix').innerHTML = '<option value="">Select Suffix</option>';
+            if(document.getElementById('wdBankName')) document.getElementById('wdBankName').value = '';
+            if(document.getElementById('wdUpiUsername')) document.getElementById('wdUpiUsername').value = '';
+            if(document.getElementById('wdUpiSuffix')) document.getElementById('wdUpiSuffix').innerHTML = '<option value="">Select Suffix</option>';
+            if(document.getElementById('wdCustomSuffix')) document.getElementById('wdCustomSuffix').value = '';
+            if(document.getElementById('wdFullUpiId')) document.getElementById('wdFullUpiId').value = '';
             document.getElementById('wdAmount').value = '';
+            window.updateWithdrawUI();
         } catch(e) { showToast("Failed to submit request", "error"); }
     };
 
@@ -2414,7 +2510,7 @@ body { overflow-x: hidden; }
     };
 
     window.deleteWithdrawal = (id) => {
-        confirmAction("Are you sure you want to delete this withdraw request? History/Earnings will not be affected.", async () => {
+        confirmAction("Are you sure delete withdraw request? History/Earnings will not be affected.", async () => {
             try {
                 await remove(ref(db, `withdrawals/${id}`));
                 showToast("Withdrawal request deleted");
