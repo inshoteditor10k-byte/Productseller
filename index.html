@@ -215,6 +215,30 @@ h1 { text-align: center; font-size: 28px; margin-top: 25px; background: linear-g
 .profile-tab-content.active { display: block; animation: fadeIn 0.3s; }
 .stats-badge { font-size: 10px; padding: 3px 6px; background: rgba(255,255,255,0.1); border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; }
 
+/* Withdraw Form Mobile Card Style */
+.withdrawCard {
+    max-width: 480px;
+    margin: auto;
+    padding: 15px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    display: block;
+    box-sizing: border-box;
+}
+.withdrawCard input,
+.withdrawCard select,
+.withdrawCard button {
+    width: 100%;
+    height: 48px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    display: block;
+    box-sizing: border-box;
+}
+.withdrawCard button {
+    height: 50px;
+}
+
 body { overflow-x: hidden; }
 #notesViewWrapper { width: 100%; overflow-x: hidden; box-sizing: border-box; }
 #notesGrid { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px !important; padding: 10px !important; align-items: start; }
@@ -795,22 +819,39 @@ body { overflow-x: hidden; }
         if(!mode) return;
 
         let finalUpi = '';
+        let suffixUsed = '';
 
         if(mode === 'direct') {
-            document.getElementById('wdDirectMode').style.display = 'flex';
+            document.getElementById('wdDirectMode').style.display = 'block';
             document.getElementById('wdBuilderMode').style.display = 'none';
             finalUpi = document.getElementById('wdFullUpiId').value.trim();
         } else {
             document.getElementById('wdDirectMode').style.display = 'none';
-            document.getElementById('wdBuilderMode').style.display = 'flex';
+            document.getElementById('wdBuilderMode').style.display = 'block';
             
             const bank = document.getElementById('wdBankName').value;
             const suffixSelect = document.getElementById('wdUpiSuffix');
             const customSuffixInput = document.getElementById('wdCustomSuffix');
-            const username = document.getElementById('wdUpiUsername').value.trim();
+            let rawUser = document.getElementById('wdUpiUsername').value;
+
+            let username = rawUser.replace(/@.*/, "").replace(/\s+/g, "").toLowerCase();
+            if(rawUser !== username) {
+                document.getElementById('wdUpiUsername').value = username;
+            }
 
             if (bank !== window.lastSelectedBank) {
                 suffixSelect.innerHTML = '<option value="">Select Suffix</option>';
+                
+                const uid = state.currentUser?.uid;
+                const history = (uid && state.users[uid]?.upiSuffixHistory) ? state.users[uid].upiSuffixHistory : [];
+                if(history.length > 0) {
+                    const uniqueHistory = [...new Set(history)];
+                    uniqueHistory.forEach(s => {
+                        suffixSelect.innerHTML += `<option value="${s}">${s} (Recent)</option>`;
+                    });
+                    suffixSelect.innerHTML += `<option disabled>───────</option>`;
+                }
+
                 if(bank && window.bankSuffixMap[bank]) {
                     window.bankSuffixMap[bank].forEach(s => {
                         suffixSelect.innerHTML += `<option value="${s}">${s}</option>`;
@@ -827,10 +868,13 @@ body { overflow-x: hidden; }
 
             let selectedSuffix = '';
             if (isCustom) {
-                selectedSuffix = customSuffixInput.value.trim();
+                selectedSuffix = customSuffixInput.value.trim().toLowerCase().replace(/\s+/g, "");
+                if(selectedSuffix && !selectedSuffix.startsWith('@')) selectedSuffix = '@' + selectedSuffix;
             } else {
                 selectedSuffix = suffixSelect.value;
             }
+            
+            suffixUsed = selectedSuffix;
 
             if (username && selectedSuffix) {
                 finalUpi = username + selectedSuffix;
@@ -841,6 +885,7 @@ body { overflow-x: hidden; }
 
         document.getElementById('wdUpiPreview').innerText = finalUpi || '-';
         document.getElementById('wdUpiPreview').dataset.finalUpi = finalUpi;
+        document.getElementById('wdUpiPreview').dataset.suffixUsed = suffixUsed;
     };
 
     const firebaseConfig = {
@@ -1567,48 +1612,47 @@ body { overflow-x: hidden; }
                 <p style="font-size:11px; opacity:0.7; margin-top:5px;">Total Earned: ₹${totalEarnings.toFixed(2)} | Pending: ₹${pendingWithdraw.toFixed(2)} | Withdrawn: ₹${totalWithdrawn.toFixed(2)}</p>
             </div>
             
-            <div style="background:var(--input-bg); padding:15px; border-radius:10px; max-width:480px; margin:0 auto; display:flex; flex-direction:column; gap:12px; box-sizing:border-box;">
-                <h4 style="margin-bottom:5px;">Request Withdrawal</h4>
+            <div class="withdrawCard">
+                <h4 style="margin-bottom:15px; text-align:center;">Request Withdrawal</h4>
 
-                <input type="text" id="wdUpiName" placeholder="Account Holder Name (e.g. Shailesh)" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                <input type="text" id="wdUpiName" placeholder="UPI par jo name show karta hai" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 
-                <select id="wdEntryMode" onchange="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                <select id="wdEntryMode" onchange="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                     <option value="builder">Bank Selection / UPI Builder</option>
                     <option value="direct">Direct Full UPI Entry</option>
                 </select>
 
                 <!-- DIRECT MODE -->
-                <div id="wdDirectMode" style="display:none; flex-direction:column; gap:12px;">
-                    <input type="text" id="wdFullUpiId" placeholder="Full UPI ID (e.g. Shailesh@fam)" oninput="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                <div id="wdDirectMode" style="display:none;">
+                    <input type="text" id="wdFullUpiId" placeholder="Full UPI ID (e.g. shailesh123@fam)" oninput="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 </div>
 
                 <!-- BUILDER MODE -->
-                <div id="wdBuilderMode" style="display:flex; flex-direction:column; gap:12px;">
-                    <select id="wdBankName" onchange="window.updateWithdrawUI()" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                <div id="wdBuilderMode" style="display:block;">
+                    <select id="wdBankName" onchange="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                         <option value="">Choose your bank account</option>
                         <option value="No Bank">No Bank</option>
                         ${banksList}
                     </select>
                     
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="wdUpiUsername" placeholder="Username (e.g. Shailesh)" oninput="window.updateWithdrawUI()" style="flex:2; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
-                        <select id="wdUpiSuffix" onchange="window.updateWithdrawUI()" style="flex:1.5; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
-                            <option value="">Suffix</option>
-                        </select>
-                    </div>
+                    <input type="text" id="wdUpiUsername" placeholder="UPI ID (without suffix)" oninput="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                    
+                    <select id="wdUpiSuffix" onchange="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
+                        <option value="">Select Suffix</option>
+                    </select>
 
-                    <input type="text" id="wdCustomSuffix" placeholder="Custom Suffix (e.g. @fam)" oninput="window.updateWithdrawUI()" style="display:none; width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                    <input type="text" id="wdCustomSuffix" placeholder="Enter custom suffix (e.g. @fam)" oninput="window.updateWithdrawUI()" style="display:none; background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 </div>
 
-                <div style="background:rgba(0,245,255,0.1); padding:10px; border-radius:8px; border:1px dashed var(--primary-glow); text-align:center;">
+                <div style="background:rgba(0,245,255,0.1); padding:12px; border-radius:8px; border:1px dashed var(--primary-glow); text-align:center; margin-bottom:12px;">
                     <span style="font-size:12px; color:var(--text-light);">Generated UPI Preview:</span><br>
                     <strong id="wdUpiPreview" style="color:var(--primary-glow); font-size:16px;">-</strong>
                 </div>
 
-                <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="width:100%; height:48px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.2); border:none; color:#fff; box-sizing:border-box;">
+                <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 
-                <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="width:100%; height:50px; background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; border-radius:10px; color:#fff; font-weight:bold; cursor:pointer; font-size:15px; margin-top:5px;">Withdraw Funds</button>
-                <p style="font-size:10px; color:var(--text-light); text-align:center;">Processing can take up to 2 weeks. (3% GST applies)</p>
+                <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; color:#fff; font-weight:bold; cursor:pointer; font-size:15px;">Withdraw Funds</button>
+                <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks. (3% GST applies)</p>
             </div>
         `;
 
@@ -1654,10 +1698,11 @@ body { overflow-x: hidden; }
         const upiName = document.getElementById('wdUpiName').value.trim();
         const mode = document.getElementById('wdEntryMode').value;
         const finalUpiPreview = document.getElementById('wdUpiPreview').dataset.finalUpi || '';
+        const suffixUsed = document.getElementById('wdUpiPreview').dataset.suffixUsed || '';
         const amount = parseFloat(document.getElementById('wdAmount').value);
         let bankName = mode === 'builder' ? document.getElementById('wdBankName').value : 'Manual Entry';
 
-        if(!upiName) return showToast("Account Holder Name required!", "error");
+        if(!upiName) return showToast("UPI Name is required!", "error");
         
         if (mode === 'builder') {
             const upiUser = document.getElementById('wdUpiUsername').value.trim();
@@ -1692,26 +1737,30 @@ body { overflow-x: hidden; }
         try {
             const updates = {};
             const newWdRef = push(refs.withdrawals);
+            
             updates[`withdrawals/${newWdRef.key}`] = {
                 uid: state.currentUser.uid,
                 userName: state.currentUser.displayName || 'User',
                 userEmail: state.currentUser.email || '',
-                upiName, upiId: finalUpi, bankName, amount, gst, payAmount,
+                upiName, upiId: finalUpi, bankName, suffixUsed, amount, gst, payAmount,
                 status: 'pending',
                 timestamp: Date.now()
             };
             updates[`users/${state.currentUser.uid}/pendingWithdraw`] = increment(amount);
 
+            if(mode === 'builder' && suffixUsed) {
+                const userRefData = state.users[state.currentUser.uid] || {};
+                let suffixHistory = userRefData.upiSuffixHistory || [];
+                suffixHistory = suffixHistory.filter(s => s !== suffixUsed);
+                suffixHistory.unshift(suffixUsed);
+                if(suffixHistory.length > 5) suffixHistory.pop();
+                updates[`users/${state.currentUser.uid}/upiSuffixHistory`] = suffixHistory;
+            }
+
             await update(ref(db), updates);
             showToast("Withdrawal request submitted!");
-            document.getElementById('wdUpiName').value = '';
-            if(document.getElementById('wdBankName')) document.getElementById('wdBankName').value = '';
-            if(document.getElementById('wdUpiUsername')) document.getElementById('wdUpiUsername').value = '';
-            if(document.getElementById('wdUpiSuffix')) document.getElementById('wdUpiSuffix').innerHTML = '<option value="">Select Suffix</option>';
-            if(document.getElementById('wdCustomSuffix')) document.getElementById('wdCustomSuffix').value = '';
-            if(document.getElementById('wdFullUpiId')) document.getElementById('wdFullUpiId').value = '';
-            document.getElementById('wdAmount').value = '';
-            window.updateWithdrawUI();
+            
+            window.renderUserDashboard();
         } catch(e) { showToast("Failed to submit request", "error"); }
     };
 
