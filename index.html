@@ -359,10 +359,10 @@ body { overflow-x: hidden; }
 </div>
 
 <div id="notesViewWrapper" style="display:none; margin-top: 15px; padding: 0 10px;">
-    <button class="btn-upload-note" onclick="openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload & Sell Notes</button>
+    <button class="btn-upload-note" onclick="window.openNoteUploadModal()"><i class="fas fa-cloud-upload-alt"></i> Upload & Sell Notes</button>
     <div class="notes-controls">
-        <input type="text" id="searchNotes" placeholder="Search by Title, Keywords, Subject, Class..." oninput="renderNotesGrid()">
-        <select id="filterClassNote" onchange="renderNotesGrid()">
+        <input type="text" id="searchNotes" placeholder="Search by Title, Keywords, Subject, Class..." oninput="window.renderNotesGrid()">
+        <select id="filterClassNote" onchange="window.renderNotesGrid()">
             <option value="">All Classes</option>
             <option value="Pre Nursery">Pre Nursery</option><option value="Nursery">Nursery</option>
             <option value="LKG">LKG</option><option value="UKG">UKG</option>
@@ -381,7 +381,7 @@ body { overflow-x: hidden; }
             <option value="Computer courses">Computer courses</option>
             <option value="All competitive exams">All competitive exams</option>
         </select>
-        <select id="sortNotes" onchange="renderNotesGrid()">
+        <select id="sortNotes" onchange="window.renderNotesGrid()">
             <option value="latest">Sort: Newest First</option>
             <option value="popular">Most Viewed</option>
             <option value="downloads">Sort: Most Booked</option>
@@ -400,29 +400,29 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div class="admin-btn" onclick="openAdminAuth()"><i class="fas fa-user-shield"></i> Admin</div>
+<div class="admin-btn" onclick="window.switchPanel('adminPanel')"><i class="fas fa-user-shield"></i> Admin</div>
 
-<div class="modal" id="productModal">
+<div class="modal page" id="productModal">
     <div class="modal-content" id="modalContent"></div>
 </div>
 
-<div class="modal" id="userProfileModal">
+<div class="modal page" id="userProfileModal">
     <div class="modal-content" style="max-width: 600px; text-align: left; padding:0;">
-        <button class="back-btn" onclick="document.getElementById('userProfileModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <button class="back-btn" onclick="window.hideAllPages()"><i class="fas fa-arrow-left"></i></button>
         <div id="userProfileContent" style="padding:20px; padding-top:50px; max-height: 85vh; overflow-y: auto;"></div>
     </div>
 </div>
 
-<div class="modal" id="noteDetailModal">
+<div class="modal page" id="noteDetailModal">
     <div class="modal-content" style="max-width: 600px; text-align: left;">
-        <button class="back-btn" onclick="document.getElementById('noteDetailModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <button class="back-btn" onclick="window.hideAllPages()"><i class="fas fa-arrow-left"></i></button>
         <div id="noteDetailContent" style="margin-top: 30px;"></div>
     </div>
 </div>
 
-<div class="modal" id="uploadNoteModal">
+<div class="modal page" id="uploadNoteModal">
     <div class="modal-content" style="max-width: 500px;">
-        <button class="back-btn" onclick="document.getElementById('uploadNoteModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <button class="back-btn" onclick="window.hideAllPages()"><i class="fas fa-arrow-left"></i></button>
         <h3 style="margin-bottom:15px; margin-top:20px; text-align:center;"><i class="fas fa-upload" style="color: var(--primary-glow);"></i> Upload Study Notes</h3>
         
         <input type="text" id="noteTitle" placeholder="Note Title (Required)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
@@ -430,7 +430,7 @@ body { overflow-x: hidden; }
         <input type="text" id="noteKeywords" placeholder="Keywords (Comma separated)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
 
         <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
-            <select id="noteClass" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteClass', 'customNoteClass')">
+            <select id="noteClass" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="window.toggleCustomInput('noteClass', 'customNoteClass')">
                 <option value="">Select Class</option>
                 <option value="Pre Nursery">Pre Nursery</option><option value="Nursery">Nursery</option>
                 <option value="LKG">LKG</option><option value="UKG">UKG</option>
@@ -452,7 +452,7 @@ body { overflow-x: hidden; }
             </select>
             <input type="text" id="customNoteClass" placeholder="Enter Custom Class" style="display:none; flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
             
-            <select id="noteSubject" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="toggleCustomInput('noteSubject', 'customNoteSubject')">
+            <select id="noteSubject" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;" onchange="window.toggleCustomInput('noteSubject', 'customNoteSubject')">
                 <option value="">Select Subject</option>
                 <option value="Math">Math</option><option value="Science">Science</option>
                 <option value="Physics">Physics</option><option value="Chemistry">Chemistry</option>
@@ -469,7 +469,7 @@ body { overflow-x: hidden; }
         </div>
 
         <div style="display:flex; gap:10px; margin-bottom:10px;">
-            <input type="number" id="noteDurationDays" placeholder="Duration (Days)" oninput="calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+            <input type="number" id="noteDurationDays" placeholder="Duration (Days)" oninput="window.calcNotePrice()" style="flex:1; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         </div>
         
         <div class="price-breakdown" id="notePriceBreakdown">URLs: 1 | Duration: 0 Days <br><strong style="font-size:16px;">Total Price: ₹0</strong></div>
@@ -483,20 +483,20 @@ body { overflow-x: hidden; }
             <label style="font-size:12px; color:var(--text-light); display:block; margin-bottom:10px;">Study Notes URLs</label>
             <div id="noteUrlsContainer">
                 <div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group">
-                    <input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()">
-                    <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>
+                    <input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="window.calcNotePrice()">
+                    <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); window.calcNotePrice();"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
-            <button onclick="addNoteUrlField()" style="width:100%; padding:10px; margin-top:5px; background:rgba(0, 245, 255, 0.2); border:1px dashed var(--primary-glow); color:var(--primary-glow); border-radius:8px; cursor:pointer;"><i class="fas fa-plus"></i> Add Another URL</button>
+            <button onclick="window.addNoteUrlField()" style="width:100%; padding:10px; margin-top:5px; background:rgba(0, 245, 255, 0.2); border:1px dashed var(--primary-glow); color:var(--primary-glow); border-radius:8px; cursor:pointer;"><i class="fas fa-plus"></i> Add Another URL</button>
         </div>
 
         <button type="button" id="submitUploadBtn" style="width:100%; padding:12px; background:linear-gradient(90deg, var(--primary-glow), var(--secondary-glow)); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#fff;">Submit for Approval</button>
     </div>
 </div>
 
-<div class="modal" id="noteUploadPaymentModal" style="z-index: 2500;">
+<div class="modal page" id="noteUploadPaymentModal" style="z-index: 2500;">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
-        <button class="back-btn" onclick="document.getElementById('noteUploadPaymentModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <button class="back-btn" onclick="window.hideAllPages()"><i class="fas fa-arrow-left"></i></button>
         <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Complete Submission Payment</h3>
         <p style="font-size:13px; color:var(--text-light); margin-bottom:15px;">Send <strong style="color:#fff;" id="noteUploadPayAmountDisplay">₹0</strong> to the UPI ID below to submit your notes for approval.</p>
         
@@ -516,9 +516,9 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div class="modal" id="noteBookingModal" style="z-index: 2500;">
+<div class="modal page" id="noteBookingModal" style="z-index: 2500;">
     <div class="modal-content" style="max-width: 400px; text-align:center;">
-        <button class="back-btn" onclick="document.getElementById('noteBookingModal').classList.remove('show')"><i class="fas fa-arrow-left"></i></button>
+        <button class="back-btn" onclick="window.hideAllPages()"><i class="fas fa-arrow-left"></i></button>
         
         <div id="bookingFormPage">
             <h3 style="margin-bottom:10px; margin-top:20px; color:var(--primary-glow);">Book Notes</h3>
@@ -555,39 +555,39 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div class="modal" id="noteEditPage">
-    <div class="modal-content" style="max-width: 400px;">
-        <button class="close-btn" onclick="document.getElementById('noteEditPage').style.display='none'">×</button>
+<div class="modal page" id="noteEditPage">
+    <div class="modal-content" style="max-width: 450px;">
+        <button class="close-btn" onclick="window.hideAllPages()">×</button>
         <h3 style="margin-bottom:15px; text-align:center;">Note Pricing Editor</h3>
         <input type="hidden" id="editNoteId">
         <input type="hidden" id="editNotePath">
         
-        <div style="background:var(--input-bg); padding:15px; border-radius:8px; margin-bottom:15px;">
-            <p style="font-size:13px; color:var(--text-light); margin-bottom:5px;">Pages: <strong id="editNotePagesDisplay" style="color:#fff;">0</strong></p>
-            <p style="font-size:13px; color:var(--text-light); margin-bottom:0;">Original Price: <strong id="editNoteOriginalDisplay" style="color:#fff;">₹0</strong></p>
+        <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between;">
+            <p style="font-size:13px; color:var(--text-light); margin:0;">Pages: <strong id="editNotePagesDisplay" style="color:#fff;">0</strong></p>
+            <p style="font-size:13px; color:var(--text-light); margin:0;">Base Price: <strong id="editNoteOriginalDisplay" style="color:#fff;">₹0</strong></p>
         </div>
 
-        <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Price per page (₹)</label>
-        <input type="number" id="editNotePricePerPage" placeholder="Enter price per page" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+        <div id="pagePricingContainer" style="max-height:300px; overflow-y:auto; margin-bottom:15px; display:flex; flex-direction:column; gap:10px; padding-right:5px;">
+        </div>
         
         <div style="display:flex; gap:10px; margin-bottom:10px;">
             <div style="flex:1;">
                 <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Discount %</label>
-                <input type="number" id="editNoteDiscountPercent" placeholder="%" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+                <input type="number" id="editNoteDiscountPercent" placeholder="0%" oninput="window.calculateNotePrice()" style="width:100%; padding:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
             </div>
             <div style="flex:1;">
                 <label style="font-size:12px; color:var(--text-light); margin-bottom:5px; display:block;">Discount Days</label>
-                <input type="number" id="editNoteDiscountDays" placeholder="Days" oninput="window.calculateNotePrice()" style="width:100%; padding:12px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
+                <input type="number" id="editNoteDiscountDays" placeholder="0" oninput="window.calculateNotePrice()" style="width:100%; padding:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
             </div>
         </div>
 
-        <p style="margin-bottom:15px; font-size:14px; text-align:center;">Final Price: <strong id="editNoteFinalPriceDisplay" style="color:var(--primary-glow); font-size:20px;">₹0</strong></p>
+        <p style="margin-bottom:15px; font-size:14px; text-align:center;">Total Final Price: <strong id="editNoteFinalPriceDisplay" style="color:var(--primary-glow); font-size:20px;">₹0</strong></p>
         
         <button onclick="window.updateNotePricing()" style="width:100%; padding:12px; background:var(--primary-glow); border:none; border-radius:8px; font-weight:bold; cursor:pointer; color:#000;">Update Pricing</button>
     </div>
 </div>
 
-<div class="modal" id="rejectModal" style="z-index: 4500;">
+<div class="modal page" id="rejectModal" style="z-index: 4500;">
     <div class="modal-content" style="max-width: 400px; text-align: center;">
         <h3 style="margin-bottom: 15px; color:var(--primary-glow);">Select Reject Reason</h3>
         <input type="hidden" id="rejectType">
@@ -603,25 +603,25 @@ body { overflow-x: hidden; }
         <textarea id="rejectRemark" placeholder="Admin remark (optional)" rows="2" style="width:100%; padding:12px; margin-bottom:15px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;"></textarea>
         
         <div style="display:flex; gap:10px;">
-            <button class="btn-danger" onclick="confirmReject()" style="width: 100%; padding: 12px; border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Confirm Reject</button>
-            <button onclick="document.getElementById('rejectModal').classList.remove('show')" style="width: 100%; padding: 12px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); font-weight:bold; cursor:pointer;">Cancel</button>
+            <button class="btn-danger" onclick="window.confirmReject()" style="width: 100%; padding: 12px; border:none; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Confirm Reject</button>
+            <button onclick="window.hideAllPages()" style="width: 100%; padding: 12px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); font-weight:bold; cursor:pointer;">Cancel</button>
         </div>
     </div>
 </div>
 
-<div class="modal" id="confirmModal" style="z-index: 4000;">
+<div class="modal page" id="confirmModal" style="z-index: 4000;">
     <div class="modal-content" style="max-width: 300px; text-align: center;">
         <h3 id="confirmMsg" style="margin-bottom: 20px; font-size: 16px;">Are you sure?</h3>
         <div style="display:flex; gap:10px;">
             <button id="confirmYes" class="btn-danger" style="width: 100%; padding: 10px; border:none; border-radius:8px; color:#fff; cursor:pointer;">Yes</button>
-            <button onclick="document.getElementById('confirmModal').classList.remove('show')" style="width: 100%; padding: 10px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); cursor:pointer;">Cancel</button>
+            <button onclick="window.hideAllPages()" style="width: 100%; padding: 10px; border:none; border-radius:8px; background:var(--input-bg); color:var(--text-color); cursor:pointer;">Cancel</button>
         </div>
     </div>
 </div>
 
-<div class="modal" id="adminLoginModal">
+<div class="modal page" id="adminLoginModal">
     <div class="modal-content" style="max-width: 350px;">
-        <button class="close-btn" onclick="closeModals()">×</button>
+        <button class="close-btn" onclick="window.hideAllPages()">×</button>
         <h3 style="margin-bottom:15px; text-align:center;">Admin Portal</h3>
         <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
         <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none;">
@@ -630,7 +630,7 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div id="fullImageViewer">
+<div id="fullImageViewer" class="page">
     <button class="fv-close" onclick="closeImageViewer()">×</button>
     <div class="fv-counter" id="fvCounter">1/1</div>
     <button class="fv-nav fv-prev" onclick="navImageViewer(-1)">❮</button>
@@ -642,12 +642,12 @@ body { overflow-x: hidden; }
     </div>
 </div>
 
-<div class="admin-panel" id="adminPanel">
+<div class="admin-panel page" id="adminPanel">
     <div class="admin-header">
         <h2>Admin Dashboard</h2>
         <div style="display:flex; gap:5px;">
             <button onclick="logoutAdmin()" class="btn-secondary btn-action"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            <button onclick="closeAdmin()" class="btn-danger btn-action"><i class="fas fa-times"></i></button>
+            <button onclick="window.hideAllPages()" class="btn-danger btn-action"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
@@ -834,7 +834,7 @@ body { overflow-x: hidden; }
     <div id="tab-backup" class="admin-tab-content">
         <h3>System Backup</h3>
         <p style="font-size:12px; opacity:0.8; margin-bottom:15px;">Export your complete database as a JSON file, or restore from a previous backup to prevent data loss.</p>
-        <button onclick="exportDatabaseJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
+        <button onclick="window.downloadJSON()"><i class="fas fa-download"></i> Download Full Database JSON</button>
         
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
         <h3>Restore Database</h3>
@@ -863,9 +863,49 @@ body { overflow-x: hidden; }
     import { getDatabase, ref, push, set, onValue, remove, update, increment, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
+    document.addEventListener("click", function(){}, true);
+
     let tempNoteData = null;
     window.bookingLocks = {};
     window.withdrawPayLocks = {};
+    window.currentNoteId = null;
+
+    window.hideAllPages = () => {
+        document.querySelectorAll(".page, .modal, .admin-panel").forEach(p => {
+            p.style.display = "none";
+            p.classList.remove("show");
+        });
+        document.body.style.overflow = 'auto';
+    };
+
+    window.switchPanel = (panelId) => {
+        window.hideAllPages();
+        const el = document.getElementById(panelId);
+        if(el) {
+            if(panelId === 'adminPanel' || panelId === 'noteEditPage') {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'flex';
+                if(el.classList.contains('modal')) el.classList.add('show');
+            }
+        }
+        window.rebindAllButtons();
+    };
+
+    window.rebindAllButtons = () => {
+        if (state.currentView === 'notes') window.renderNotesGrid();
+        window.renderAdminNotes();
+        window.renderAdminBookings();
+        if (state.currentUser && document.getElementById('userProfileModal')?.classList.contains('show')) {
+            window.renderUserDashboard();
+        }
+    };
+
+    window.openNotePage = (id) => {
+        window.currentNoteId = id;
+        window.switchPanel('noteDetailModal');
+        window.openNoteDetail(id);
+    };
 
     window.rejectReasons = {
         booking: ["Payment not verified", "Fake payment screenshot", "Duplicate booking", "User cancelled request", "Invalid booking"],
@@ -885,7 +925,7 @@ body { overflow-x: hidden; }
         sel.innerHTML = window.rejectReasons[type].map(r => `<option value="${r}">${r}</option>`).join('');
         document.getElementById('rejectRemark').value = '';
         
-        document.getElementById('rejectModal').classList.add('show');
+        window.switchPanel('rejectModal');
     };
 
     window.confirmReject = () => {
@@ -895,7 +935,8 @@ body { overflow-x: hidden; }
         const rem = document.getElementById('rejectRemark').value.trim();
         const fullReason = rem ? `${sel} - ${rem}` : sel;
 
-        document.getElementById('rejectModal').classList.remove('show');
+        window.hideAllPages();
+        window.switchPanel('adminPanel');
 
         if (type === 'upload') window.executeRejectNote(id, fullReason);
         if (type === 'booking') window.executeHandleBooking(id, 'booking_rejected', fullReason);
@@ -941,7 +982,11 @@ body { overflow-x: hidden; }
         if(mode === 'direct') {
             document.getElementById('wdDirectMode').style.display = 'block';
             document.getElementById('wdBuilderMode').style.display = 'none';
-            finalUpi = document.getElementById('wdFullUpiId').value.trim();
+            
+            let rawUpi = document.getElementById('wdFullUpiId').value.trim();
+            finalUpi = rawUpi.replace(/\s+/g, "").toLowerCase();
+            if(rawUpi !== finalUpi) document.getElementById('wdFullUpiId').value = finalUpi;
+            
         } else {
             document.getElementById('wdDirectMode').style.display = 'none';
             document.getElementById('wdBuilderMode').style.display = 'block';
@@ -1007,8 +1052,15 @@ body { overflow-x: hidden; }
 
     window.getNotePriceInfo = (note) => {
         const pages = note.noteUrls ? note.noteUrls.length : 1;
-        const spp = note.sellingPricePerPage || (note.price ? (note.price / pages) : 5);
-        const originalPrice = pages * spp;
+        let originalPrice = 0;
+        let pricesArr = note.pagePrices || [];
+        
+        if(pricesArr.length !== pages) {
+            const defaultSpp = note.sellingPricePerPage || (note.price ? (note.price / pages) : 5);
+            pricesArr = Array(pages).fill(defaultSpp);
+        }
+        
+        originalPrice = pricesArr.reduce((a, b) => a + b, 0);
         
         let discountPercent = note.discountPercent || 0;
         const discountEndDate = note.discountEndDate || 0;
@@ -1017,15 +1069,15 @@ body { overflow-x: hidden; }
             discountPercent = 0;
         }
         
-        const finalPrice = discountPercent > 0 ? (originalPrice - (originalPrice * discountPercent / 100)) : originalPrice;
+        const finalPrice = discountPercent > 0 ? Math.round(originalPrice - (originalPrice * discountPercent / 100)) : originalPrice;
         
         return {
             pages,
-            pricePerPage: spp,
             originalPrice,
             finalPrice,
             discountPercent,
-            hasDiscount: discountPercent > 0
+            hasDiscount: discountPercent > 0,
+            pagePrices: pricesArr
         };
     };
 
@@ -1103,17 +1155,6 @@ body { overflow-x: hidden; }
         const div = document.createElement('div'); div.innerText = str; return div.innerHTML;
     }
 
-    let confirmCallback = null;
-    window.confirmAction = (msg, callback) => {
-        document.getElementById("confirmMsg").innerText = msg;
-        document.getElementById("confirmModal").classList.add("show");
-        confirmCallback = callback;
-    };
-    document.getElementById("confirmYes").onclick = () => {
-        document.getElementById("confirmModal").classList.remove("show");
-        if(confirmCallback) confirmCallback();
-    };
-
     function getTimestamp(d, t) { 
         if (!d) return null;
         const parsed = new Date(`${d}T${t || '00:00:00'}`).getTime();
@@ -1137,7 +1178,6 @@ body { overflow-x: hidden; }
         const now = Date.now();
         document.querySelectorAll('.countdown-timer').forEach(el => {
             const exp = parseInt(el.dataset.expiry);
-            if(exp) el.innerText = exp > now ? formatCountdown(exp - exp) : 'Expired'; // Fixed visual bug, should be exp - now
             if(exp) el.innerText = exp > now ? formatCountdown(exp - now) : 'Expired';
         });
         requestAnimationFrame(runTimers);
@@ -1175,7 +1215,7 @@ body { overflow-x: hidden; }
         const noteIdParam = params.get('note');
         if (noteIdParam && state.notes[noteIdParam] && !state.noteLinkedOpened) {
             state.noteLinkedOpened = true;
-            setTimeout(() => openNoteDetail(noteIdParam), 500);
+            setTimeout(() => window.openNotePage(noteIdParam), 500);
         }
         if(state.currentView === 'notes') renderNotesGrid(); 
         renderAdminNotes(); 
@@ -1207,22 +1247,6 @@ body { overflow-x: hidden; }
             renderBanners(); 
         } catch(e) { console.error("Render Data Error:", e); }
     });
-
-    window.getGlobalAdminUPI = () => {
-        return state.adminSecurity?.upiId || '6206319727@fam';
-    };
-
-    window.updateAdminUPI = async () => {
-        const newUpiId = document.getElementById('newAdminUpiId').value.trim();
-        if(!newUpiId || !newUpiId.includes('@') || newUpiId.includes(' ') || newUpiId.length < 6) {
-            return showToast("Invalid UPI ID! Must contain '@', no spaces, min 6 chars.", "error");
-        }
-        try {
-            await update(ref(db, 'adminAuth'), { upiId: newUpiId, lastUpiUpdate: Date.now() });
-            showToast("Admin Global UPI Updated Successfully!");
-            document.getElementById('newAdminUpiId').value = '';
-        } catch(e) { showToast("Failed to update Admin UPI", "error"); }
-    };
 
     function getActiveProducts() {
         const now = Date.now();
@@ -1524,7 +1548,6 @@ body { overflow-x: hidden; }
     window.openProduct = (id) => {
         const p = state.products[id]; if(!p || p.inTrash) return;
         trackEvent('views', id);
-        document.body.style.overflow = 'hidden';
         
         const gallery = (p.images||[]).map(url => `<img src="${sanitize(url)}" class="modal-gallery-image" onerror="this.src='${fallbackImage}'">`).join('');
         const tags = (p.tags||'').split(',').filter(t=>t.trim()).map(t=>`<span class="tag">#${sanitize(t.trim())}</span>`).join('');
@@ -1541,7 +1564,7 @@ body { overflow-x: hidden; }
         const safeTitle = sanitize(p.title).replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
         document.getElementById("modalContent").innerHTML = `
-            <button class="close-btn" onclick="closeModals()">×</button>
+            <button class="close-btn" onclick="window.hideAllPages()">×</button>
             <div class="modal-image-gallery">${gallery||`<img src="${fallbackImage}" class="modal-gallery-image">`}</div>
             <h2>${sanitize(p.title)}</h2>
             <div class="tags-container">${tags}</div>
@@ -1562,10 +1585,10 @@ body { overflow-x: hidden; }
                 <button class="share-btn ns" onclick="nativeShare('${id}', '${safeTitle}')" title="More Sharing Options"><i class="fas fa-share-nodes"></i></button>
             </div>
         `;
-        document.getElementById("productModal").classList.add('show');
+        window.switchPanel('productModal');
     };
 
-    window.closeModals = () => { document.body.style.overflow = 'auto'; document.getElementById("productModal").classList.remove('show'); document.getElementById("adminLoginModal").classList.remove('show'); document.getElementById("noteDetailModal").classList.remove('show'); document.getElementById("userProfileModal").classList.remove('show'); };
+    window.closeModals = () => { window.hideAllPages(); };
     window.copyCoupon = (code) => { navigator.clipboard.writeText(code); showToast("Coupon Copied!"); };
     window.shareProduct = (id, url) => { trackEvent('shares', id); window.open(url); };
     window.copyShare = (id, txt) => { trackEvent('shares', id); navigator.clipboard.writeText(txt); showToast("Link Copied!"); };
@@ -1624,12 +1647,14 @@ body { overflow-x: hidden; }
                 state.isAdmin = true;
                 state.currentUser = null;
                 if(document.getElementById('adminLoginModal').classList.contains('show')) {
-                    closeModals(); document.getElementById('adminPanel').style.display = 'block'; showToast("Admin session active");
+                    window.hideAllPages();
+                    window.switchPanel('adminPanel');
+                    showToast("Admin session active");
                 }
             } else {
                 state.isAdmin = false;
                 state.currentUser = user;
-                if(document.getElementById('userProfileModal')?.classList.contains('show')) renderUserDashboard();
+                if(document.getElementById('userProfileModal')?.classList.contains('show')) window.renderUserDashboard();
             }
         } else { 
             state.isAdmin = false; 
@@ -1650,9 +1675,9 @@ body { overflow-x: hidden; }
                 </div>
             `;
         } else {
-            renderUserDashboard();
+            window.renderUserDashboard();
         }
-        document.getElementById('userProfileModal').classList.add('show');
+        window.switchPanel('userProfileModal');
     };
 
     window.loginWithGoogle = async (isNew) => {
@@ -1672,7 +1697,7 @@ body { overflow-x: hidden; }
         } catch (e) { showToast("Auth Failed", "error"); }
     };
 
-    window.logoutUser = async () => { await signOut(auth); showToast("Logged out"); document.getElementById('userProfileModal').classList.remove('show'); };
+    window.logoutUser = async () => { await signOut(auth); showToast("Logged out"); window.hideAllPages(); };
 
     window.switchProfileTab = (tabId) => {
         document.querySelectorAll('.profile-tab-content').forEach(c => c.classList.remove('active'));
@@ -1706,7 +1731,7 @@ body { overflow-x: hidden; }
         list.forEach(([id, b]) => {
             html += `
             <div class="historyCard">
-                <button class="del-btn" onclick="deleteHistoryItem('pendingBookings', '${id}', 'buyerHistoryHidden')">Delete</button>
+                <button class="del-btn" onclick="window.deleteHistoryItem('pendingBookings', '${id}', 'buyerHistoryHidden')">Delete</button>
                 <h4>${sanitize(b.noteTitle)}</h4>
                 <p>Price: ₹${b.amount}</p>
                 <p>Purchased: ${new Date(b.timestamp).toLocaleDateString()}</p>
@@ -1740,7 +1765,7 @@ body { overflow-x: hidden; }
             
             html += `
             <div class="historyCard">
-                <button class="del-btn" onclick="deleteHistoryItem('${col}', '${id}', 'uploaderHistoryHidden')">Delete</button>
+                <button class="del-btn" onclick="window.deleteHistoryItem('${col}', '${id}', 'uploaderHistoryHidden')">Delete</button>
                 <h4>${sanitize(n.title)}</h4>
                 <p>Uploaded: ${new Date(n.createdAt).toLocaleDateString()}</p>
                 <p>Price: ₹${n.price || 0}</p>
@@ -1770,7 +1795,7 @@ body { overflow-x: hidden; }
             const earned = (b.amount * 0.5).toFixed(2);
             html += `
             <div class="historyCard">
-                <button class="del-btn" onclick="deleteHistoryItem('pendingBookings', '${id}', 'earningHistoryHidden')">Delete</button>
+                <button class="del-btn" onclick="window.deleteHistoryItem('pendingBookings', '${id}', 'earningHistoryHidden')">Delete</button>
                 <h4>${sanitize(b.noteTitle)}</h4>
                 <p>Earned: ₹${earned}</p>
                 <p>Date: ${new Date(b.approvedAt || b.timestamp).toLocaleDateString()}</p>
@@ -1796,7 +1821,7 @@ body { overflow-x: hidden; }
         list.forEach(([id, w]) => {
             html += `
             <div class="historyCard">
-                <button class="del-btn" onclick="deleteHistoryItem('withdrawals', '${id}', 'withdrawHistoryHidden')">Delete</button>
+                <button class="del-btn" onclick="window.deleteHistoryItem('withdrawals', '${id}', 'withdrawHistoryHidden')">Delete</button>
                 <h4>₹${w.amount}</h4>
                 <p>UPI: ${sanitize(w.upiId)}</p>
                 <p>Status: <span style="color:${w.status==='approved'?'#2ed573':(w.status==='rejected'?'#ff4757':'#ff9800')}">${w.status.toUpperCase()}</span></p>
@@ -1808,10 +1833,10 @@ body { overflow-x: hidden; }
     };
 
     window.deleteHistoryItem = (collection, id, flagField) => {
-        confirmAction("Delete from history?", async () => {
+        window.confirmAction("Delete from history?", async () => {
             try {
                 await update(ref(db, `${collection}/${id}`), { [flagField]: true });
-                showToast("Removed from history");
+                window.showToast("Removed from history");
                 
                 const activeTab = document.querySelector('#histTabsContainer button.active');
                 if(activeTab) {
@@ -1821,7 +1846,7 @@ body { overflow-x: hidden; }
                     if(activeTab.id === 'htab-withdraw') window.loadWithdrawHistory();
                 }
             } catch(e) {
-                showToast("Error removing item", "error");
+                window.showToast("Error removing item", "error");
             }
         });
     };
@@ -1846,7 +1871,7 @@ body { overflow-x: hidden; }
             
             bookingsHtml += `
                 <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid ${statusColor}; position:relative;">
-                    <button class="icon-btn" style="position:absolute; top:5px; right:5px; padding:5px; font-size:12px; background:none; color:#ff4757;" onclick="deleteUserBooking('${id}')"><i class="fas fa-trash"></i></button>
+                    <button class="icon-btn" style="position:absolute; top:5px; right:5px; padding:5px; font-size:12px; background:none; color:#ff4757;" onclick="window.deleteUserBooking('${id}')"><i class="fas fa-trash"></i></button>
                     <div style="display:flex; justify-content:space-between; margin-right:20px;">
                         <strong style="font-size:14px;">${sanitize(b.noteTitle)}</strong>
                     </div>
@@ -1857,7 +1882,7 @@ body { overflow-x: hidden; }
             if(isApproved && note && note.noteUrls) {
                 bookingsHtml += `
                     <div style="margin-top:10px; display:flex; gap:10px; overflow-x:auto;">
-                        ${note.noteUrls.map((url, i) => `<img src="${sanitize(url)}" style="height:60px; min-width:60px; object-fit:cover; border-radius:5px; cursor:pointer;" onclick="openImageViewer('${b.noteId}', ${i})">`).join('')}
+                        ${note.noteUrls.map((url, i) => `<img src="${sanitize(url)}" style="height:60px; min-width:60px; object-fit:cover; border-radius:5px; cursor:pointer;" onclick="window.openImageViewer('${b.noteId}', ${i})">`).join('')}
                     </div>
                 `;
             }
@@ -1911,12 +1936,10 @@ body { overflow-x: hidden; }
                     <option value="direct">Direct Full UPI Entry</option>
                 </select>
 
-                <!-- DIRECT MODE -->
                 <div id="wdDirectMode" style="display:none;">
                     <input type="text" id="wdFullUpiId" placeholder="Full UPI ID (e.g. shailesh123@fam)" oninput="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 </div>
 
-                <!-- BUILDER MODE -->
                 <div id="wdBuilderMode" style="display:block;">
                     <select id="wdBankName" onchange="window.updateWithdrawUI()" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                         <option value="">Choose your bank account</option>
@@ -1940,38 +1963,24 @@ body { overflow-x: hidden; }
 
                 <input type="number" id="wdAmount" placeholder="Amount (Min ₹50)" style="background:rgba(0,0,0,0.2); border:none; color:#fff;">
                 
-                <button onclick="submitWithdrawal(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; color:#fff; font-weight:bold; cursor:pointer; font-size:15px;">Withdraw Funds</button>
+                <div id="wdLoadingText" style="text-align:center; color:var(--primary-glow); font-size:12px; height:15px; margin-bottom:5px;"></div>
+                <button id="withdrawSubmitBtn" onclick="window.submitWithdrawalWithAd(${availableBalance})" ${availableBalance < 50 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} style="background:linear-gradient(90deg, #2ed573, #1e90ff); border:none; color:#fff; font-weight:bold; cursor:pointer; font-size:15px;">Withdraw Funds</button>
                 <p style="font-size:10px; color:var(--text-light); text-align:center; margin-top:10px;">Processing can take up to 2 weeks. (3% GST applies)</p>
             </div>
         `;
-
-        const myWds = Object.entries(state.withdrawals || {}).filter(([id, w]) => w.uid === u.uid).sort((a,b)=>b[1].timestamp - a[1].timestamp);
-        if(myWds.length > 0) {
-            withdrawHtml += `<h4 style="margin-top:20px; margin-bottom:10px;">Withdrawal History</h4>`;
-            myWds.forEach(([id, w]) => {
-                const statusColor = w.status === 'approved' ? '#2ed573' : (w.status === 'rejected' ? '#ff4757' : '#ff9800');
-                const gst = w.gst || (w.amount * 0.03);
-                const payAmt = w.payAmount || (w.amount - gst);
-                withdrawHtml += `<div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong style="font-size:14px;">Requested: ₹${w.amount}</strong><br><small style="opacity:0.8; color:var(--primary-glow);">Received: ₹${payAmt.toFixed(2)}</small> <br><small style="opacity:0.5;">${new Date(w.timestamp).toLocaleDateString()}</small></div>
-                    <span style="font-size:10px; padding:3px 6px; background:rgba(0,0,0,0.3); border-radius:4px; color:${statusColor};">${w.status.toUpperCase()}</span>
-                </div>
-                ${w.status === 'rejected' && w.rejectReason ? `<p style="color:#ff4757; font-size:11px; margin-top:3px; margin-bottom:10px;">Reason: ${sanitize(w.rejectReason)}</p>` : ''}`;
-            });
-        }
 
         document.getElementById('userProfileContent').innerHTML = `
             <div style="text-align:center; margin-bottom:15px;">
                 <img src="${u.photoURL || fallbackImage}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--primary-glow); margin-bottom:5px; object-fit:cover;">
                 <h3 style="font-size:16px;">${sanitize(u.displayName || 'User')}</h3>
-                <button onclick="logoutUser()" style="margin-top:5px; padding:4px 12px; font-size:11px; background:#ff4757; color:#fff; border:none; border-radius:15px; cursor:pointer;">Logout</button>
+                <button onclick="window.logoutUser()" style="margin-top:5px; padding:4px 12px; font-size:11px; background:#ff4757; color:#fff; border:none; border-radius:15px; cursor:pointer;">Logout</button>
             </div>
             
             <div class="profile-tabs">
-                <button class="profile-tab active" onclick="switchProfileTab('ptab-bookings')">Bookings</button>
-                <button class="profile-tab" onclick="switchProfileTab('ptab-uploads')">Uploads</button>
-                <button class="profile-tab" onclick="switchProfileTab('ptab-withdraw')">Earnings / Withdraw</button>
-                <button class="profile-tab" onclick="switchProfileTab('ptab-history'); window.loadPurchaseHistory();">History</button>
+                <button class="profile-tab active" onclick="window.switchProfileTab('ptab-bookings')">Bookings</button>
+                <button class="profile-tab" onclick="window.switchProfileTab('ptab-uploads')">Uploads</button>
+                <button class="profile-tab" onclick="window.switchProfileTab('ptab-withdraw')">Earnings / Withdraw</button>
+                <button class="profile-tab" onclick="window.switchProfileTab('ptab-history'); window.loadPurchaseHistory();">History</button>
             </div>
 
             <div id="ptab-bookings" class="profile-tab-content active">${bookingsHtml}</div>
@@ -1992,6 +2001,35 @@ body { overflow-x: hidden; }
             window.lastSelectedBank = '';
             if(document.getElementById('wdEntryMode')) window.updateWithdrawUI();
         }, 50);
+    };
+
+    window.adLoadedScript = false;
+    window.submitWithdrawalWithAd = (maxAllowed) => {
+        const loadingText = document.getElementById("wdLoadingText");
+        const btn = document.getElementById("withdrawSubmitBtn");
+        
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        }
+        if (loadingText) loadingText.innerText = "Loading offer...";
+
+        if (!window.adLoadedScript) {
+            let ad = document.createElement("script");
+            ad.src = "https://pl28750759.profitablecpmratenetwork.com/28/b7/77/28b7770062cf1401c510514ab77dccf2.js";
+            ad.async = true;
+            document.body.appendChild(ad);
+            window.adLoadedScript = true;
+        }
+
+        setTimeout(() => {
+            if (loadingText) loadingText.innerText = "";
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = "Withdraw Funds";
+            }
+            window.submitWithdrawal(maxAllowed);
+        }, 1500);
     };
 
     window.submitWithdrawal = async (maxAllowed) => {
@@ -2065,7 +2103,7 @@ body { overflow-x: hidden; }
     };
 
     window.deleteUserBooking = async (id) => {
-        confirmAction("Remove booking from your dashboard?", async () => {
+        window.confirmAction("Remove booking from your dashboard?", async () => {
             try { await update(ref(db, `pendingBookings/${id}`), { userDeleted: true }); showToast("Removed from dashboard"); } catch(e){}
         });
     };
@@ -2080,12 +2118,14 @@ body { overflow-x: hidden; }
         state.fvIndex = startIndex;
         
         updateImageViewer();
+        document.getElementById('fullImageViewer').style.display = 'flex';
         document.getElementById('fullImageViewer').classList.add('show');
         document.body.style.overflow = 'hidden';
     };
 
     window.closeImageViewer = () => {
         document.getElementById('fullImageViewer').classList.remove('show');
+        document.getElementById('fullImageViewer').style.display = 'none';
         document.body.style.overflow = 'auto';
         state.fvUrls = [];
     };
@@ -2103,13 +2143,26 @@ body { overflow-x: hidden; }
         document.getElementById('fvCounter').innerText = `${state.fvIndex + 1} / ${state.fvUrls.length}`;
         
         document.getElementById('fvDownloadBtn').onclick = () => {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Note_Image_${state.fvIndex + 1}`;
-            a.target = '_blank';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            const btn = document.getElementById('fvDownloadBtn');
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            
+            fetch(url)
+            .then(res => res.blob())
+            .then(blob => {
+                let a = document.createElement("a");
+                let objectUrl = URL.createObjectURL(blob);
+                a.href = objectUrl;
+                a.download = `Note_Image_${state.fvIndex + 1}.jpg`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(objectUrl);
+                btn.innerHTML = origHtml;
+            }).catch(e => {
+                btn.innerHTML = origHtml;
+                showToast("Download failed", "error");
+            });
         };
         
         document.getElementById('fvShareBtn').onclick = () => {
@@ -2122,24 +2175,25 @@ body { overflow-x: hidden; }
     }
 
     document.getElementById('fullImageViewer').addEventListener('click', (e) => {
-        if(e.target.id === 'fullImageViewer') closeImageViewer();
+        if(e.target.id === 'fullImageViewer') window.closeImageViewer();
     });
     
     let touchstartY = 0;
     document.getElementById('fullImageViewer').addEventListener('touchstart', e => { touchstartY = e.changedTouches[0].screenY; }, {passive:true});
     document.getElementById('fullImageViewer').addEventListener('touchend', e => { 
-        if(e.changedTouches[0].screenY - touchstartY > 100) closeImageViewer(); 
+        if(e.changedTouches[0].screenY - touchstartY > 100) window.closeImageViewer(); 
     }, {passive:true});
     
     document.addEventListener('keydown', e => {
         if(document.getElementById('fullImageViewer').classList.contains('show')) {
-            if(e.key === 'Escape') closeImageViewer();
-            if(e.key === 'ArrowRight') navImageViewer(1);
-            if(e.key === 'ArrowLeft') navImageViewer(-1);
+            if(e.key === 'Escape') window.closeImageViewer();
+            if(e.key === 'ArrowRight') window.navImageViewer(1);
+            if(e.key === 'ArrowLeft') window.navImageViewer(-1);
         }
     });
 
-    window.openAdminAuth = () => { if(state.isAdmin) document.getElementById('adminPanel').style.display = 'block'; else document.getElementById('adminLoginModal').classList.add('show'); };
+    window.openAdminAuth = () => { if(state.isAdmin) window.switchPanel('adminPanel'); else window.switchPanel('adminLoginModal'); };
+    
     window.loginAdmin = async () => {
         const e = document.getElementById('adminEmail').value, p = document.getElementById('adminPass').value, sp = document.getElementById('adminSecPass').value;
         if(!e || !p || !sp) return showToast("All fields required", "error");
@@ -2148,8 +2202,11 @@ body { overflow-x: hidden; }
         try { await signInWithEmailAndPassword(auth, e, p); showToast("Login Request Sent", "success"); } 
         catch (err) { showToast("Authentication failed", "error"); } 
     };
-    window.logoutAdmin = () => { confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; closeAdmin(); showToast("Logged out safely"); } catch(e){} }); };
-    window.closeAdmin = () => document.getElementById('adminPanel').style.display = 'none';
+
+    window.logoutAdmin = () => { window.confirmAction("Are you sure you want to logout?", async () => { try { await signOut(auth); state.isAdmin = false; window.hideAllPages(); showToast("Logged out safely"); } catch(e){} }); };
+    
+    window.closeAdmin = () => window.hideAllPages();
+
     window.switchAdminTab = (tabId) => {
         document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -2272,8 +2329,8 @@ body { overflow-x: hidden; }
         calcPrice(); document.getElementById("adminPanel").scrollTo(0,0); window.switchAdminTab('tab-manage');
     };
 
-    window.duplicateProduct = (id) => { confirmAction("Duplicate this product?", async () => { try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {} }); };
-    window.archiveProduct = (id) => { confirmAction("Archive product? (Moves to expired panel)", async () => { try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {} }); };
+    window.duplicateProduct = (id) => { window.confirmAction("Duplicate this product?", async () => { try { const p = {...state.products[id]}; delete p.id; p.title = p.title + ' (Copy)'; p.createdAt = Date.now(); p.views = 0; p.clicks = 0; p.sales = 0; p.shares = 0; await set(push(refs.products), p); showToast("Duplicated successfully"); } catch(e) {} }); };
+    window.archiveProduct = (id) => { window.confirmAction("Archive product? (Moves to expired panel)", async () => { try { const updates = {}; const p = {...state.products[id]}; p.status = 'expired'; updates[`expiredProducts/${id}`] = p; updates[`products/${id}`] = null; await update(ref(db), updates); showToast("Archived successfully"); } catch(e) {} }); };
 
     function renderAdminProducts() {
         const c = document.getElementById("adminProductList"); if(!c) return; c.innerHTML = "";
@@ -2289,10 +2346,10 @@ body { overflow-x: hidden; }
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
                 <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>Stock: ${p.stock!=null?p.stock:'∞'} | <span style="color:var(--primary-glow); font-weight:bold; text-transform:uppercase;">${visText}</span></p></div>
                 <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
-                    <button class="btn-secondary btn-action" onclick="quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
-                    <button class="btn-secondary btn-action" onclick="duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
-                    <button class="btn-danger btn-action" onclick="archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
+                    <button class="btn-secondary btn-action" onclick="window.copyShare('${id}', '${shareUrl}')" title="Copy Product Link"><i class="fas fa-link"></i></button>
+                    <button class="btn-secondary btn-action" onclick="window.quickEdit('${id}')" title="Edit"><i class="fas fa-pen"></i></button>
+                    <button class="btn-secondary btn-action" onclick="window.duplicateProduct('${id}')" title="Duplicate"><i class="fas fa-copy"></i></button>
+                    <button class="btn-danger btn-action" onclick="window.archiveProduct('${id}')" title="Archive"><i class="fas fa-archive"></i></button>
                 </div>`;
             frag.appendChild(div);
         });
@@ -2313,27 +2370,40 @@ body { overflow-x: hidden; }
                 <img src="${sanitize(p.images?.[0]||fallbackImage)}">
                 <div class="admin-item-info"><h4>${sanitize(p.title)}</h4><p>${isTrash ? 'In Trash' : 'Expired/Archived'}</p></div>
                 <div class="admin-item-actions">
-                    <button class="btn-secondary btn-action" onclick="restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
-                    ${!isTrash ? `<button class="btn-danger btn-action" onclick="deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
+                    <button class="btn-secondary btn-action" onclick="window.restoreProduct('${id}')"><i class="fas fa-undo"></i> Restore</button>
+                    ${!isTrash ? `<button class="btn-danger btn-action" onclick="window.deletePermanent('${id}')" title="Move to Trash"><i class="fas fa-trash"></i></button>` : ''}
                 </div>`;
             frag.appendChild(div);
         });
         c.appendChild(frag);
     }
 
-    window.restoreProduct = (id) => { confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
-    window.deletePermanent = (id) => { confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
-    window.bulkRestore = () => { confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
+    window.restoreProduct = (id) => { window.confirmAction("Restore to active?", async () => { try { const p = state.expired[id]; p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; const updates = {}; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; await update(ref(db), updates); showToast("Restored"); } catch(e) {} }); };
+    window.deletePermanent = (id) => { window.confirmAction("Move to trash?", async () => { try { const p = state.expired[id]; if(p){ const updates = {}; p.inTrash = true; updates[`expiredProducts/${id}`] = p; await update(ref(db), updates); showToast("Moved to Trash", "error"); } } catch(e) {} }); };
+    window.bulkRestore = () => { window.confirmAction("Restore ALL expired & trashed products?", async () => { try { const updates = {}; Object.entries(state.expired || {}).forEach(([id, p]) => { if(p){ p.expiryDateTime = null; p.status = 'public'; p.inTrash = false; updates[`products/${id}`] = p; updates[`expiredProducts/${id}`] = null; }}); if(Object.keys(updates).length) { await update(ref(db), updates); showToast("Bulk restored"); } } catch (e) {} }); };
 
-    window.exportDatabaseJSON = async () => { try { const s = await get(ref(db)); const blob = new Blob([JSON.stringify(s.val(), null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showToast("Backup Downloaded"); } catch(e) { showToast("Backup Failed", "error"); } };
-    window.importDatabaseJSON = () => { const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error"); confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => { const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file); }); };
+    window.downloadJSON = () => {
+        get(ref(db)).then(s => {
+            const data = s.val();
+            let blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = `store_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showToast("Backup Downloaded");
+        }).catch(e => {
+            showToast("Backup Failed", "error");
+        });
+    };
+
+    window.importDatabaseJSON = () => { const file = document.getElementById('importFile').files[0]; if(!file) return showToast("Select a file first", "error"); window.confirmAction("DANGER: This will OVERWRITE the database. Proceed?", () => { const reader = new FileReader(); reader.onload = async (e) => { try { const data = JSON.parse(e.target.result); await set(ref(db), data); showToast("Restored Successfully!"); document.getElementById('importFile').value = ''; } catch(err) { showToast("Invalid JSON", "error"); } }; reader.readAsText(file); }); };
 
     window.addCategory = async () => { try { const v = document.getElementById("newCategoryName").value.trim(); if(v) { await push(refs.categories, v); document.getElementById("newCategoryName").value=''; } } catch(e) {} };
-    window.deleteCategory = (id) => { confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
+    window.deleteCategory = (id) => { window.confirmAction("Delete Category?", () => remove(ref(db, `categories/${id}`))); };
     function renderAdminCategories() {
         const sel = document.getElementById("pCategory"), list = document.getElementById("categoryList"); if(!sel || !list) return;
         sel.innerHTML = '<option value="">Select Category</option>'; list.innerHTML = '';
-        Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
+        Object.entries(state.categories || {}).forEach(([id, c]) => { if(c){ sel.innerHTML += `<option value="${sanitize(c)}">${sanitize(c)}</option>`; list.innerHTML += `<div class="admin-list-item" style="padding:5px 10px;"><span>${sanitize(c)}</span> <button class="btn-danger btn-action" onclick="window.deleteCategory('${id}')"><i class="fas fa-trash"></i></button></div>`; } });
     }
 
     window.addBannerField = (id='', img='', link='', exp=null) => {
@@ -2342,8 +2412,8 @@ body { overflow-x: hidden; }
         setInputsDate(exp, d.querySelector('.bDate'), d.querySelector('.bTime')); document.getElementById("bannerFields").appendChild(d);
     };
     window.saveBanners = async () => { try { const nodes = [...document.querySelectorAll("#bannerFields .admin-list-item")]; for (const el of nodes) { const id = el.querySelector('.bId').value, img = el.querySelector('.bImg').value, link = el.querySelector('.bLink').value, exp = getTimestamp(el.querySelector('.bDate').value, el.querySelector('.bTime').value); if(img && link) { const b = { image:img, link, expiryDateTime:exp }; if (id) await update(ref(db, `banners/${id}`), b); else await set(push(refs.banners), b); } } document.getElementById("bannerFields").innerHTML=''; showToast("Banners Saved!"); } catch(e) {} };
-    window.deleteBanner = id => confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
-    function renderAdminBanners() { const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML=''; Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; }); }
+    window.deleteBanner = id => window.confirmAction("Delete Banner?", () => remove(ref(db, `banners/${id}`)));
+    function renderAdminBanners() { const c = document.getElementById("adminBannerList"); if(!c) return; c.innerHTML=''; Object.entries(state.banners || {}).forEach(([id, b]) => { if(b) c.innerHTML += `<div class="admin-list-item"><img src="${sanitize(b.image)}"><div class="admin-item-info"><p>${sanitize(b.link)}</p></div><button class="btn-danger btn-action" onclick="window.deleteBanner('${id}')"><i class="fas fa-trash"></i></button></div>`; }); }
 
     window.sendManualNotification = async () => {
         const title = document.getElementById("notificationTitle").value, msg = document.getElementById("notificationMessage").value, url = document.getElementById("notificationUrl").value;
@@ -2357,21 +2427,19 @@ body { overflow-x: hidden; }
             showToast("Notification Sent!"); document.getElementById("notificationTitle").value = ''; document.getElementById("notificationMessage").value = ''; document.getElementById("notificationUrl").value = '';
         } catch(e) { showToast(e.message, "error"); }
     };
-    if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) addImageField();
+    if(document.getElementById("imageFields") && !document.getElementById("imageFields").children.length) window.addImageField();
 
     document.getElementById('submitUploadBtn').setAttribute('type', 'button');
-    document.getElementById('submitUploadBtn').addEventListener('click', function handleSubmitForApproval(e) {
-        if(e) e.preventDefault();
+    document.getElementById('submitUploadBtn').onclick = function(e) {
+        e.preventDefault();
         
-        if(document.getElementById('noteUploadPaymentModal').classList.contains('show')) return;
-
         if(!state.currentUser) return showToast("Please login first", "error");
         
         const title = document.getElementById('noteTitle').value.trim();
         const uploader = document.getElementById('noteUploader') ? document.getElementById('noteUploader').value.trim() : (state.currentUser.displayName || 'Unknown');
         const days = parseInt(document.getElementById('noteDurationDays').value) || 0;
         const urls = Array.from(document.querySelectorAll('.note-url-input')).map(i => i.value.trim()).filter(Boolean);
-        const price = calcNotePrice();
+        const price = window.calcNotePrice();
         
         if(!title) return showToast("Note Title is required!", "error");
         if(urls.length === 0) return showToast("At least one valid Note URL is required!", "error");
@@ -2407,23 +2475,21 @@ body { overflow-x: hidden; }
             status: 'upload_pending'
         };
 
-        document.getElementById('uploadNoteModal').classList.remove('show');
+        window.switchPanel('noteUploadPaymentModal');
         document.getElementById('noteUploadPayAmountDisplay').innerText = `₹${price}`;
         
-        const adminUPI = getGlobalAdminUPI();
+        const adminUPI = window.getGlobalAdminUPI();
         const upiDisplay = document.getElementById('officialUpiDisplayUpload');
         if(upiDisplay) upiDisplay.innerText = adminUPI;
         
         const payLink = `upi://pay?pa=${adminUPI}&pn=Notes%20Marketplace&am=${price}`;
         document.getElementById('noteUploadPayNowBtn').onclick = () => window.open(payLink, '_blank');
-        document.getElementById('copyUpiUploadBtn').onclick = () => copyUPI(adminUPI);
-
-        document.getElementById('noteUploadPaymentModal').classList.add('show');
-    });
+        document.getElementById('copyUpiUploadBtn').onclick = () => window.copyUPI(adminUPI);
+    };
 
     document.getElementById('finalizeUploadBtn').setAttribute('type', 'button');
-    document.getElementById('finalizeUploadBtn').addEventListener('click', async function confirmPaymentSubmit(e) {
-        if(e) e.preventDefault();
+    document.getElementById('finalizeUploadBtn').onclick = async function(e) {
+        e.preventDefault();
 
         if(!tempNoteData) return showToast("Session expired, please try again", "error");
         
@@ -2445,25 +2511,24 @@ body { overflow-x: hidden; }
         try {
             await set(push(refs.pendingNotes), tempNoteData);
             showToast("Waiting for approval (96 hours)", "success");
-            document.getElementById('noteUploadPaymentModal').classList.remove('show');
+            window.hideAllPages();
             tempNoteData = null;
             
             ['noteTitle','noteDesc','noteKeywords','customNoteClass','customNoteSubject','noteDurationDays','noteThumb','noteUploadUpiName','noteUploadUpiId'].forEach(i => { if(document.getElementById(i)) document.getElementById(i).value=''; });
-            document.getElementById('noteUrlsContainer').innerHTML = `<div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group"><input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()"><button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button></div>`;
-            calcNotePrice();
+            document.getElementById('noteUrlsContainer').innerHTML = `<div style="display:flex; gap:5px; margin-bottom:5px;" class="note-url-group"><input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="window.calcNotePrice()"><button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); window.calcNotePrice();"><i class="fas fa-trash"></i></button></div>`;
+            window.calcNotePrice();
         } catch(err) { 
-            console.error("Firebase write error:", err);
             showToast("Submission failed. Try again.", "error"); 
         } finally {
             btn.disabled = false;
             btn.innerHTML = 'Successfully Paid & Submit for Approval';
             btn.classList.remove('btn-disabled');
         }
-    });
+    };
 
     window.openNoteUploadModal = () => {
         if(!state.currentUser) return window.openProfile(true);
-        document.getElementById('uploadNoteModal').classList.add('show');
+        window.switchPanel('uploadNoteModal');
     };
 
     window.toggleCustomInput = (selectId, customId) => {
@@ -2476,10 +2541,10 @@ body { overflow-x: hidden; }
         const div = document.createElement('div');
         div.className = 'note-url-group';
         div.style = 'display:flex; gap:5px; margin-bottom:5px;';
-        div.innerHTML = `<input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="calcNotePrice()">
-                         <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); calcNotePrice();"><i class="fas fa-trash"></i></button>`;
+        div.innerHTML = `<input type="url" class="note-url-input" placeholder="Note URL" style="flex:1; padding:12px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--text-color); border:none;" oninput="window.calcNotePrice()">
+                         <button type="button" class="btn-danger" style="padding:0 15px; border-radius:8px; border:none; cursor:pointer;" onclick="this.parentElement.remove(); window.calcNotePrice();"><i class="fas fa-trash"></i></button>`;
         container.appendChild(div);
-        calcNotePrice();
+        window.calcNotePrice();
     };
 
     window.calcNotePrice = () => {
@@ -2553,23 +2618,23 @@ body { overflow-x: hidden; }
                         <span class="oldPrice">₹${priceInfo.originalPrice}</span>
                         <span class="newPrice">₹${priceInfo.finalPrice}</span>
                     </div>
-                    <button class="buyBtn" onclick="openNoteDetail('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
+                    <button class="buyBtn" onclick="window.openNotePage('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
                 </div>`;
             } else {
                 priceHtml = `
                 <div class="priceBox">
-                    <button class="buyBtn" onclick="openNoteDetail('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
+                    <button class="buyBtn" onclick="window.openNotePage('${n.id}')">Buy Now ₹${priceInfo.finalPrice}</button>
                 </div>`;
             }
 
             div.innerHTML = `
                 <div style="position:relative;">
-                    <img class="note-thumb" src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'" onclick="openNoteDetail('${n.id}')">
+                    <img class="note-thumb" src="${sanitize(n.thumbnail||fallbackImage)}" onerror="this.src='${fallbackImage}'" onclick="window.openNotePage('${n.id}')">
                     ${n.class ? `<div class="note-badge" style="position:absolute; top:10px; left:10px;">${sanitize(n.class)}</div>` : ''}
                     ${n.subject ? `<div class="note-badge" style="position:absolute; top:10px; right:10px; background:#e91e63; color:#fff;">${sanitize(n.subject)}</div>` : ''}
                 </div>
                 <div class="note-content">
-                    <h3 class="note-title">${sanitize(n.title)}</h3>
+                    <h3 class="note-title" style="cursor:pointer;" onclick="window.openNotePage('${n.id}')">${sanitize(n.title)}</h3>
                     <p style="font-size:11px; color:var(--text-light); margin-bottom:4px;">By ${sanitize(n.uploader)} • ${d} ${n.noteUrls ? `• ${n.noteUrls.length} URLs` : ''}</p>
                     <p style="font-size:12px; flex-grow:1; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${sanitize(n.description)}</p>
                 </div>
@@ -2640,11 +2705,11 @@ body { overflow-x: hidden; }
             <div style="background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:15px; display:flex; align-items:center; justify-content:space-between;">
                 <div><span style="font-size:18px; font-weight:bold;">${avg}/5</span> <span style="font-size:14px;">${starsHtml}</span><br><small style="opacity:0.6;">(${rCount} Ratings)</small></div>
                 <div class="star-rating" id="noteRatingInput">
-                    <input type="radio" id="star5" name="rating" value="5" onclick="submitNoteRating('${id}', 5)"><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star4" name="rating" value="4" onclick="submitNoteRating('${id}', 4)"><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star3" name="rating" value="3" onclick="submitNoteRating('${id}', 3)"><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star2" name="rating" value="2" onclick="submitNoteRating('${id}', 2)"><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star1" name="rating" value="1" onclick="submitNoteRating('${id}', 1)"><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star5" name="rating" value="5" onclick="window.submitNoteRating('${id}', 5)"><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4" onclick="window.submitNoteRating('${id}', 4)"><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3" onclick="window.submitNoteRating('${id}', 3)"><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2" onclick="window.submitNoteRating('${id}', 2)"><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star1" name="rating" value="1" onclick="window.submitNoteRating('${id}', 1)"><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
                 </div>
             </div>
 
@@ -2655,20 +2720,19 @@ body { overflow-x: hidden; }
             <p style="font-size:13px; line-height:1.5; margin-bottom:20px;">${sanitize(note.description)}</p>
 
             <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button onclick="openNoteBookingModal('${id}')" style="flex:1; padding:15px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(255,71,87,0.4);"><i class="fas fa-book"></i> Buy Now ₹${priceInfo.finalPrice}</button>
-                <button onclick="shareNote('${id}')" style="width:50px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; cursor:pointer; font-size:18px;"><i class="fas fa-share-alt"></i></button>
+                <button onclick="window.openNoteBookingModal('${id}')" style="flex:1; padding:15px; background:linear-gradient(90deg, #ff4757, #ff9800); border:none; border-radius:8px; color:#fff; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(255,71,87,0.4);"><i class="fas fa-book"></i> Buy Now ₹${priceInfo.finalPrice}</button>
+                <button onclick="window.shareNote('${id}')" style="width:50px; border-radius:8px; background:var(--input-bg); color:var(--text-color); border:none; cursor:pointer; font-size:18px;"><i class="fas fa-share-alt"></i></button>
             </div>
 
             <div class="comment-section">
                 <h3 style="margin-bottom:10px; font-size:16px;">Comments</h3>
                 <input type="text" id="commentName" placeholder="Your Name" value="${state.currentUser ? state.currentUser.displayName || '' : ''}" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); border:none; color:#fff;">
                 <textarea id="commentText" placeholder="Write a comment..." rows="3" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; background:var(--input-bg); border:none; color:#fff;"></textarea>
-                <button onclick="submitNoteComment('${id}')" style="width:100%; padding:10px; background:var(--primary-glow); border:none; border-radius:8px; color:#000; font-weight:bold; cursor:pointer; margin-bottom:20px;">Post Comment</button>
+                <button onclick="window.submitNoteComment('${id}')" style="width:100%; padding:10px; background:var(--primary-glow); border:none; border-radius:8px; color:#000; font-weight:bold; cursor:pointer; margin-bottom:20px;">Post Comment</button>
                 
                 <div id="commentListContainer">${commentsHtml}</div>
             </div>
         `;
-        document.getElementById('noteDetailModal').classList.add('show');
     };
 
     window.submitNoteRating = async (id, rating) => {
@@ -2682,7 +2746,7 @@ body { overflow-x: hidden; }
             await update(ref(db, `notes/${id}`), { ratingSum: rSum, ratingCount: rCount });
             sessionStorage.setItem('rated_' + id, 'true');
             showToast("Rating submitted!");
-            openNoteDetail(id);
+            window.openNoteDetail(id);
         } catch(e) { showToast("Error submitting rating", "error"); }
     };
 
@@ -2694,13 +2758,13 @@ body { overflow-x: hidden; }
         try {
             await set(push(ref(db, `notes/${id}/comments`)), { name, text, timestamp: Date.now() });
             showToast("Comment posted!");
-            openNoteDetail(id);
+            window.openNoteDetail(id);
         } catch(e) { showToast("Error posting comment", "error"); }
     };
 
     window.openNoteBookingModal = (id) => {
         if(!state.currentUser) {
-            closeModals();
+            window.hideAllPages();
             return window.openProfile(true);
         }
         
@@ -2714,14 +2778,17 @@ body { overflow-x: hidden; }
 
         document.getElementById('bookingNoteTitle').innerText = note.title;
         document.getElementById('bookingNotesCount').innerText = urlsCount;
-        document.getElementById('bookingPppDisplay').innerText = priceInfo.pricePerPage;
+        
+        const avgPpp = (total / urlsCount).toFixed(2);
+        document.getElementById('bookingPppDisplay').innerText = avgPpp;
+        
         document.getElementById('bookingTotalAmount').innerText = total;
         document.getElementById('bookingNoteId').value = id;
         
-        if(document.getElementById('bookingFormPage')) document.getElementById('bookingFormPage').style.display = 'block';
-        if(document.getElementById('bookingPaymentPage')) document.getElementById('bookingPaymentPage').style.display = 'none';
+        document.getElementById('bookingFormPage').style.display = 'block';
+        document.getElementById('bookingPaymentPage').style.display = 'none';
         
-        document.getElementById('noteBookingModal').classList.add('show');
+        window.switchPanel('noteBookingModal');
     };
 
     window.openBookingPaymentPage = function(price) {
@@ -2729,13 +2796,13 @@ body { overflow-x: hidden; }
         document.getElementById("bookingPaymentPage").style.display = "block";
         document.getElementById("bookingAmountText").innerText = "₹" + price;
         
-        const adminUPI = getGlobalAdminUPI();
+        const adminUPI = window.getGlobalAdminUPI();
         const upiDisplay = document.getElementById('officialUpiDisplayBooking');
         if(upiDisplay) upiDisplay.innerText = adminUPI;
         
         const payLink = `upi://pay?pa=${adminUPI}&pn=Notes%20Booking&am=${price}`;
         document.getElementById('bookingPayNowBtn').onclick = () => window.open(payLink, '_blank');
-        document.getElementById('copyUpiBookingBtn').onclick = () => copyUPI(adminUPI);
+        document.getElementById('copyUpiBookingBtn').onclick = () => window.copyUPI(adminUPI);
     };
 
     const submitBookingBtn = document.getElementById("submitBookingBtn");
@@ -2804,8 +2871,7 @@ body { overflow-x: hidden; }
                 btn.disabled = true; btn.innerHTML = 'Submitting...';
                 await set(push(ref(db, 'pendingBookings/')), bookingData);
                 showToast("Waiting for approval (48 hours)", "success");
-                document.getElementById('noteBookingModal').classList.remove('show');
-                document.getElementById('noteDetailModal').classList.remove('show');
+                window.hideAllPages();
                 document.getElementById('bookingUpiName').value = '';
                 document.getElementById('bookingUpiId').value = '';
                 btn.disabled = false; btn.innerHTML = 'Submit Booking Request';
@@ -2892,12 +2958,12 @@ body { overflow-x: hidden; }
                     </div>
                     <div class="admin-item-actions">
                         ${w.status === 'pending' ? `
-                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
-                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-action" style="background:#1e90ff; color:#fff;" onclick="window.payWithdrawalUPI('${id}', '${safeUpiId}', '${safeUpiName}', ${payAmt})"><i class="fas fa-external-link-alt"></i> Pay UPI</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="window.handleWithdrawal('${id}', 'approved', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-danger btn-action" onclick="window.handleWithdrawal('${id}', 'rejected', '${w.uid}', ${w.amount}, ${payAmt}, ${gst})"><i class="fas fa-times"></i> Reject</button>
                         ` : `
                             <span style="font-size:10px; opacity:0.6; margin-right:5px; padding:5px; background:var(--input-bg); border-radius:5px;">${w.status.toUpperCase()}</span>
-                            <button class="btn-danger btn-action" onclick="deleteWithdrawal('${id}')"><i class="fas fa-trash"></i> Delete</button>
+                            <button class="btn-danger btn-action" onclick="window.deleteWithdrawal('${id}')"><i class="fas fa-trash"></i> Delete</button>
                         `}
                     </div>
                 </div>
@@ -2916,7 +2982,7 @@ body { overflow-x: hidden; }
 
     window.handleWithdrawal = async (id, status, uid, amount, payAmount, gst) => {
         if(status === 'rejected') {
-            return openRejectModal('withdrawal', id, uid, amount, payAmount, gst);
+            return window.openRejectModal('withdrawal', id, uid, amount, payAmount, gst);
         }
         if (status === 'approved') {
             const adminBalance = state.analytics?.adminEarnings || 0;
@@ -2969,8 +3035,8 @@ body { overflow-x: hidden; }
                         </div>
                         <div class="admin-item-actions">
                             <button class="btn-secondary btn-action" onclick="window.open('${n.noteUrls && n.noteUrls[0] ? sanitize(n.noteUrls[0]) : ''}','_blank')">View URL 1</button>
-                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
-                            <button class="btn-danger btn-action" onclick="openRejectModal('upload', '${id}')"><i class="fas fa-times"></i> Reject</button>
+                            <button class="btn-action" style="background:#2ed573; color:#000;" onclick="window.approveNote('${id}')"><i class="fas fa-check"></i> Approve</button>
+                            <button class="btn-danger btn-action" onclick="window.openRejectModal('upload', '${id}')"><i class="fas fa-times"></i> Reject</button>
                         </div>
                     </div>`;
             });
@@ -2978,15 +3044,20 @@ body { overflow-x: hidden; }
         
         const aCont = document.getElementById("adminApprovedNotes");
         if(aCont) {
-            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved' || x[1].status==='active');
+            aCont.innerHTML = ""; const appList = Object.entries(state.notes || {}).filter(x=>x[1].status==='approved' || x[1].status==='active' || x[1].status==='expired');
             if(!appList.length) aCont.innerHTML = "<p style='opacity:0.6; font-size:12px;'>No active notes.</p>";
             appList.forEach(([id, n]) => {
                 aCont.innerHTML += `
                     <div class="admin-list-item">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Price: ₹${n.price||0} | Bookings: ${n.successfulBookings||0}</p></div>
+                        <div class="admin-item-info">
+                            <h4>${sanitize(n.title)}</h4>
+                            <p>Date: <span style="cursor:pointer; color:var(--primary-glow); text-decoration:underline;" onclick="window.openNoteEditor('${id}', 'notes')">${new Date(n.createdAt).toLocaleDateString()}</span></p>
+                            <p>Price: ₹${n.price||0} | Bookings: ${n.successfulBookings||0}</p>
+                            <p>Status: <span style="color:${n.status==='expired'?'#ff4757':'#2ed573'}">${n.status.toUpperCase()}</span></p>
+                        </div>
                         <div class="admin-item-actions">
-                            <button class="btn-secondary btn-action" onclick="openNoteEditor('${id}', 'notes')"><i class="fas fa-pen"></i> Edit Pricing</button>
-                            <button class="btn-danger btn-action" onclick="deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
+                            <button class="btn-secondary btn-action" onclick="window.openNoteEditor('${id}', 'notes')"><i class="fas fa-pen"></i> Edit Pricing</button>
+                            <button class="btn-danger btn-action" onclick="window.deleteNote('${id}', 'notes')"><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </div>`;
             });
@@ -2999,8 +3070,15 @@ body { overflow-x: hidden; }
             rejList.forEach(([id, n]) => {
                 rCont.innerHTML += `
                     <div class="admin-list-item" style="border-left: 3px solid #ff4757;">
-                        <div class="admin-item-info"><h4>${sanitize(n.title)}</h4><p>Rejected</p></div>
-                        <div class="admin-item-actions"><button class="btn-danger btn-action" onclick="deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button></div>
+                        <div class="admin-item-info">
+                            <h4>${sanitize(n.title)}</h4>
+                            <p>Rejected</p>
+                            <p>Date: <span style="cursor:pointer; color:var(--primary-glow); text-decoration:underline;" onclick="window.openNoteEditor('${id}', 'rejectedNotes')">${new Date(n.createdAt).toLocaleDateString()}</span></p>
+                        </div>
+                        <div class="admin-item-actions">
+                            <button class="btn-secondary btn-action" onclick="window.openNoteEditor('${id}', 'rejectedNotes')"><i class="fas fa-pen"></i> Edit Pricing</button>
+                            <button class="btn-danger btn-action" onclick="window.deleteNote('${id}', 'rejectedNotes')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
                     </div>`;
             });
         }
@@ -3021,8 +3099,6 @@ body { overflow-x: hidden; }
         try { await update(ref(db), { [`rejectedNotes/${id}`]: note, [`pendingNotes/${id}`]: null }); showToast("Note Rejected!", "error"); } catch(e){}
     };
     
-    window.rejectNote = (id) => openRejectModal('upload', id);
-
     window.deleteNote = async (id, listPath) => { confirmAction("Delete Note permanently?", async () => { try { await remove(ref(db, `${listPath}/${id}`)); showToast("Note Deleted"); } catch(e){} }); };
 
     window.openNoteEditor = (id, path = 'notes') => {
@@ -3031,11 +3107,26 @@ body { overflow-x: hidden; }
         document.getElementById('editNotePath').value = path;
         
         const priceInfo = window.getNotePriceInfo(note);
-        
         document.getElementById('editNotePagesDisplay').innerText = priceInfo.pages;
-        document.getElementById('editNotePricePerPage').value = priceInfo.pricePerPage;
-        document.getElementById('editNoteDiscountPercent').value = note.discountPercent || 0;
         
+        const container = document.getElementById('pagePricingContainer');
+        container.innerHTML = '';
+        const urls = note.noteUrls || [];
+        const prices = priceInfo.pagePrices;
+        
+        urls.forEach((url, i) => {
+            container.innerHTML += `
+            <div class="pageCard" style="display:flex; align-items:center; gap:10px; background:var(--input-bg); padding:10px; border-radius:8px; margin-bottom:10px;">
+                <img src="${sanitize(url)}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
+                <div style="flex:1;">
+                    <p style="font-size:12px; margin-bottom:4px;">Page ${i+1}</p>
+                    <input type="number" min="5" max="20" class="page-price-input" data-index="${i}" value="${prices[i]}" onchange="window.updatePagePrice('${id}', ${i}, this.value)" style="width:100%; padding:8px; border-radius:5px; background:rgba(0,0,0,0.3); color:#fff; border:none;">
+                </div>
+            </div>
+            `;
+        });
+
+        document.getElementById('editNoteDiscountPercent').value = note.discountPercent || 0;
         let remDays = '';
         if (note.discountEndDate && note.discountEndDate > Date.now()) {
             remDays = Math.ceil((note.discountEndDate - Date.now()) / 86400000);
@@ -3043,19 +3134,34 @@ body { overflow-x: hidden; }
         document.getElementById('editNoteDiscountDays').value = remDays;
         
         window.calculateNotePrice();
-        
-        window.location.hash = "noteEdit";
-        document.getElementById('noteEditPage').style.display = 'flex';
+        window.switchPanel('noteEditPage');
+    };
+
+    window.updatePagePrice = (noteId, index, value) => {
+        let v = parseInt(value);
+        if(isNaN(v)) v = 5;
+        if(v < 5) v = 5;
+        if(v > 20) v = 20;
+
+        const inputs = document.querySelectorAll('.page-price-input');
+        if(inputs[index]) inputs[index].value = v;
+
+        window.calculateNotePrice();
     };
 
     window.calculateNotePrice = () => {
-        const pages = parseInt(document.getElementById('editNotePagesDisplay').innerText) || 1;
-        const ppp = parseFloat(document.getElementById('editNotePricePerPage').value) || 0;
-        const discount = parseFloat(document.getElementById('editNoteDiscountPercent').value) || 0;
+        const inputs = document.querySelectorAll('.page-price-input');
+        let original = 0;
+        inputs.forEach(inp => {
+            let v = parseInt(inp.value);
+            if(isNaN(v)) v = 5;
+            if(v < 5) v = 5; if(v > 20) v = 20;
+            original += v;
+        });
         
-        const original = pages * ppp;
+        const discount = parseFloat(document.getElementById('editNoteDiscountPercent').value) || 0;
         const discountAmt = (original * discount) / 100;
-        const finalPrice = original - discountAmt;
+        const finalPrice = Math.round(original - discountAmt);
         
         document.getElementById('editNoteOriginalDisplay').innerText = `₹${original}`;
         document.getElementById('editNoteFinalPriceDisplay').innerText = `₹${finalPrice > 0 ? finalPrice : 0}`;
@@ -3064,24 +3170,30 @@ body { overflow-x: hidden; }
     window.updateNotePricing = async () => {
         const id = document.getElementById('editNoteId').value;
         const path = document.getElementById('editNotePath').value;
+        const note = state[path][id];
+        if(!note) return;
         
-        const ppp = parseFloat(document.getElementById('editNotePricePerPage').value) || 0;
+        const inputs = document.querySelectorAll('.page-price-input');
+        let pagePrices = [];
+        let original = 0;
+        inputs.forEach(inp => {
+            let v = parseInt(inp.value);
+            if(isNaN(v)) v = 5;
+            if(v < 5) v = 5; if(v > 20) v = 20;
+            pagePrices.push(v);
+            original += v;
+        });
+
         const discount = parseFloat(document.getElementById('editNoteDiscountPercent').value) || 0;
         const days = parseFloat(document.getElementById('editNoteDiscountDays').value) || 0;
         
-        const pages = parseInt(document.getElementById('editNotePagesDisplay').innerText) || 1;
-        
-        if(ppp <= 0) return showToast("Invalid Price per page! Must be > 0", "error");
-
-        const original = pages * ppp;
         const discountAmt = (original * discount) / 100;
-        const finalPrice = original - discountAmt;
-        
+        const finalPrice = Math.round(original - discountAmt);
         const expiry = days > 0 ? Date.now() + (days * 86400000) : null;
 
         try {
             await update(ref(db, `${path}/${id}`), { 
-                sellingPricePerPage: ppp,
+                pagePrices: pagePrices,
                 originalPrice: original,
                 discountPercent: discount,
                 discountPrice: finalPrice,
@@ -3089,14 +3201,14 @@ body { overflow-x: hidden; }
                 price: finalPrice
             });
             showToast("Note pricing updated successfully");
-            document.getElementById('noteEditPage').style.display = 'none';
-            window.location.hash = "";
+            window.hideAllPages();
+            window.switchPanel('adminPanel');
         } catch(e) { showToast("Failed to update", "error"); }
     };
 
     window.handleBooking = async (id, status) => {
         if(status === 'booking_rejected') {
-            return openRejectModal('booking', id);
+            return window.openRejectModal('booking', id);
         }
         window.executeHandleBooking(id, status);
     };
@@ -3164,11 +3276,11 @@ body { overflow-x: hidden; }
                 </div>
                 <div class="admin-item-actions">
                     ${b.status === 'booking_pending' ? `
-                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="handleBooking('${id}', 'booking_approved')"><i class="fas fa-check"></i> Approve & Send</button>
-                        <button class="btn-danger btn-action" onclick="handleBooking('${id}', 'booking_rejected')"><i class="fas fa-times"></i> Reject</button>
+                        <button class="btn-action" style="background:#2ed573; color:#000;" onclick="window.handleBooking('${id}', 'booking_approved')"><i class="fas fa-check"></i> Approve & Send</button>
+                        <button class="btn-danger btn-action" onclick="window.handleBooking('${id}', 'booking_rejected')"><i class="fas fa-times"></i> Reject</button>
                     ` : `
                         <span style="font-size:11px; padding:5px; background:var(--input-bg); border-radius:5px; margin-right:5px;">${b.status.toUpperCase()}</span>
-                        <button class="btn-danger btn-action" onclick="deleteAdminBooking('${id}')"><i class="fas fa-trash"></i> Delete</button>
+                        <button class="btn-danger btn-action" onclick="window.deleteAdminBooking('${id}')"><i class="fas fa-trash"></i> Delete</button>
                     `}
                 </div>
             `;
@@ -3179,7 +3291,7 @@ body { overflow-x: hidden; }
     }
 
     window.deleteAdminBooking = async (id) => {
-        confirmAction("Delete booking entry from admin view? (User will keep access)", async () => {
+        window.confirmAction("Delete booking entry from admin view? (User will keep access)", async () => {
             try { await update(ref(db, `pendingBookings/${id}`), { adminDeleted: true }); showToast("Removed from Admin view"); } catch(e){}
         });
     };
@@ -3189,20 +3301,21 @@ body { overflow-x: hidden; }
         const url = document.getElementById('helpUrl').value.trim();
         const desc = document.getElementById('helpDesc').value.trim();
         if(!title || !url) return showToast("Title and URL required", "error");
-        try { await set(push(refs.helpLinks), { title, url, desc, createdAt: Date.now() }); showToast("Help Link Added!"); ['helpTitle','helpUrl','helpDesc'].forEach(i=>document.getElementById(i).value=''); } catch(e){}
+        try { await set(push(refs.helpLinks), { title, url, desc, active: true, createdAt: Date.now() }); showToast("Help Link Added!"); ['helpTitle','helpUrl','helpDesc'].forEach(i=>document.getElementById(i).value=''); } catch(e){}
     };
-    window.deleteHelpLink = id => confirmAction("Delete Help Link?", () => remove(ref(db, `helpLinks/${id}`)));
+    window.deleteHelpLink = id => window.confirmAction("Delete Help Link?", () => remove(ref(db, `helpLinks/${id}`)));
     
     function renderAdminHelpLinks() {
         const c = document.getElementById('adminHelpLinks'); if(!c) return; c.innerHTML = "";
         Object.entries(state.helpLinks || {}).forEach(([id, h]) => {
-            c.innerHTML += `<div class="admin-list-item"><div class="admin-item-info"><h4>${sanitize(h.title)}</h4><p>${sanitize(h.url)}</p></div><button class="btn-danger btn-action" onclick="deleteHelpLink('${id}')"><i class="fas fa-trash"></i></button></div>`;
+            if(!h.active) return;
+            c.innerHTML += `<div class="admin-list-item"><div class="admin-item-info"><h4>${sanitize(h.title)}</h4><p>${sanitize(h.url)}</p></div><button class="btn-danger btn-action" onclick="window.deleteHelpLink('${id}')"><i class="fas fa-trash"></i></button></div>`;
         });
     }
     function renderUserHelpLinks() {
         const c1 = document.getElementById('helpLinksThumbContainer');
         if(!c1) return; c1.innerHTML = ""; 
-        const linksHtml = Object.values(state.helpLinks || {}).map(h => `<a href="${sanitize(h.url)}" target="_blank" class="help-badge" title="${sanitize(h.desc)}"><i class="fab fa-youtube"></i> ${sanitize(h.title)}</a>`).join(' ');
+        const linksHtml = Object.values(state.helpLinks || {}).filter(h => h.active).map(h => `<a href="${sanitize(h.url)}" target="_blank" class="help-badge" title="${sanitize(h.desc)}"><i class="fas fa-external-link-alt"></i> ${sanitize(h.title)}</a>`).join(' ');
         c1.innerHTML = linksHtml;
     }
 
@@ -3267,4 +3380,4 @@ body { overflow-x: hidden; }
 
 </script>
 </body>
-</html>
+    </html>
