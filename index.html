@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>खिलौना नगरी | Premium Online Toy Store</title>
 
-  <!-- Google Fonts: Baloo 2 (Hindi Friendly) & Nunito -->
+  <!-- Google Fonts: Baloo 2 (हिंदी अनुकूल) & Nunito -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -430,7 +430,7 @@
       cursor: not-allowed;
     }
 
-    /* States (Loading / Empty) */
+    /* States */
     .state-banner {
       text-align: center;
       padding: 3.5rem 1.5rem;
@@ -789,7 +789,7 @@
 </head>
 <body>
 
-  <!-- Toast Notification Box -->
+  <!-- Toast Container -->
   <div id="toastContainer"></div>
 
   <!-- Header -->
@@ -1051,7 +1051,7 @@
     </div>
   </div>
 
-  <!-- Firebase Modular Scripts (Single-File Architecture) -->
+  <!-- Firebase Modular Scripts -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
     import { 
@@ -1076,9 +1076,9 @@
       Timestamp 
     } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-    // 1. Firebase Configuration (Given by user)
+    // 1. आपकी सही और सत्यापित Firebase Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDRHLRpbYYzMi6GxuoTOs_jXhReWpuj8",
+      apiKey: "AIzaSyDRGHLRpbYYzMi6GxuoTOs_jXhReWpuHj8",
       authDomain: "storage-2ddaf.firebaseapp.com",
       projectId: "storage-2ddaf",
       storageBucket: "storage-2ddaf.firebasestorage.app",
@@ -1090,7 +1090,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Global App State
+    // Global State
     let currentUser = null;
     let productsList = [];
     let cart = [];
@@ -1098,7 +1098,7 @@
     let searchFilter = "";
     let fulfillmentOption = "pickup";
 
-    // Notification Toast Helper
+    // Toast Alert Helper
     window.showToast = function(msg, type = "info") {
       const container = document.getElementById("toastContainer");
       const toast = document.createElement("div");
@@ -1114,7 +1114,7 @@
       }, 4000);
     };
 
-    // View Navigation
+    // Navigation Switcher
     window.navigateTo = function(view) {
       if(view === "shop") {
         document.getElementById("shopView").style.display = "block";
@@ -1148,7 +1148,7 @@
       }
     };
 
-    // 2. Authentication Flow (Google Only)
+    // 2. Google Authentication Engine
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
 
@@ -1157,7 +1157,7 @@
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         
-        // Setup Customer Profile in Firestore
+        // Auto create user profile document
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
         if(!userSnap.exists()) {
@@ -1173,7 +1173,7 @@
         } else {
           await setDoc(userRef, { lastLoginAt: serverTimestamp() }, { merge: true });
         }
-        showToast(`स्वागत है, ${user.displayName || 'ग्राहक'}!`, "success");
+        showToast(`नमस्ते, ${user.displayName || 'ग्राहक'}! आपका स्वागत है।`, "success");
       } catch (err) {
         console.error("Auth error:", err);
         showToast(err.message || "लॉगिन विफल रहा", "error");
@@ -1213,7 +1213,7 @@
       }
     });
 
-    // 3. Products Engine & Catalog Listener
+    // 3. Products Engine & Realtime Firestore Catalog
     function startProductsListener() {
       const pRef = collection(db, "products");
       onSnapshot(pRef, (snap) => {
@@ -1228,7 +1228,7 @@
           }
         });
 
-        // If firestore collection is empty, auto-seed starter toys so UI is never broken/empty
+        // अगर Firestore में अभी कोई खिलौना नहीं है तो डेमो प्रोडक्ट्स जोड़ें
         if(productsList.length === 0 && snap.empty) {
           seedStarterToys();
           return;
@@ -1238,14 +1238,14 @@
         renderCategoryChips(Array.from(cats));
         renderProducts();
       }, (err) => {
-        console.error("Products error:", err);
+        console.error("Products load error:", err);
         document.getElementById("catalogLoading").style.display = "none";
         document.getElementById("catalogEmpty").style.display = "block";
-        document.getElementById("catalogEmpty").innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><p>डेटा लोड करने में असमर्थ: ${err.message}</p>`;
+        document.getElementById("catalogEmpty").innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i><p>डेटा लोड करने में समस्या: ${err.message}</p>`;
       });
     }
 
-    // Auto seeder for first-time usage
+    // Auto seeder (फर्स्ट टाइम यूज़ के लिए)
     async function seedStarterToys() {
       const defaultToys = [
         { name: "रिमोट कंट्रोल स्टंट कार 4WD", category: "Electronic", price: 1499, discountedPrice: 999, stock: 12, ageRecommendation: "4-10 वर्ष", sku: "TOY-RC-01", description: "360 डिग्री रोटेटिंग हाई-स्पीड रिचार्जेबल स्टंट रेसिंग कार LED लाइट्स के साथ।", imageUrl: "https://images.unsplash.com/photo-1594787318286-3d835c1d207f?auto=format&fit=crop&w=600&q=80", isActive: true },
@@ -1538,7 +1538,7 @@
       document.getElementById("cartTotalText").innerText = `₹${subtotal.toFixed(2)}`;
     }
 
-    // 6. Checkout & Razorpay Payment Integration
+    // 6. Checkout & Razorpay Integration
     window.openCheckoutProcess = function() {
       if(!currentUser) {
         showToast("ऑर्डर करने के लिए पहले लॉगिन करें!", "error");
@@ -1590,7 +1590,7 @@
       }
     };
 
-    // Atomic Stock Validation & Razorpay Execution
+    // Atomic Stock Reservation & Payment Handler
     window.processFinalPayment = async function() {
       const payBtn = document.getElementById("paySubmitBtn");
       payBtn.disabled = true;
@@ -1608,9 +1608,9 @@
         const totalPayable = cart.reduce((s, i) => s + (i.price * i.qty), 0);
         const amountPaise = Math.round(totalPayable * 100);
 
-        // Step 2: Razorpay Checkout Dialog
+        // Step 2: Open Razorpay modal
         const rzpOptions = {
-          key: "rzp_test_1DP5mmOlF5G5ag", // Razorpay Public Test Key
+          key: "rzp_test_1DP5mmOlF5G5ag", // Standard Razorpay Sandbox Key
           amount: amountPaise,
           currency: "INR",
           name: "खिलौना नगरी (Toy Store)",
@@ -1626,7 +1626,7 @@
             payBtn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ऑर्डर दर्ज हो रहा है...`;
 
             try {
-              // Step 3: Run Atomic Firestore Transaction (Stock deduction + Order Creation)
+              // Step 3: Atomic Firestore Transaction
               const orderRef = doc(collection(db, "orders"));
 
               await runTransaction(db, async (transaction) => {
@@ -1656,7 +1656,7 @@
                     sku: pData.sku || ""
                   });
 
-                  // Write to inventoryTransactions audit collection
+                  // Log to inventoryTransactions
                   const txRef = doc(collection(db, "inventoryTransactions"));
                   transaction.set(txRef, {
                     productId: cartItem.id,
@@ -1667,7 +1667,7 @@
                   });
                 }
 
-                // 48-Hour Pickup Deadline Calculation
+                // 48 घंटे की पिकअप डेडलाइन
                 const deadline = new Date();
                 deadline.setHours(deadline.getHours() + 48);
 
@@ -1902,4 +1902,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
